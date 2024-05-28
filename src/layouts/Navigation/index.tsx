@@ -1,5 +1,9 @@
 const index = () => {
-  return <div className="w-full h-[200px] bottom-0 border border-red-600">navigation</div>;
+  return (
+    <section className="fixed w-full h-[100px] bottom-0 border border-gray-400">
+      navigation
+    </section>
+  );
 };
 
 export default index;
