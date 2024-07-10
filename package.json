@@ -16,6 +16,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
     "react-spinners": "^0.13.8",
+    "vite-plugin-svgr": "^4.2.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
