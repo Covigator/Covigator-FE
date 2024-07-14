@@ -49,98 +49,98 @@ const config: Config = {
         h1: [
           '24px',
           {
-            fontWeight: 'bold',
+            fontWeight: '700',
             lineHeight: '32px',
           },
         ],
         h2: [
           '20px',
           {
-            fontWeight: 'bold',
+            fontWeight: '700',
             lineHeight: '28px',
           },
         ],
         h3: [
           '18px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: '26px',
           },
         ],
         h4: [
           '16px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: '24px',
           },
         ],
         body1: [
           '16px',
           {
-            fontWeight: 'medium',
+            fontWeight: '500',
             lineHeight: '24px',
           },
         ],
         body2: [
           '16px',
           {
-            fontWeight: 'regular',
+            fontWeight: '400',
             lineHeight: '24px',
           },
         ],
         body3: [
           '14px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: '20px',
           },
         ],
         body4: [
           '14px',
           {
-            fontWeight: 'medium',
+            fontWeight: '500',
             lineHeight: '20px',
           },
         ],
         body5: [
           '14px',
           {
-            fontWeight: 'regular',
+            fontWeight: '400',
             lineHeight: '20px',
           },
         ],
         body6: [
           '12px',
           {
-            fontWeight: 'regular',
+            fontWeight: '400',
             lineHeight: '16px',
           },
         ],
         btn1: [
           '18px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: '20px',
           },
         ],
         btn2: [
           '14px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: '20px',
           },
         ],
         btn3: [
           '10px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: '16px',
           },
         ],
         nav: [
           '12px',
           {
-            fontWeight: 'semibold',
+            fontWeight: '600',
             lineHeight: 'auto',
           },
         ],
