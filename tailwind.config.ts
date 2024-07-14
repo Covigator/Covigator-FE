@@ -36,9 +36,115 @@ const config: Config = {
         'bk-90': '#302E2D',
         'bk-100': '#121212',
       },
-      fontWeight: {},
-      fontFamily: {},
-      typos: {},
+      fontFamily: {
+        pretendard: 'Pretendard',
+      },
+      fontWeight: {
+        regular: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      },
+      fontSize: {
+        h1: [
+          '24px',
+          {
+            fontWeight: 'bold',
+            lineHeight: '32px',
+          },
+        ],
+        h2: [
+          '20px',
+          {
+            fontWeight: 'bold',
+            lineHeight: '28px',
+          },
+        ],
+        h3: [
+          '18px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: '26px',
+          },
+        ],
+        h4: [
+          '16px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: '24px',
+          },
+        ],
+        body1: [
+          '16px',
+          {
+            fontWeight: 'medium',
+            lineHeight: '24px',
+          },
+        ],
+        body2: [
+          '16px',
+          {
+            fontWeight: 'regular',
+            lineHeight: '24px',
+          },
+        ],
+        body3: [
+          '14px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: '20px',
+          },
+        ],
+        body4: [
+          '14px',
+          {
+            fontWeight: 'medium',
+            lineHeight: '20px',
+          },
+        ],
+        body5: [
+          '14px',
+          {
+            fontWeight: 'regular',
+            lineHeight: '20px',
+          },
+        ],
+        body6: [
+          '12px',
+          {
+            fontWeight: 'regular',
+            lineHeight: '16px',
+          },
+        ],
+        btn1: [
+          '18px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: '20px',
+          },
+        ],
+        btn2: [
+          '14px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: '20px',
+          },
+        ],
+        btn3: [
+          '10px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: '16px',
+          },
+        ],
+        nav: [
+          '12px',
+          {
+            fontWeight: 'semibold',
+            lineHeight: 'auto',
+          },
+        ],
+      },
     },
   },
 };
