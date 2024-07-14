@@ -1,10 +1,12 @@
-import { /*Outlet,*/ Route, Routes } from 'react-router-dom';
+
+import { Route, Routes } from 'react-router-dom';
 
 import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Seohyun from './pages/Test/Seohyun';
+
 
 const Router = () => {
   return (
