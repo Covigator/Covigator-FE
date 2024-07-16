@@ -1,4 +1,4 @@
-import kakaoLoginBtn from '../../assets/image/kakaoLoginBtn.png';
+import kakaoLoginBtn from '../../assets/image/login/kakaoLoginBtn.png';
 
 const KakaoLogin = () => {
   return (
