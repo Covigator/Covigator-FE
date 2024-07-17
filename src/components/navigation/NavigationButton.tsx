@@ -1,5 +1,8 @@
+import React from 'react';
+import { IconType } from 'react-icons';
+
 interface Props {
-  Icon: React.ReactNode;
+  Icon: IconType;
   title: string;
   isActive: boolean;
   onClick: () => void;
@@ -11,14 +14,20 @@ const NavigationButton: React.FC<Props> = ({
   isActive,
   onClick,
 }) => {
+  
+  const activeColor = '#606AB1';
+  const inactiveColor = 'black';
+
   return (
     <div
-      className="flex flex-col justify-center items-center"
+      className="flex flex-col justify-center items-center cursor-pointer"
       onClick={onClick}
     >
-      <div>{Icon}</div>
-
-      <div className={`text-black ${isActive ? 'text-[#606AB1]' : ''}`}>
+      <Icon
+        size={24}
+        color={isActive ? activeColor : inactiveColor}
+      />
+      <div className={`text-nav mt-1 ${isActive ? 'text-[#606AB1]' : 'text-black'}`}>
         {title}
       </div>
     </div>
