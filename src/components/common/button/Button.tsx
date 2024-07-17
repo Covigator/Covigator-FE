@@ -17,22 +17,20 @@ const style: {
 } = {
   base: 'inline-flex items-center justify-center box-border select-none m-0 p-0 w-fit h-fit cursor-pointer disabled:cursor-default',
   size: {
-    sm: 'w-full max-w-[80px] h-full max-h-[58px] px-6 py-[14px]',
-    md: 'w-full max-w-[153px] h-[50px] py-3 px-12',
-    // lg: 'w-full max-w-[216px] h-[54px] py-3 text-h3', // 이전, 다음 버튼
+    xs:'w-fit h-fit py-[4px] px-[10px]',
+    sm: 'w-[75px] h-[42px] py-[7px] px-[43px]',
+    md: 'w-[115px] h-[43px] py-[7px] px-[43px]',
     lg: 'w-[280px] h-[54px] py-[17px] px-[102px]',
-    xl: 'w-full max-w-[588px] !flex h-[68px] py-4 text-body2', // 로그인
   },
   shape: {
     square: 'rounded-[10px]',
     rounded: 'rounded-full',
   },
   color: {
-    active: 'text-white',
-    default: 'bg-primary-orange6 text-white',
-    gray: 'bg-gray-03 text-gray-07',
-    darkGray: 'bg-gray-05 text-gray-08',
-    disabled: 'bg-primary-orange6 opacity-60 text-white',
+    default: 'bg-primary-500 text-white',
+    sub: 'bg-sub-100 text-white',
+    hover: 'bg-sub-400 text-white',
+    disabled: 'bg-bk-30 text-bk-60',
   },
 };
 
@@ -58,6 +56,7 @@ const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonProps>>(
           style.shape[shape],
           style.size[size],
           style.color[color],
+          'gap-[10px]',
           className,
         )}
         {...rest}
