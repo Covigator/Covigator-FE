@@ -14,7 +14,7 @@ module.exports = {
     quotes: ['error', 'single'],
     'no-duplicate-imports': 'error',
     'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
-    'no-unused-vars': 'error',
+    "@typescript-eslint/no-unused-vars": "warn",
     'no-multiple-empty-lines': 'error',
     'import/order': [
       'error',
