@@ -25,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     placeholder,
     maxLength,
     icon,
+    type,
     onChange,
     onKeyDown,
   } = props;
@@ -33,8 +34,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const [value, setValue] = useState(defaultValue);
 
+  const [count, setCount] = useState<number>(0);
+  const handleCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCount(
+      maxLength && e.target.value.length >= maxLength
+        ? maxLength
+        : e.target.value.length,
+    );
+  };
+
   return (
-    <div className="relative w-full">
+    <div className={clsx(style.sizes[size], 'relative')}>
       <div
         className={clsx(
           'absolute top-2 left-[15px]',
@@ -47,21 +57,29 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         value={value}
         placeholder={placeholder}
         maxLength={maxLength}
+        type={type || 'text'}
         ref={ref}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={(e) => {
           onChange?.(e);
+          handleCount(e);
           setValue(e.target.value);
         }}
         onKeyDown={onKeyDown}
-        className={clsx(
-          style.base,
-          style.sizes[size],
-          icon && 'pl-[45px]',
-          className,
-        )}
+        className={clsx(style.base, icon && 'pl-[45px]', className)}
       />
+      {maxLength && (
+        <p
+          className={clsx(
+            style.sizes[size],
+            'absolute top-3 right-[15px] text-body6',
+            isFocused ? 'text-bk-70' : 'text-bk-50',
+          )}
+        >
+          {count}/{maxLength}
+        </p>
+      )}
     </div>
   );
 });
