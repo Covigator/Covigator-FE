@@ -12,7 +12,7 @@ const Dialog: React.FC<DialogProps> = ({
   showSubtitle = false,
 }) => {
   return (
-    <div className="flex flex-col items-center w-[310px] p-[24px_18px_20px_18px] bg-white rounded-[10px] border">
+    <div className="flex flex-col items-center w-[310px] p-[24px_18px_20px_18px] bg-white rounded-[10px]">
       {showSubtitle ? (
         <div className="w-[282px] rounded-[10px] flex flex-col gap-y-[8px] mb-[8px]">
           <h3 className="text-[18px] leading-[26px] text-center text-bk-100">
