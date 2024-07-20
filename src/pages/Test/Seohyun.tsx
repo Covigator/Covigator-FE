@@ -11,8 +11,9 @@ const Seohyun = () => {
           size={'sm'}
           placeholder={'sm'}
           icon={<HiOutlineMail className="w-6 h-6" />}
+          type="password"
         />
-        <Input size={'sm'} placeholder={'sm'} />
+        <Input size={'sm'} placeholder={'sm'} maxLength={3} />
         <Input size={'md'} placeholder={'md'} />
         <Input size={'lg'} placeholder={'lg'} />
         <Input size={'xl'} placeholder={'xl'} />
