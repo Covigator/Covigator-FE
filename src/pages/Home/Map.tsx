@@ -1,30 +1,41 @@
 import { useEffect, useRef } from 'react';
 
 const Map: React.FC = () => {
+  // 지도를 표시할 div 참조
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY}&autoload=false`;
-    script.async = true;
-    document.body.appendChild(script);
-    script.onload = () => {
-      // kakao.maps API가 로드된 후 지도 생성
-      kakao.maps.load(() => {
-        if (mapRef.current) {
-          const container = mapRef.current;
-          const options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3,
-          };
-          new kakao.maps.Map(container, options);
-        }
+    // 카카오맵 API 로드 함수
+    const loadKakaoMaps = () => {
+      // 카카오맵 API가 잘 로드되었는지 확인
+      if (
+        typeof window.kakao === 'undefined' ||
+        typeof window.kakao.maps === 'undefined'
+      ) {
+        console.error('카카오맵 API 로딩 에러');
+        return;
+      }
+
+      // 카카오맵 API 로드 완료 후 실행될 함수
+      window.kakao.maps.load(() => {
+        // mapRef가 유효한지 확인
+        if (!mapRef.current) return;
+
+        const options = {
+          center: new window.kakao.maps.LatLng(
+            37.543239722374615,
+            127.07733005460825,
+          ),
+          level: 3,
+        };
+
+        // 지도 생성
+        new window.kakao.maps.Map(mapRef.current, options);
       });
     };
-    return () => {
-      document.body.removeChild(script);
-    };
-  });
+
+    loadKakaoMaps();
+  }, []);
 
   return (
     <div className="h-screen w-screen">
