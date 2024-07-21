@@ -5,6 +5,8 @@ import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Community from './pages/Community';
+import User from './pages/User';
 import Seohyun from './pages/Test/Seohyun';
 
 
@@ -15,6 +17,8 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/loading" element={<Loading />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/user" element={<User />} />
         {/* <Route path="/order" element={<Outlet />}>
           <Route index element={<Order />} />
           <Route path="detail/:droneId" element={<OrderDetail />} />
