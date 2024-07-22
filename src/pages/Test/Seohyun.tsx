@@ -1,10 +1,15 @@
 import { HiOutlineMail } from 'react-icons/hi';
 
+import Dropdown from '../../components/common/dropdown';
 import Input from '../../components/common/input';
+import { regionDropdownItems, sortDropdownItems } from '../../constants/object';
 
 const Seohyun = () => {
   return (
     <div className="w-full flex flex-col gap-3 pt-4 px-2">
+      {/* common dropdown 테스트 */}
+      <Dropdown dropdownItems={sortDropdownItems} size="sm" type={'primary'} />
+      <Dropdown dropdownItems={regionDropdownItems} size="lg" type={'sub'} />
       {/* common input 테스트 */}
       <div className="w-full flex flex-col gap-4">
         <Input
