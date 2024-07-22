@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
 import {
@@ -15,21 +16,21 @@ const styles: {
   sizes: Record<DropdownSize, string>;
   types: Record<DropdownType, string>;
 } = {
-  base: 'w-full bg-wh cursor-pointer rounded-[5px] flex items-center',
+  base: 'w-full bg-wh cursor-pointer rounded-[5px] flex items-center justify-between',
   sizes: {
     sm: 'max-w-[60px] h-[26px] px-[6px]',
     lg: 'max-w-[280px] h-10 px-[15px]',
   },
   types: {
     sub: 'border !border-sub-400 text-bk-90 text-body3',
-    primary: 'text-primary-500 text-btn3',
+    primary: 'border !border-primary-500 text-primary-500 text-btn3',
   },
 };
 
 const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
   const animationTiming = {
-    enter: 400,
-    exit: 600,
+    enter: 100,
+    exit: 300,
   };
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -43,10 +44,32 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
   return (
     <div className="w-full">
       <button
-        className={clsx(styles.base, styles.sizes[size], styles.types[type])}
+        className={clsx(
+          styles.base,
+          styles.sizes[size],
+          styles.types[type],
+          type == 'primary' && '!border-none',
+        )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {dropdownItems[selectedItem].text}
+        {dropdownItems[selectedItem].text}{' '}
+        {isOpen ? (
+          <HiOutlineChevronUp
+            className={
+              type == 'sub'
+                ? 'w-6 h-6 text-sub-400'
+                : 'w-3 h-3 text-primary-500'
+            }
+          />
+        ) : (
+          <HiOutlineChevronDown
+            className={
+              type == 'sub'
+                ? 'w-6 h-6 text-sub-400'
+                : 'w-3 h-3 text-primary-500'
+            }
+          />
+        )}
       </button>
       <CSSTransition
         in={isOpen}
@@ -66,8 +89,10 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
                   styles.base,
                   styles.sizes[size],
                   styles.types[type],
-                  !isFirst && !isLast && 'rounded-none !border-t-0',
-                  isFirst && 'rounded-b-none',
+                  !isFirst &&
+                    !isLast &&
+                    'rounded-none !border-t-0 !border-b-[0.5px]',
+                  isFirst && 'rounded-b-none !border-b-[0.5px]',
                   isLast && 'rounded-t-none !border-t-0',
                 )}
                 onClick={(e) => handleSelect(item)}

@@ -28,11 +28,11 @@ a {
   display: none;
 }
 .enter-done {
-  animation: dropdownOpen 0.4s;
+  animation: dropdownOpen 0.1s;
 }
 
 .exit-active {
-  animation: dropdownClosed 0.6s;
+  animation: dropdownClosed 0.3s;
 }
 
 @keyframes dropdownOpen {
