@@ -1,43 +1,83 @@
-import { useRef, useState } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { useState } from 'react';
+import CSSTransition from 'react-transition-group/CSSTransition';
 
-import { DropdownProps, DropdownSize } from './Dropdown.types';
+import {
+  dropdownItemType,
+  DropdownProps,
+  DropdownSize,
+  DropdownType,
+} from './Dropdown.types';
+
+import clsx from 'clsx';
 
 const styles: {
   base: string;
   sizes: Record<DropdownSize, string>;
+  types: Record<DropdownType, string>;
 } = {
-  base: '',
+  base: 'w-full bg-wh cursor-pointer rounded-[5px] flex items-center',
   sizes: {
-    sm: '',
-    lg: '',
+    sm: 'max-w-[60px] h-[26px] px-[6px]',
+    lg: 'max-w-[280px] h-10 px-[15px]',
+  },
+  types: {
+    sub: 'border !border-sub-400 text-bk-90 text-body3',
+    primary: 'text-primary-500 text-btn3',
   },
 };
 
-const DropDown = ({ dropdownItems, size }: DropdownProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<string>(dropdownItems[0]);
+const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
+  const animationTiming = {
+    enter: 400,
+    exit: 600,
+  };
 
-  const handleSelect = (item: string) => {
-    setSelectedItem(item);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<number>(dropdownItems[0].id);
+
+  const handleSelect = (item: dropdownItemType) => {
+    setSelectedItem(item.id);
+    setIsOpen(!isOpen);
   };
 
   return (
-    <div className="w-full h-10">
-      <Dropdown className="w-full bg-bk-40">
-        {/* 드롭다운 버튼 */}
-        <Dropdown.Toggle>{selectedItem}</Dropdown.Toggle>
-        {/* 드롭다운 메뉴 */}
-        <Dropdown.Menu>
-          {dropdownItems.map((item: string) => {
+    <div className="w-full">
+      <button
+        className={clsx(styles.base, styles.sizes[size], styles.types[type])}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {dropdownItems[selectedItem].text}
+      </button>
+      <CSSTransition
+        in={isOpen}
+        timeout={animationTiming}
+        mountOnEnter
+        unmountOnExit
+      >
+        <div className="w-full h-0 z-10 absolute pt-1">
+          {dropdownItems.map((item) => {
+            const isFirst = item.id === 0;
+            const isLast = item.id === dropdownItems.length - 1;
+
             return (
-              <Dropdown.Item key={item} onClick={(e) => handleSelect(item)}>
-                {item}
-              </Dropdown.Item>
+              <ul
+                key={item.id + item.text}
+                className={clsx(
+                  styles.base,
+                  styles.sizes[size],
+                  styles.types[type],
+                  !isFirst && !isLast && 'rounded-none !border-t-0',
+                  isFirst && 'rounded-b-none',
+                  isLast && 'rounded-t-none !border-t-0',
+                )}
+                onClick={(e) => handleSelect(item)}
+              >
+                {item.text}
+              </ul>
             );
           })}
-        </Dropdown.Menu>
-      </Dropdown>
+        </div>
+      </CSSTransition>
     </div>
   );
 };
