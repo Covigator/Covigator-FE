@@ -24,16 +24,17 @@ a {
 }
 
 .enter,
-.enter-active {
+.enter-active,
+.exit {
   display: none;
 }
 .enter-done {
   animation: dropdownOpen 0.1s;
 }
 
-.exit-active {
+/* .exit-active {
   animation: dropdownClosed 0.3s;
-}
+} */
 
 @keyframes dropdownOpen {
   0% {
@@ -47,7 +48,7 @@ a {
   }
 }
 
-@keyframes dropdownClosed {
+/* @keyframes dropdownClosed {
   0% {
     opacity: 1;
     transform: translateY(0);
@@ -57,4 +58,4 @@ a {
     opacity: 0;
     transform: translateY(-100%);
   }
-}
+} */
