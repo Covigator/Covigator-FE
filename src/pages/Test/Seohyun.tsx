@@ -1,11 +1,20 @@
 import { HiOutlineMail } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 
 import Input from '../../components/common/input';
 import Textarea from '../../components/common/textarea';
+import { Topbar } from '../../layouts';
 
 const Seohyun = () => {
+  const navigate = useNavigate();
+  const handleTopbar = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="w-full flex flex-col gap-3 pt-4 px-2">
+      {/* topbar 테스트 */}
+      <Topbar handleClick={(e: React.MouseEvent) => handleTopbar()} />
       {/* common textarea 테스트 */}
       <Textarea maxLength={50} placeholder={'md textarea'} size={'md'} />
       <Textarea maxLength={150} placeholder={'lg textarea'} size={'lg'} />
