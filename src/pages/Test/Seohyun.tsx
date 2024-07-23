@@ -12,7 +12,7 @@ const Seohyun = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-3 pt-4 px-2">
+    <div className="w-full flex flex-col gap-3 pt-4 px-2 mt-[60px]">
       {/* topbar 테스트 */}
       <Topbar handleClick={(e: React.MouseEvent) => handleTopbar()} />
       {/* common textarea 테스트 */}
