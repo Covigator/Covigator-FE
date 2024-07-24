@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export type DialogProps = {
-  title?: string;
+  title: string;
   subtitle?: string;
   content?: ReactNode;
   onConfirm: () => void;

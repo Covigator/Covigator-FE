@@ -1,14 +1,13 @@
-
 import { Route, Routes } from 'react-router-dom';
 
 import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
+import Community from './pages/Community';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Community from './pages/Community';
-import User from './pages/User';
+import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
-
+import User from './pages/User';
 
 const Router = () => {
   return (
@@ -26,6 +25,7 @@ const Router = () => {
         </Route> */}
         <Route path="/test">
           <Route path="seohyun" element={<Seohyun />} />
+          <Route path="hasang" element={<Hasang />} />
         </Route>
       </Route>
     </Routes>
