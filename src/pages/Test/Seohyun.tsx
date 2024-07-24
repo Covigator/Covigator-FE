@@ -1,8 +1,25 @@
+import { HiOutlineMail } from 'react-icons/hi';
+
+import Input from '../../components/common/input';
+
 const Seohyun = () => {
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-3 pt-4 px-2">
+      {/* common input 테스트 */}
+      <div className="w-full flex flex-col gap-4">
+        <Input
+          size={'sm'}
+          placeholder={'sm'}
+          icon={<HiOutlineMail className="w-6 h-6" />}
+          type="password"
+        />
+        <Input size={'sm'} placeholder={'sm'} maxLength={3} />
+        <Input size={'md'} placeholder={'md'} />
+        <Input size={'lg'} placeholder={'lg'} />
+        <Input size={'xl'} placeholder={'xl'} />
+      </div>
       {/* 디자인 시스템 테스트 */}
-      <div className="p-1 border-b border-b-bk-100">
+      <div className="p-1">
         <div className="text-body3 text-primary-100 bg-bk-90">primary100</div>
         <div className="text-body3 text-primary-200 bg-bk-90">primary200</div>
         <div className="text-body3 text-primary-300 bg-bk-90">primary300</div>
