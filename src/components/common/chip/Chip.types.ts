@@ -11,8 +11,8 @@ export const chipStates = {
 export type ChipState = (typeof chipStates)[keyof typeof chipStates];
 
 export type ChipProps = {
-  size?: ChipSize;
-  state?: ChipState;
+  size: ChipSize;
+  state: ChipState;
   className?: string;
   children?: React.ReactNode;
 };
