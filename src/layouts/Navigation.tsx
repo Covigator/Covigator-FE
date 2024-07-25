@@ -10,6 +10,7 @@ import NavigationButton from '../components/navigation/NavigationButton';
 
 const Navigation = () => {
   const [activeButton, setActiveButton] = useState<string>('home');
+
   const navigate = useNavigate();
 
   const handleNavigation = (path: string, buttonName: string) => {
