@@ -1,15 +1,13 @@
-
 import { Route, Routes } from 'react-router-dom';
 
 import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
+import Community from './pages/Community';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
-import Community from './pages/Community';
-import User from './pages/User';
 import Seohyun from './pages/Test/Seohyun';
-
+import User from './pages/User';
 
 const Router = () => {
   return (
