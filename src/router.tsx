@@ -6,6 +6,7 @@ import Community from './pages/Community';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Seohyun from './pages/Test/Seohyun';
 import User from './pages/User';
 
@@ -16,6 +17,7 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/community" element={<Community />} />
         <Route path="/user" element={<User />} />
