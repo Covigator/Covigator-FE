@@ -1,8 +1,38 @@
+import { HiOutlineMail } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
+
+import Input from '../../components/common/input';
+import Textarea from '../../components/common/textarea';
+import { Topbar } from '../../layouts';
+
 const Seohyun = () => {
+  const navigate = useNavigate();
+  const handleTopbar = () => {
+    navigate(-1);
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-3 pt-4 px-2 mt-[60px]">
+      {/* topbar 테스트 */}
+      <Topbar handleClick={(e: React.MouseEvent) => handleTopbar()} />
+      {/* common textarea 테스트 */}
+      <Textarea maxLength={50} placeholder={'md textarea'} size={'md'} />
+      <Textarea maxLength={150} placeholder={'lg textarea'} size={'lg'} />
+      {/* common input 테스트 */}
+      <div className="w-full flex flex-col gap-4">
+        <Input
+          size={'sm'}
+          placeholder={'sm'}
+          icon={<HiOutlineMail className="w-6 h-6" />}
+          type="password"
+        />
+        <Input size={'sm'} placeholder={'sm'} maxLength={3} />
+        <Input size={'md'} placeholder={'md'} />
+        <Input size={'lg'} placeholder={'lg'} />
+        <Input size={'xl'} placeholder={'xl'} />
+      </div>
       {/* 디자인 시스템 테스트 */}
-      <div className="p-1 border-b border-b-bk-100">
+      <div className="p-1">
         <div className="text-body3 text-primary-100 bg-bk-90">primary100</div>
         <div className="text-body3 text-primary-200 bg-bk-90">primary200</div>
         <div className="text-body3 text-primary-300 bg-bk-90">primary300</div>
