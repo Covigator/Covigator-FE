@@ -1,14 +1,18 @@
+import './global.css';
+
 import { BrowserRouter } from 'react-router-dom';
 
-import './global.css';
+import ModalProvider from './context/ModalProvider';
 import Router from './router';
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
+      <ModalProvider>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </ModalProvider>
     </>
   );
 }

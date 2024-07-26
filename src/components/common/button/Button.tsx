@@ -17,7 +17,7 @@ const style: {
 } = {
   base: 'inline-flex items-center justify-center box-border select-none m-0 p-0 w-fit h-fit cursor-pointer disabled:cursor-default',
   size: {
-    xs:'w-fit h-fit py-[4px] px-[10px]',
+    xs: 'w-fit h-fit py-[4px] px-[10px]',
     sm: 'w-[75px] h-[42px] py-[7px] px-[43px]',
     md: 'w-[115px] h-[43px] py-[7px] px-[43px]',
     lg: 'w-[280px] h-[54px] py-[17px] px-[102px]',
@@ -29,6 +29,7 @@ const style: {
   color: {
     default: 'bg-primary-500 text-white',
     sub: 'bg-sub-100 text-white',
+    sub_300: 'bg-sub-300 text-white',
     hover: 'bg-sub-400 text-white',
     disabled: 'bg-bk-30 text-bk-60',
   },
