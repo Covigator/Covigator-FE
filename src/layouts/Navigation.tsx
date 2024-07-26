@@ -6,10 +6,11 @@ import {
 } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
 
-import NavigationButton from '../../components/navigation/NavigationButton';
+import NavigationButton from '../components/navigation/NavigationButton';
 
 const Navigation = () => {
-  const [activeButton, setActiveButton] = useState<String>('home');
+  const [activeButton, setActiveButton] = useState<string>('home');
+
   const navigate = useNavigate();
 
   const handleNavigation = (path: string, buttonName: string) => {
