@@ -1,7 +1,9 @@
 import { HiOutlineMail } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
+import Dropdown from '../../components/common/dropdown';
 import Input from '../../components/common/input';
+import { regionDropdownItems, sortDropdownItems } from '../../constants/object';
 import Textarea from '../../components/common/textarea';
 import { Topbar } from '../../layouts';
 
@@ -12,7 +14,10 @@ const Seohyun = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-3 pt-4 px-2 mt-[60px]">
+    <div className="w-full flex flex-col gap-3 pt-4 px-2">
+      {/* common dropdown 테스트 */}
+      <Dropdown dropdownItems={sortDropdownItems} size="sm" type={'primary'} />
+      <Dropdown dropdownItems={regionDropdownItems} size="lg" type={'sub'} />
       {/* topbar 테스트 */}
       <Topbar handleClick={(e: React.MouseEvent) => handleTopbar()} />
       {/* common textarea 테스트 */}
