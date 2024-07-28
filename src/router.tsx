@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
 import Community from './pages/Community';
+import FindId from './pages/Find/Id';
+import FindPassword from './pages/Find/Password';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
@@ -18,6 +20,12 @@ const Router = () => {
         <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/find">
+          <Route path="id" element={<FindId />} />
+          <Route path="password" element={<FindPassword />} />
+        </Route>
+
         <Route path="/loading" element={<Loading />} />
         <Route path="/community" element={<Community />} />
         <Route path="/user" element={<User />} />
