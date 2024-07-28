@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
 import User from './pages/User';
 
@@ -36,6 +37,7 @@ const Router = () => {
         </Route> */}
         <Route path="/test">
           <Route path="seohyun" element={<Seohyun />} />
+          <Route path="hasang" element={<Hasang />} />
         </Route>
       </Route>
     </Routes>
