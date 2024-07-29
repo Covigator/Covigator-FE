@@ -7,11 +7,11 @@ export const sortDropdownItems: dropdownItemType[] = [
   },
   {
     id: 1,
-    text: '인기순',
+    text: '별점순',
   },
   {
     id: 2,
-    text: '찜한순',
+    text: '좋아요순',
   },
 ];
 
