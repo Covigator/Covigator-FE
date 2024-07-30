@@ -11,7 +11,8 @@ export type CourseItemProps = {
 };
 
 const variants = {
-  container: 'w-full h-[220px] rounded-[5px] bg-wh border',
+  container:
+    'w-full h-[220px] rounded-[5px] bg-wh border shadow-[0_4px_4px_0_rgb(0,0,0,0.25)]',
   heartBtn: 'absolute top-[9px] right-3 cursor-pointer w-6 h-6',
   content: 'flex justify-between px-3 pt-[13px] pb-[18px]',
   title: 'text-body3 text-bk-90',
