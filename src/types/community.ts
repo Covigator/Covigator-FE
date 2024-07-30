@@ -1,5 +1,5 @@
 export type CourseItemType = {
-  id: string;
+  id: number;
   title: string;
   caption: string;
   img?: string;
