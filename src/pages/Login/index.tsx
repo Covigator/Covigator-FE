@@ -7,7 +7,7 @@ import KakaoLogin from '../../components/login/KakaoLogin';
 
 const index = () => {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen overflow-x-hidden">
       <div className="flex flex-col items-center justify-center mx-10">
         <h1 className="mt-32 text-h1 mb-5">Covigator</h1>
 
@@ -54,7 +54,9 @@ const index = () => {
           <div className="flex-grow border-t border-bk-30"></div>
         </div>
 
-        <KakaoLogin />
+        <div className="flex justify-center mb-28">
+          <KakaoLogin />
+        </div>
       </div>
     </div>
   );
