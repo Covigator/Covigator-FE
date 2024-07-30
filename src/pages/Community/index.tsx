@@ -1,6 +1,7 @@
 import Dropdown from '../../components/common/dropdown';
 import Header from '../../components/common/header';
 import CourseItem from '../../components/community/CourseItem';
+import FloatingBtn from '../../components/community/FloatingBtn';
 import { sortDropdownItems } from '../../constants/object';
 import { CourseItemType } from '../../types/community';
 
@@ -100,6 +101,7 @@ const index = () => {
           );
         })}
       </main>
+      <FloatingBtn />
     </div>
   );
 };
