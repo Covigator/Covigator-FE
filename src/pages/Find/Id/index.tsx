@@ -36,7 +36,7 @@ const Index = () => {
               <Input
                 size="sm"
                 placeholder="인증번호를 입력해주세요"
-                type="tel"
+                type="number"
                 className="w-full"
               />
             </div>
