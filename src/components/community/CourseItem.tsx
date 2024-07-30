@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
 import { IoStar } from 'react-icons/io5';
 
@@ -10,14 +11,26 @@ export type CourseItemProps = {
 };
 
 const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
+  const [isLiked, setIsLiked] = useState<boolean>(isLike);
+
+  const handleLike = () => {
+    setIsLiked((prev) => !prev);
+  };
+
   return (
     <div className="w-full h-[220px] rounded-[5px] bg-wh border">
       <div className="h-[150px] relative">
         <img src={img} className="w-full h-full bg-bk-50" />
-        {isLike ? (
-          <IoMdHeart className="absolute top-[9px] right-3 cursor-pointer" />
+        {isLiked ? (
+          <IoMdHeart
+            className="absolute top-[9px] right-3 cursor-pointer"
+            onClick={handleLike}
+          />
         ) : (
-          <IoMdHeartEmpty className="absolute top-[9px] right-3 cursor-pointer" />
+          <IoMdHeartEmpty
+            className="absolute top-[9px] right-3 cursor-pointer"
+            onClick={handleLike}
+          />
         )}
       </div>
 
