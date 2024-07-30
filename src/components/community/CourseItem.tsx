@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
 import { IoStar } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 export type CourseItemProps = {
+  id: number;
   title: string;
   caption: string;
   img?: string;
@@ -20,7 +22,16 @@ const variants = {
   rate: 'top-[2px] w-[15px] h-[15px] text-[#FFD600]',
 };
 
-const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
+const CourseItem = ({
+  id,
+  title,
+  caption,
+  img,
+  rate,
+  isLike,
+}: CourseItemProps) => {
+  const navigate = useNavigate();
+  const courseId = id;
   const [isLiked, setIsLiked] = useState<boolean>(isLike);
 
   const handleLike = () => {
@@ -28,7 +39,10 @@ const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
   };
 
   return (
-    <div className={variants.container}>
+    <button
+      className={variants.container}
+      onClick={() => navigate(`/course/${courseId}`)}
+    >
       <div className="h-[150px] relative">
         <img src={img} className="w-full h-full bg-bk-50" />
         {isLiked ? (
@@ -38,7 +52,7 @@ const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
         )}
       </div>
       <section className={variants.content}>
-        <div className="flex flex-col gap-[3px]">
+        <div className="flex flex-col gap-[3px] items-start">
           <p className={variants.title}>{title}</p>
           <p className={variants.desc}>{caption}</p>
         </div>
@@ -47,7 +61,7 @@ const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
           <p className={variants.desc}>{rate}</p>
         </div>
       </section>
-    </div>
+    </button>
   );
 };
 
