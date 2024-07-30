@@ -73,7 +73,7 @@ const index = () => {
   ];
 
   return (
-    <div className="w-full h-full pt-[67px] px-[30px] pb-3">
+    <div className="w-full h-full pt-[67px] px-[30px] pb-5">
       <header className="relative mb-[19px]">
         <Header
           title={'커뮤니티'}
