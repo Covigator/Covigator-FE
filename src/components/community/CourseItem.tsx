@@ -10,6 +10,15 @@ export type CourseItemProps = {
   isLike: boolean;
 };
 
+const variants = {
+  container: 'w-full h-[220px] rounded-[5px] bg-wh border',
+  heartBtn: 'absolute top-[9px] right-3 cursor-pointer w-6 h-6',
+  content: 'flex justify-between px-3 pt-[13px] pb-[18px]',
+  title: 'text-body3 text-bk-90',
+  desc: 'text-body6 text-bk-70',
+  rate: 'top-[2px] w-[15px] h-[15px] text-[#FFD600]',
+};
+
 const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
   const [isLiked, setIsLiked] = useState<boolean>(isLike);
 
@@ -18,30 +27,23 @@ const CourseItem = ({ title, caption, img, rate, isLike }: CourseItemProps) => {
   };
 
   return (
-    <div className="w-full h-[220px] rounded-[5px] bg-wh border">
+    <div className={variants.container}>
       <div className="h-[150px] relative">
         <img src={img} className="w-full h-full bg-bk-50" />
         {isLiked ? (
-          <IoMdHeart
-            className="absolute top-[9px] right-3 cursor-pointer"
-            onClick={handleLike}
-          />
+          <IoMdHeart className={variants.heartBtn} onClick={handleLike} />
         ) : (
-          <IoMdHeartEmpty
-            className="absolute top-[9px] right-3 cursor-pointer"
-            onClick={handleLike}
-          />
+          <IoMdHeartEmpty className={variants.heartBtn} onClick={handleLike} />
         )}
       </div>
-
-      <section className="flex justify-between px-3 pt-[13px] pb-[18px]">
+      <section className={variants.content}>
         <div className="flex flex-col gap-[3px]">
-          <p className="text-body3 text-bk-90">{title}</p>
-          <p className="text-body6 text-bk-70">{caption}</p>
+          <p className={variants.title}>{title}</p>
+          <p className={variants.desc}>{caption}</p>
         </div>
         <div className="flex gap-[3px]">
-          <IoStar className="top-[2px] w-[15px] h-[15px] text-[#FFD600]" />
-          <p className="text-body6 text-bk-70">{rate}</p>
+          <IoStar className={variants.rate} />
+          <p className={variants.desc}>{rate}</p>
         </div>
       </section>
     </div>
