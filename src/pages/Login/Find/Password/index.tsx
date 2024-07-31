@@ -1,6 +1,6 @@
-import Button from '../../../components/common/button/Button';
-import Input from '../../../components/common/input';
-import { Topbar } from '../../../layouts';
+import Button from '../../../../components/common/button/Button';
+import Input from '../../../../components/common/input';
+import { Topbar } from '../../../../layouts';
 
 const Index = () => {
   return (
