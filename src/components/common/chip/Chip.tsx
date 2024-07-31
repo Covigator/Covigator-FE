@@ -34,6 +34,7 @@ const Chip: React.FC<ChipProps> = ({
         style.size[size],
         style.state[state],
         'rounded-[20px]',
+        'whitespace-nowrap',
         className,
       )}
       {...rest}
