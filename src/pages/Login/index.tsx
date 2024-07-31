@@ -29,7 +29,12 @@ const index = () => {
         </div>
 
         <div className="mt-11">
-          <Button size="lg" color="default" shape="square">
+          <Button
+            size="lg"
+            color="default"
+            shape="square"
+            className="text-btn1"
+          >
             로그인
           </Button>
         </div>
