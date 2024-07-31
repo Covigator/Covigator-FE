@@ -11,7 +11,7 @@ const index = () => {
       <div className="flex flex-col items-center justify-center mx-10">
         <h1 className="mt-32 text-h1 mb-5">Covigator</h1>
 
-        <div className="flex flex-col items-center gap-y-4">
+        <div className="flex flex-col items-center gap-y-[18px]">
           <Input
             size="lg"
             icon={<HiOutlineEnvelope className="w-6 h-6" />}
