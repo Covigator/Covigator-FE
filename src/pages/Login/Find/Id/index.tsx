@@ -19,7 +19,12 @@ const Index = () => {
               type="tel"
             />
 
-            <Button size="sm" shape="square" color="sub_300">
+            <Button
+              size="sm"
+              shape="square"
+              color="sub_300"
+              className="text-btn2"
+            >
               인증요청
             </Button>
           </div>
@@ -28,7 +33,7 @@ const Index = () => {
             띄어쓰기를 제외한 숫자만 입력해주세요
           </div>
 
-          <div className="flex mt-3 gap-x-2">
+          <div className="flex mt-[11px] gap-x-2">
             <div className="w-[240px]">
               <Input
                 size="sm"
@@ -37,7 +42,12 @@ const Index = () => {
                 className="w-full"
               />
             </div>
-            <Button size="sm" shape="square" color="sub_300">
+            <Button
+              size="sm"
+              shape="square"
+              color="sub_300"
+              className="text-btn2"
+            >
               인증
             </Button>
           </div>

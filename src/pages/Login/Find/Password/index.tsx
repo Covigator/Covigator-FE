@@ -22,7 +22,12 @@ const Index = () => {
               />
             </div>
 
-            <Button size="sm" shape="square" color="sub_300">
+            <Button
+              size="sm"
+              shape="square"
+              color="sub_300"
+              className="text-btn2"
+            >
               인증요청
             </Button>
           </div>
@@ -40,7 +45,12 @@ const Index = () => {
                 className="w-full"
               />
             </div>
-            <Button size="sm" shape="square" color="sub_300">
+            <Button
+              size="sm"
+              shape="square"
+              color="sub_300"
+              className="text-btn2"
+            >
               인증
             </Button>
           </div>
