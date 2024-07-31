@@ -1,21 +1,13 @@
-import { useState } from 'react';
-
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
 import Dropdown from '../../components/common/dropdown/Dropdown';
+import {
+  timeOptions,
+  withOptions,
+  chipOptions,
+} from '../../constants/homeOption';
 
 const Home = () => {
-  const timeOptions = [{ id: 0, text: '방문할 곳을 선택해주세요' }];
-
-  const chipOptions = ['식당', '카페', '액티비티', '문화/여가', '자연', '기타'];
-
-  const withOptions = [
-    { id: 0, text: '함께 방문할 사람을 선택해주세요' },
-    { id: 1, text: '연인' },
-    { id: 2, text: '가족' },
-    { id: 3, text: '친구' },
-  ];
-
   return (
     <div className="x-screen h-screen overflow-x-hidden mt-24">
       <div className="flex flex-col items-center">
@@ -26,16 +18,21 @@ const Home = () => {
             추천받고 싶은 코스에 대한 정보를 입력해주세요
           </p>
           <p className="text-body4 text-bk-70 mb-2">언제 방문할 예정인가요?</p>
-          <p className="text-body4 text-bk-70 mb-2">
-            어디를 방문할 예정인가요?
+          <p className="text-body4 text-bk-70">어디를 방문할 예정인가요?</p>
+          <div className="my-2">
+            <Dropdown dropdownItems={timeOptions} size="lg" type="sub" />
+          </div>
+          <p className="text-body6 text-sub-300 mb-6">
+            * 여기를 누르면 지도에서 지역을 선택할 수 있어요
           </p>
-          <Dropdown dropdownItems={timeOptions} size="lg" type="sub" />
-          <p className="text-body4 text-bk-70 mb-2">
+
+          <p className="text-body4 text-bk-70 my-2">
             누구와 방문할 예정인가요?
           </p>
+
           <Dropdown dropdownItems={withOptions} size="lg" type="sub" />
-          <p className="text-body5 mb-2">어떤 곳을 방문하고 싶나요?</p>
-          <div className="grid grid-cols-3 gap-2 w-full">
+          <p className="text-body5 mt-8 mb-3">어떤 곳을 방문하고 싶나요?</p>
+          <div className="grid grid-cols-3 gap-x-7 gap-y-3">
             {chipOptions.map((option, index) => (
               <Chip key={index} size="md" state="inactive">
                 {option}
@@ -44,9 +41,16 @@ const Home = () => {
           </div>
         </div>
 
-        <Button size="lg" color="default">
-          추천받기
-        </Button>
+        <div className="mt-[52px] mb-16 w-[280px] h-[54px]">
+          <Button
+            size="lg"
+            color="disabled"
+            shape="square"
+            className="w-full h-full"
+          >
+            추천받기
+          </Button>
+        </div>
       </div>
     </div>
   );
