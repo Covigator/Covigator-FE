@@ -1,6 +1,7 @@
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
 import Dropdown from '../../components/common/dropdown/Dropdown';
+import SelectBox from '../../components/home/selectBox/SelectBox';
 import {
   timeOptions,
   withOptions,
@@ -18,9 +19,16 @@ const Home = () => {
             추천받고 싶은 코스에 대한 정보를 입력해주세요
           </p>
           <p className="text-body4 text-bk-70 mb-2">언제 방문할 예정인가요?</p>
-          <p className="text-body4 text-bk-70">어디를 방문할 예정인가요?</p>
-          <div className="my-2">
-            <Dropdown dropdownItems={timeOptions} size="lg" type="sub" />
+
+          <SelectBox />
+
+          <p className="text-body4 text-bk-70 mt-8">
+            어디를 방문할 예정인가요?
+          </p>
+          <div className="my-2 w-[280px]">
+            <div className="w-full">
+              <Dropdown dropdownItems={timeOptions} size="lg" type="sub" />
+            </div>
           </div>
           <p className="text-body6 text-sub-300 mb-6">
             * 여기를 누르면 지도에서 지역을 선택할 수 있어요

@@ -28,3 +28,6 @@ interface Window {
     maps: KakaoMaps; // window 객체에 카카오맵 API 추가
   };
 }
+
+declare module 'clsx';
+declare module 'react-datepicker';
