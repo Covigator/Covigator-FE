@@ -11,20 +11,17 @@ const index = () => {
       <div className="flex flex-col items-center justify-center mx-10">
         <h1 className="mt-32 text-h1 mb-5">Covigator</h1>
 
-        <div className="flex flex-col items-center gap-y-4">
+        <div className="w-full flex flex-col items-center gap-y-4">
           <Input
-            size="lg"
+            size="md"
             icon={<HiOutlineEnvelope className="w-6 h-6" />}
             placeholder="이메일을 입력해주세요"
-            className="w-72"
-            // w-[280px]라고 하면 적용이 안되고, w-72라고 해야 적용이 됨
           />
 
           <Input
-            size="lg"
+            size="md"
             icon={<CiLock className="w-6 h-6" />}
             placeholder="비밀번호를 입력해주세요"
-            className="w-72"
           />
         </div>
 
