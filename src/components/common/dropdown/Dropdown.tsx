@@ -37,8 +37,11 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
   const [selectedItem, setSelectedItem] = useState<number>(dropdownItems[0].id);
 
   const handleSelect = (item: dropdownItemType) => {
-    setSelectedItem(item.id);
-    setIsOpen(!isOpen);
+    if (item.id !== 0) {
+      // 0번째 항목은 선택하지 않음
+      setSelectedItem(item.id);
+      setIsOpen(false); // 항목 선택 시 드롭다운을 닫음
+    }
   };
 
   return (
@@ -78,8 +81,9 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
         unmountOnExit
       >
         <div className="w-full h-0 z-10 absolute pt-1">
-          {dropdownItems.map((item) => {
-            const isFirst = item.id === 0;
+          {dropdownItems.slice(1).map((item) => {
+            // 0번째 항목을 제외하고 렌더링
+            const isFirst = item.id === 1; // 1번째 항목이 이제 첫 번째가 됨
             const isLast = item.id === dropdownItems.length - 1;
 
             return (
