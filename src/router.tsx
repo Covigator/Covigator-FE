@@ -8,7 +8,7 @@ import FindPassword from './pages/Find/Password';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
-import Register from './pages/Register';
+import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
 import User from './pages/User';
@@ -20,7 +20,7 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<SignUp />} />
 
         <Route path="/find">
           <Route path="id" element={<FindId />} />

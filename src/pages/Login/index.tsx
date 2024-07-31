@@ -51,7 +51,7 @@ const index = () => {
             비밀번호 찾기
           </a>
           |
-          <a href="/register" className="ml-[11px]">
+          <a href="/signup" className="ml-[11px]">
             회원가입
           </a>
         </div>
