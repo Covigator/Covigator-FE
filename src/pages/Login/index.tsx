@@ -10,6 +10,7 @@ const index = () => {
     <div className="h-full w-full overflow-x-hidden">
       <div className="flex flex-col items-center justify-center mx-10">
         <h1 className="mt-[135px] text-h1 mb-[57px]">Covigator</h1>
+
         <div className="flex flex-col items-center gap-y-[18px]">
           <div className="w-[280px]">
             <Input
@@ -55,10 +56,12 @@ const index = () => {
           </a>
         </div>
 
-        <div className="relative flex items-center w-full mt-[33px] mb-[15px]">
-          <div className="flex-grow border-t border-bk-30"></div>
-          <span className="flex-shrink mx-4 text-body5">또는</span>
-          <div className="flex-grow border-t border-bk-30"></div>
+        <div className="flex items-center w-full max-w-[280px] mt-[33px] mb-[15px]">
+          <div className="flex-grow border-t border-bk-50 w-[120px]"></div>
+          <span className="flex-shrink mx-[7px] text-body4 text-bk-50 whitespace-nowrap">
+            또는
+          </span>
+          <div className="flex-grow border-t border-bk-50  w-[120px]"></div>
         </div>
 
         <div className="flex justify-center">
