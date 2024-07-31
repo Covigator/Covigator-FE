@@ -10,7 +10,6 @@ const index = () => {
     <div className="h-full w-full overflow-x-hidden">
       <div className="flex flex-col items-center justify-center mx-10">
         <h1 className="mt-[135px] text-h1 mb-[57px]">Covigator</h1>
-
         <div className="flex flex-col items-center gap-y-[18px]">
           <div className="w-[280px]">
             <Input

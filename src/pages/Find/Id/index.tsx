@@ -13,14 +13,11 @@ const Index = () => {
 
         <div className="flex flex-col">
           <div className="flex gap-x-2 mb-1">
-            <div className="w-[240px]">
-              <Input
-                size="sm"
-                placeholder="휴대폰 번호를 입력해주세요"
-                type="tel"
-                className="w-full"
-              />
-            </div>
+            <Input
+              size="sm"
+              placeholder="휴대폰 번호를 입력해주세요"
+              type="tel"
+            />
 
             <Button size="sm" shape="square" color="sub_300">
               인증요청
