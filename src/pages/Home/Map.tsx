@@ -1,10 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 
-const Map: React.FC = () => {
+interface MapProps {
+  lat: number;
+  lng: number;
+  radius?: number;
+}
+
+const Map: React.FC<MapProps> = ({ lat, lng, radius }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
-  const { lat, lng } = (location.state as { lat?: number; lng?: number }) || {};
 
   useEffect(() => {
     const loadKakaoMaps = () => {
@@ -20,25 +23,39 @@ const Map: React.FC = () => {
         if (!mapRef.current) return;
 
         const options = {
-          center: new window.kakao.maps.LatLng(
-            lat ?? 37.543239722374615,
-            lng ?? 127.07733005460825,
-          ),
+          center: new window.kakao.maps.LatLng(lat, lng),
           level: 3,
         };
 
-        new window.kakao.maps.Map(mapRef.current, options);
+        const map = new window.kakao.maps.Map(mapRef.current, options);
+
+        // 마커 추가
+        const marker = new window.kakao.maps.Marker({
+          position: new window.kakao.maps.LatLng(lat, lng),
+        });
+        marker.setMap(map);
+
+        // radius가 제공된 경우에만 원 추가
+        if (radius) {
+          const circle = new window.kakao.maps.Circle({
+            center: new window.kakao.maps.LatLng(lat, lng),
+            radius: radius * 1000, // km -> m
+            strokeWeight: 1,
+            strokeColor: '#75B8FA',
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid',
+            fillColor: '#CFE7FF',
+            fillOpacity: 0.3,
+          });
+          circle.setMap(map);
+        }
       });
     };
 
     loadKakaoMaps();
-  }, [lat, lng]);
+  }, [lat, lng, radius]);
 
-  return (
-    <div className="h-screen w-screen">
-      <div id="map" ref={mapRef} className="w-full h-4/5"></div>
-    </div>
-  );
+  return <div ref={mapRef} className="w-full h-full"></div>;
 };
 
 export default Map;

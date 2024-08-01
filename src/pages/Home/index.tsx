@@ -5,6 +5,7 @@ import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
 import { DropdownItemType } from '../../components/common/dropdown';
 import Dropdown from '../../components/common/dropdown/Dropdown';
+import LocationDialog from '../../components/home/locationDialog/LocationDialog';
 import SelectBox from '../../components/home/selectBox/SelectBox';
 import {
   locationOptions,
@@ -17,13 +18,19 @@ const Home = () => {
   const [selectedLocation, setSelectedLocation] = useState<DropdownItemType>(
     locationOptions[0],
   );
+  const [showLocationDialog, setShowLocationDialog] = useState(false);
 
   const handleLocationSelect = (item: DropdownItemType) => {
     setSelectedLocation(item);
     if (item.id !== 0) {
-      navigate('/map', { state: { lat: item.lat, lng: item.lng } });
+      setShowLocationDialog(true);
     }
   };
+
+  const handleCloseLocationDialog = () => {
+    setShowLocationDialog(false);
+  };
+
   return (
     <div className="h-full w-full overflow-x-hidden">
       <div className="flex flex-col items-center mt-[55px]">
@@ -84,6 +91,13 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {showLocationDialog && selectedLocation.lat && selectedLocation.lng && (
+        <LocationDialog
+          lat={selectedLocation.lat}
+          lng={selectedLocation.lng}
+          onClose={handleCloseLocationDialog}
+        />
+      )}
     </div>
   );
 };

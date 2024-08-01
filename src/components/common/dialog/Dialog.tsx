@@ -37,7 +37,9 @@ const Dialog: React.FC<DialogProps> = ({
           {showSubtitle ? (
             <div className="w-[282px] rounded-[10px] flex flex-col gap-y-[8px] mb-[8px]">
               <h3 className="text-h3 text-center text-bk-100">{title}</h3>
-              <p className="text-body5 text-center text-bk-70">{subtitle}</p>
+              <p className="text-body5 text-center text-bk-70 whitespace-pre-line">
+                {subtitle}
+              </p>
             </div>
           ) : (
             <h3 className="text-h3 text-center text-bk-100 mb-[8px]">
