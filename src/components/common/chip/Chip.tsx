@@ -33,7 +33,7 @@ const Chip: React.FC<ChipProps> = ({
         style.base,
         style.size[size],
         style.state[state],
-        'rounded-[20px]',
+        'rounded-[20px] whitespace-nowrap',
         className,
       )}
       {...rest}
