@@ -1,0 +1,104 @@
+.custom-calendar {
+  width: 100%;
+  max-width: 240px;
+  border: none;
+}
+
+[aria-live] {
+  display: none;
+}
+
+/* 헤더 */
+.react-datepicker__header {
+  background-color: white;
+  border-bottom: none;
+}
+
+/* 월 표시 숨김 */
+.react-datepicker__current-month {
+  display: none;
+}
+
+/* 요일 */
+.react-datepicker__day-names {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 개별 요일 이름 */
+.react-datepicker__day-name {
+  width: 2rem;
+  line-height: 2rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.react-datepicker__month {
+  margin: 0;
+}
+
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.react-datepicker__day {
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  margin: 0.1rem 0;
+  border-radius: 50%;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* 해당 월이 아니면 보이지 않게 */
+.react-datepicker__day--outside-month {
+  cursor: default;
+  visibility: hidden;
+}
+
+/* 선택된 날짜 스타일 */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #2d387a; /* sub-400 */
+  color: white;
+}
+
+/* 오늘 날짜 스타일 */
+.react-datepicker__day--today {
+  font-weight: bold;
+}
+
+/* 날짜에 마우스 호버 시 스타일 */
+.react-datepicker__day:hover {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.5rem;
+  background-color: white;
+}
+
+.custom-header button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+}
+
+.custom-header .current-month {
+  font-size: 1rem;
+  font-weight: bold;
+}

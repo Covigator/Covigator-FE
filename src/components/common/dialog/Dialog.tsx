@@ -38,22 +38,28 @@ const Dialog: React.FC<DialogProps> = ({
       )}
       {content && <div className="mb-[18px]">{content}</div>}
       <div className="flex gap-[16px]">
-        <Button
-          size="md"
-          color="sub_300"
-          shape="square"
-          onClick={handleConfirm}
-        >
-          {confirmText}
-        </Button>
-        <Button
-          size="md"
-          color="disabled"
-          shape="square"
-          onClick={handleCancel}
-        >
-          {cancelText}
-        </Button>
+        <div className="w-[115px] h-[43px]">
+          <Button
+            size="md"
+            color="sub_300"
+            shape="square"
+            onClick={handleConfirm}
+            className="w-full h-full text-btn2"
+          >
+            {confirmText}
+          </Button>
+        </div>
+        <div className="w-[115px] h-[43px] text-btn2">
+          <Button
+            size="md"
+            color="disabled"
+            shape="square"
+            onClick={handleCancel}
+            className="w-full h-full text-btn2"
+          >
+            {cancelText}
+          </Button>
+        </div>
       </div>
     </div>
   );
