@@ -6,6 +6,9 @@ import Community from './pages/Community';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
+import FindId from './pages/Login/Find/Id';
+import FindPassword from './pages/Login/Find/Password';
+import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
 import User from './pages/User';
@@ -17,6 +20,13 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+
+        <Route path="/find">
+          <Route path="id" element={<FindId />} />
+          <Route path="password" element={<FindPassword />} />
+        </Route>
+
         <Route path="/loading" element={<Loading />} />
         <Route path="/community" element={<Community />} />
         <Route path="/user" element={<User />} />
