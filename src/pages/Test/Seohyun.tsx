@@ -1,10 +1,11 @@
 import { HiOutlineMail } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
+import Button from '../../components/common/button';
 import Dropdown from '../../components/common/dropdown';
 import Input from '../../components/common/input';
-import { regionDropdownItems, sortDropdownItems } from '../../constants/object';
 import Textarea from '../../components/common/textarea';
+import { regionDropdownItems, sortDropdownItems } from '../../constants/object';
 import { Topbar } from '../../layouts';
 
 const Seohyun = () => {
@@ -14,7 +15,19 @@ const Seohyun = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-3 pt-4 px-2">
+    <div className="w-full flex flex-col gap-3 pt-20 px-2">
+      <Button size={'xs'} shape={'square'} color={'sub_300'}>
+        채팅방
+      </Button>
+      <Button size={'sm'} shape={'rounded'} color={'sub_300'}>
+        채팅방
+      </Button>
+      <Button size={'md'} shape={'rounded'} color={'sub_300'}>
+        채팅방
+      </Button>
+      <Button size={'lg'} shape={'rounded'} color={'sub_300'}>
+        채팅방
+      </Button>
       {/* common dropdown 테스트 */}
       <Dropdown dropdownItems={sortDropdownItems} size="sm" type={'primary'} />
       <Dropdown dropdownItems={regionDropdownItems} size="lg" type={'sub'} />
