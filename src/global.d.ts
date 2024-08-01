@@ -9,6 +9,7 @@ interface KakaoMaps {
   Map: new (container: HTMLElement, options: KakaoMapOptions) => kakao.maps.Map;
   Marker: new (options: kakao.maps.MarkerOptions) => kakao.maps.Marker;
   Circle: new (options: kakao.maps.CircleOptions) => kakao.maps.Circle;
+  LatLngBounds: new () => kakao.maps.LatLngBounds; // 추가
 }
 
 declare namespace kakao {
@@ -18,6 +19,10 @@ declare namespace kakao {
     }
     export class Map {
       constructor(container: HTMLElement, options: KakaoMapOptions);
+      setCenter(latlng: LatLng): void;
+      setLevel(level: number, options?: { animate: boolean }): void;
+      getLevel(): number;
+      setBounds(bounds: LatLngBounds): void;
     }
     export class Marker {
       constructor(options: MarkerOptions);
@@ -26,6 +31,10 @@ declare namespace kakao {
     export class Circle {
       constructor(options: CircleOptions);
       setMap(map: Map | null): void;
+    }
+    export class LatLngBounds {
+      constructor();
+      extend(latlng: LatLng): void;
     }
     export interface MarkerOptions {
       position: LatLng;
