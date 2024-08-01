@@ -6,3 +6,11 @@ export type CourseItemType = {
   rate: number;
   isLike: boolean;
 };
+
+export type PlaceItemType = {
+  id: number;
+  type: string;
+  name: string;
+  desc: string;
+  img?: string;
+};
