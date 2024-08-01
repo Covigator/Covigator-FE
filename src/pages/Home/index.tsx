@@ -1,14 +1,29 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
+import { DropdownItemType } from '../../components/common/dropdown';
 import Dropdown from '../../components/common/dropdown/Dropdown';
 import SelectBox from '../../components/home/selectBox/SelectBox';
 import {
-  timeOptions,
+  locationOptions,
   withOptions,
   chipOptions,
 } from '../../constants/homeOption';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [selectedLocation, setSelectedLocation] = useState<DropdownItemType>(
+    locationOptions[0],
+  );
+
+  const handleLocationSelect = (item: DropdownItemType) => {
+    setSelectedLocation(item);
+    if (item.id !== 0) {
+      navigate('/map', { state: { lat: item.lat, lng: item.lng } });
+    }
+  };
   return (
     <div className="h-full w-full overflow-x-hidden">
       <div className="flex flex-col items-center mt-[55px]">
@@ -27,7 +42,12 @@ const Home = () => {
           </p>
           <div className="my-[7px] w-[280px]">
             <div className="w-full">
-              <Dropdown dropdownItems={timeOptions} size="lg" type="sub" />
+              <Dropdown
+                dropdownItems={locationOptions}
+                size="lg"
+                type="sub"
+                onSelect={handleLocationSelect}
+              />
             </div>
           </div>
           <p className="text-body6 text-sub-300 mb-[23px]">

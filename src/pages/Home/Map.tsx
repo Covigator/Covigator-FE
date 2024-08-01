@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Map: React.FC = () => {
-  // 지도를 표시할 div 참조
   const mapRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const { lat, lng } = (location.state as { lat?: number; lng?: number }) || {};
 
   useEffect(() => {
-    // 카카오맵 API 로드 함수
     const loadKakaoMaps = () => {
-      // 카카오맵 API가 잘 로드되었는지 확인
       if (
         typeof window.kakao === 'undefined' ||
         typeof window.kakao.maps === 'undefined'
@@ -16,26 +16,23 @@ const Map: React.FC = () => {
         return;
       }
 
-      // 카카오맵 API 로드 완료 후 실행될 함수
       window.kakao.maps.load(() => {
-        // mapRef가 유효한지 확인
         if (!mapRef.current) return;
 
         const options = {
           center: new window.kakao.maps.LatLng(
-            37.543239722374615,
-            127.07733005460825,
+            lat ?? 37.543239722374615,
+            lng ?? 127.07733005460825,
           ),
           level: 3,
         };
 
-        // 지도 생성
         new window.kakao.maps.Map(mapRef.current, options);
       });
     };
 
     loadKakaoMaps();
-  }, []);
+  }, [lat, lng]);
 
   return (
     <div className="h-screen w-screen">
