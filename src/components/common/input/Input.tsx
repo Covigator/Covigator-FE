@@ -44,7 +44,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   };
 
   return (
-    <div className={clsx(style.sizes[size], 'relative')}>
+    <div className={clsx(style.sizes[size], 'relative w-full')}>
       <div
         className={clsx(
           'absolute top-2 left-[15px]',
