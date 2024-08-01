@@ -5,14 +5,17 @@ import { Navigation } from '.';
 const Layout = () => {
   const location = useLocation();
 
-  /*  TODO: 바텀내비 및 헤더 조건  */
-  // const navNotNeeded = location.pathname === ''
+  /*  TODO: 바텀내비 조건  */
+  const navNotNeeded =
+    location.pathname.includes('detail') || location.pathname.includes('chat');
   // const topbarNeeded =
 
   return (
     <div className="w-full h-screen">
-      <Outlet />
-      <Navigation />
+      <div className={!navNotNeeded ? 'pb-16' : ''}>
+        <Outlet />
+      </div>
+      {!navNotNeeded && <Navigation />}
     </div>
   );
 };
