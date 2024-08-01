@@ -51,7 +51,7 @@ const Map = ({ lat, lng, radius }: MapProps) => {
             center: mapCenter,
             radius: radius * 1000, // km를 m로 변환
             strokeWeight: 1,
-            strokeColor: '#75B8FA',
+            strokeColor: '#fa0000',
             strokeOpacity: 0.8,
             strokeStyle: 'solid',
             fillColor: '#CFE7FF',
