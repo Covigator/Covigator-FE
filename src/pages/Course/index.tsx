@@ -1,4 +1,6 @@
-import { IoMdHeartEmpty } from 'react-icons/io';
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useState } from 'react';
+import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/common/button';
@@ -8,7 +10,6 @@ import { Topbar } from '../../layouts';
 import { PlaceItemType, ReviewItemType } from '../../types/community';
 
 const index = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { courseId } = useParams();
   const dummy: PlaceItemType[] = [
     {
@@ -40,6 +41,12 @@ const index = () => {
     { id: 5, name: '조하상', content: '여기 좋아요', rate: 4 },
   ];
 
+  const [isLike, setIsLike] = useState<boolean>();
+
+  const handleLike = () => {
+    setIsLike((prev) => !prev);
+  };
+
   return (
     <div className="w-full h-full px-[30px] pt-[62px] mb-5">
       <Topbar />
@@ -47,7 +54,18 @@ const index = () => {
         <p className="text-bk-90 text-h1">성수동 데이트</p>
         <section className="flex gap-[10px] items-center">
           <div className="flex flex-col items-center">
-            <IoMdHeartEmpty className="w-6 h-6" />
+            {isLike ? (
+              <IoMdHeart
+                className="w-6 h-6 cursor-pointer text-primary-500"
+                onClick={handleLike}
+              />
+            ) : (
+              <IoMdHeartEmpty
+                className="w-6 h-6 cursor-pointer text-bk-70"
+                onClick={handleLike}
+              />
+            )}
+
             <p className="text-bk-70 text-body6 !text-[8px]">36</p>
           </div>
           <Button size={'xs'} shape={'square'} color={'sub_300'}>
@@ -80,7 +98,7 @@ const index = () => {
             리뷰작성
           </Button>
         </div>
-        <div className="flex gap-[10px] whitespace-nowrap overflow-auto">
+        <div className="flex gap-[10px] whitespace-nowrap overflow-auto cursor-pointer">
           {/* TODO: scrollbar 커스텀 */}
           {reviewDummy.map((d) => {
             return (
