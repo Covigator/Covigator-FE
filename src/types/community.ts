@@ -14,3 +14,11 @@ export type PlaceItemType = {
   desc: string;
   img?: string;
 };
+
+export type ReviewItemType = {
+  id: number;
+  name: string;
+  content: string;
+  img?: string;
+  rate: number;
+};

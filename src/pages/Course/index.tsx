@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
+import ReviewItem from '../../components/community/ReviewItem';
 import { Topbar } from '../../layouts';
-import { PlaceItemType } from '../../types/community';
+import { PlaceItemType, ReviewItemType } from '../../types/community';
 
 const index = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -30,8 +31,17 @@ const index = () => {
     },
   ];
 
+  const reviewDummy: ReviewItemType[] = [
+    { id: 0, name: '조하상', content: '여기 좋아요', rate: 4 },
+    { id: 1, name: '조하상', content: '여기 좋아요', rate: 4 },
+    { id: 2, name: '조하상', content: '여기 좋아요', rate: 4 },
+    { id: 3, name: '조하상', content: '여기 좋아요', rate: 4 },
+    { id: 4, name: '조하상', content: '여기 좋아요', rate: 4 },
+    { id: 5, name: '조하상', content: '여기 좋아요', rate: 4 },
+  ];
+
   return (
-    <div className="w-full h-full px-[30px] pt-[62px]">
+    <div className="w-full h-full px-[30px] pt-[62px] mb-5">
       <Topbar />
       <header className="flex justify-between items-center">
         <p className="text-bk-90 text-h1">성수동 데이트</p>
@@ -62,6 +72,27 @@ const index = () => {
             </>
           );
         })}
+      </section>
+      <section>
+        <div className="mt-[11px] mb-[9px] w-full flex justify-between items-center">
+          <p className="text-body3 text-bk-80">리뷰 ({reviewDummy.length})</p>
+          <Button size={'xs'} shape={'square'} color={'sub_300'}>
+            리뷰작성
+          </Button>
+        </div>
+        <div className="flex gap-[10px] whitespace-nowrap overflow-auto">
+          {/* TODO: scrollbar 커스텀 */}
+          {reviewDummy.map((d) => {
+            return (
+              <ReviewItem
+                key={d.id}
+                name={d.name}
+                content={d.content}
+                rate={d.rate}
+              />
+            );
+          })}
+        </div>
       </section>
     </div>
   );
