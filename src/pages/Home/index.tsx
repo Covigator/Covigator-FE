@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
 
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
-import { DropdownItemType } from '../../components/common/dropdown';
+import {
+  DropdownItemType,
+  LocationItemType,
+} from '../../components/common/dropdown';
 import Dropdown from '../../components/common/dropdown/Dropdown';
 import LocationDialog from '../../components/home/locationDialog/LocationDialog';
 import SelectBox from '../../components/home/selectBox/SelectBox';
@@ -14,11 +16,22 @@ import {
 } from '../../constants/homeOption';
 
 const Home = () => {
-  const navigate = useNavigate();
-  const [selectedLocation, setSelectedLocation] = useState<DropdownItemType>(
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationItemType>(
     locationOptions[0],
   );
+  const [selectedCompanion, setSelectedCompanion] = useState<DropdownItemType>(
+    withOptions[0],
+  );
+  const [selectedPlaces, setSelectedPlaces] = useState<Record<string, boolean>>(
+    chipOptions.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
+  );
   const [showLocationDialog, setShowLocationDialog] = useState(false);
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+    console.log('날짜 변경 :', date);
+  };
 
   const handleLocationSelect = (item: DropdownItemType) => {
     setSelectedLocation(item);
@@ -27,9 +40,51 @@ const Home = () => {
     }
   };
 
+  const handleLocationConfirm = (lat: number, lng: number, radius: number) => {
+    setSelectedLocation({
+      ...selectedLocation,
+      lat,
+      lng,
+      radius,
+    });
+    setShowLocationDialog(false);
+  };
+
+  const handleCompanionSelect = (item: DropdownItemType) => {
+    setSelectedCompanion(item);
+  };
+
+  const handlePlaceSelect = (place: string) => {
+    setSelectedPlaces((prev) => ({ ...prev, [place]: !prev[place] }));
+  };
+
   const handleCloseLocationDialog = () => {
     setShowLocationDialog(false);
   };
+
+  // 전부 선택했는지
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
+  useEffect(() => {
+    const dateSelected = selectedDate !== null;
+    const locationSelected = selectedLocation.id !== 0;
+    const companionSelected = selectedCompanion.id !== 0;
+    const placesSelected = Object.values(selectedPlaces).some(Boolean);
+
+    // console.log('--------------------');
+    // console.log('Date selected:', dateSelected);
+    // console.log('Location selected:', locationSelected);
+    // console.log('Companion selected:', companionSelected);
+    // console.log('Places selected:', placesSelected);
+
+    const allSelected =
+      dateSelected && locationSelected && companionSelected && placesSelected;
+
+    // console.log('All selected:', allSelected);
+    // console.log('--------------------');
+
+    setIsAllSelected(allSelected);
+  }, [selectedDate, selectedLocation, selectedCompanion, selectedPlaces]);
 
   return (
     <div className="h-full w-full overflow-x-hidden">
@@ -42,7 +97,7 @@ const Home = () => {
           </p>
           <p className="text-body4 text-bk-70 mb-2">언제 방문할 예정인가요?</p>
 
-          <SelectBox />
+          <SelectBox onChange={handleDateChange} />
 
           <p className="text-body4 text-bk-70 mt-[31px]">
             어디를 방문할 예정인가요?
@@ -65,7 +120,12 @@ const Home = () => {
 
           <div className="mt-[7px] w-[280px]">
             <div className="w-full">
-              <Dropdown dropdownItems={withOptions} size="lg" type="sub" />
+              <Dropdown
+                dropdownItems={withOptions}
+                size="lg"
+                type="sub"
+                onSelect={handleCompanionSelect}
+              />
             </div>
           </div>
 
@@ -73,16 +133,21 @@ const Home = () => {
             어떤 곳을 방문하고 싶나요?
           </p>
           <div className="grid grid-cols-3 gap-x-[27px] gap-y-[11px]">
-            {chipOptions.map((option, index) => (
-              <Chip key={index} size="md" state="inactive">
-                {option}
-              </Chip>
+            {chipOptions.map((option) => (
+              <div key={option} onClick={() => handlePlaceSelect(option)}>
+                <Chip
+                  size="md"
+                  state={selectedPlaces[option] ? 'active' : 'inactive'}
+                >
+                  {option}
+                </Chip>
+              </div>
             ))}
           </div>
           <div className="mt-[52px] mb-[84px] w-[280px] h-[54px]">
             <Button
               size="lg"
-              color="disabled"
+              color={isAllSelected ? 'default' : 'disabled'}
               shape="square"
               className="w-full h-full text-btn1"
             >
@@ -96,6 +161,7 @@ const Home = () => {
           lat={selectedLocation.lat}
           lng={selectedLocation.lng}
           onClose={handleCloseLocationDialog}
+          onConfirm={handleLocationConfirm}
         />
       )}
     </div>

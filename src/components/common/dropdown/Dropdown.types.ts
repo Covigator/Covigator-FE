@@ -5,6 +5,10 @@ export type DropdownProps = {
   onSelect?: (item: DropdownItemType) => void;
 };
 
+export type LocationItemType = DropdownItemType & {
+  radius?: number;
+};
+
 export const dropdownSize = {
   sm: 'sm',
   lg: 'lg',

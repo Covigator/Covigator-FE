@@ -10,10 +10,15 @@ interface LocationDialogProps {
   lat: number;
   lng: number;
   onClose: () => void;
+  onConfirm: (lat: number, lng: number, radius: number) => void;
 }
 
-const LocationDialog = ({ lat, lng, onClose }: LocationDialogProps) => {
-  const navigate = useNavigate();
+const LocationDialog = ({
+  lat,
+  lng,
+  onClose,
+  onConfirm,
+}: LocationDialogProps) => {
   const [selectedRadius, setSelectedRadius] = useState<number>(1);
 
   const handleRadiusSelect = (radius: number) => {
@@ -21,7 +26,7 @@ const LocationDialog = ({ lat, lng, onClose }: LocationDialogProps) => {
   };
 
   const handleConfirm = () => {
-    navigate('/map', { state: { lat, lng, radius: selectedRadius } });
+    onConfirm(lat, lng, selectedRadius);
     onClose();
   };
 

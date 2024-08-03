@@ -1,6 +1,6 @@
 import './SelectBox.css';
 
-import { useState, useContext, useCallback } from 'react';
+import { useState, useContext, useCallback, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import {
   HiOutlineCalendar,
@@ -18,31 +18,35 @@ interface SelectBoxProps {
 
 const SelectBox = ({ onChange }: SelectBoxProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  // const [tempDate, setTempDate] = useState<Date | null>(null);
+  const tempDateRef = useRef<Date | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const { openModal, closeModal } = useModal();
   const modalState = useContext(ModalStateContext);
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+    console.log('Date changed in DatePicker:', date);
+    tempDateRef.current = date;
   };
 
   const handleConfirm = useCallback(() => {
-    if (onChange && selectedDate) {
-      onChange(selectedDate);
+    console.log('Confirming date:', tempDateRef.current);
+    setSelectedDate(tempDateRef.current);
+    if (onChange) {
+      onChange(tempDateRef.current);
     }
     setIsOpen(false);
     closeModal();
-  }, [selectedDate, onChange, closeModal]);
+  }, [onChange, closeModal]);
 
   const handleCancel = useCallback(() => {
-    setSelectedDate(null);
     setIsOpen(false);
     closeModal();
   }, [closeModal]);
 
   const handleOpenDialog = useCallback(() => {
     setIsOpen(true);
-    setSelectedDate(null);
+    tempDateRef.current = selectedDate;
     openModal({
       type: 'Dialog',
       props: {
@@ -50,7 +54,7 @@ const SelectBox = ({ onChange }: SelectBoxProps) => {
         content: (
           <div>
             <DatePicker
-              selected={null}
+              selected={tempDateRef.current}
               onChange={handleDateChange}
               showPopperArrow={false}
               inline
@@ -101,7 +105,7 @@ const SelectBox = ({ onChange }: SelectBoxProps) => {
         showSubtitle: false,
       },
     });
-  }, [handleConfirm, handleCancel, openModal]);
+  }, [selectedDate, handleConfirm, handleCancel, openModal]);
 
   return (
     <>
