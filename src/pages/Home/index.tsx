@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
@@ -16,6 +17,7 @@ import {
 } from '../../constants/homeOption';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LocationItemType>(
     locationOptions[0],
@@ -64,6 +66,12 @@ const Home = () => {
 
   // 전부 선택했는지
   const [isAllSelected, setIsAllSelected] = useState(false);
+
+  const handleRecommendation = () => {
+    if (isAllSelected) {
+      navigate('/result');
+    }
+  };
 
   useEffect(() => {
     const dateSelected = selectedDate !== null;
@@ -150,6 +158,7 @@ const Home = () => {
               color={isAllSelected ? 'default' : 'disabled'}
               shape="square"
               className="w-full h-full text-btn1"
+              onClick={handleRecommendation}
             >
               추천받기
             </Button>
