@@ -7,6 +7,14 @@ export type CourseItemType = {
   isLike: boolean;
 };
 
+export type CourseDetailType = {
+  id?: number;
+  title: string;
+  heartCount: number;
+  placeItems: PlaceItemType[];
+  reviewItems: ReviewItemType[];
+};
+
 export type PlaceItemType = {
   id: number;
   type: string;
