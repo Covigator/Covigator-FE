@@ -7,7 +7,7 @@ import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
 import ReviewItem from '../../components/community/ReviewItem';
 import { Topbar } from '../../layouts';
-import { PlaceItemType, ReviewItemType } from '../../types/community';
+import { CourseDetailType } from '../../types/community';
 
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
@@ -25,35 +25,38 @@ const variants = {
 
 const index = () => {
   const { courseId } = useParams();
-  const placeDummy: PlaceItemType[] = [
-    {
-      id: 0,
-      type: '카페',
-      name: '스타벅스',
-      desc: '굿굿',
-    },
-    {
-      id: 1,
-      type: '카페',
-      name: '스타벅스',
-      desc: '굿굿',
-    },
-    {
-      id: 2,
-      type: '카페',
-      name: '스타벅스',
-      desc: '굿굿',
-    },
-  ];
-
-  const reviewDummy: ReviewItemType[] = [
-    { id: 0, name: '조하상', content: '여기 좋아요', rate: 4 },
-    { id: 1, name: '조하상', content: '여기 좋아요', rate: 4 },
-    { id: 2, name: '조하상', content: '여기 좋아요', rate: 4 },
-    { id: 3, name: '조하상', content: '여기 좋아요', rate: 4 },
-    { id: 4, name: '조하상', content: '여기 좋아요', rate: 4 },
-    { id: 5, name: '조하상', content: '여기 좋아요', rate: 4 },
-  ];
+  const dummy: CourseDetailType = {
+    heartCount: 0,
+    title: '성수동 데이트',
+    placeItems: [
+      {
+        id: 0,
+        type: '카페',
+        name: '스타벅스',
+        desc: '굿굿',
+      },
+      {
+        id: 1,
+        type: '카페',
+        name: '스타벅스',
+        desc: '굿굿',
+      },
+      {
+        id: 2,
+        type: '카페',
+        name: '스타벅스',
+        desc: '굿굿',
+      },
+    ],
+    reviewItems: [
+      { id: 0, name: '조하상', content: '여기 좋아요', rate: 4 },
+      { id: 1, name: '조하상', content: '여기 좋아요', rate: 4 },
+      { id: 2, name: '조하상', content: '여기 좋아요', rate: 4 },
+      { id: 3, name: '조하상', content: '여기 좋아요', rate: 4 },
+      { id: 4, name: '조하상', content: '여기 좋아요', rate: 4 },
+      { id: 5, name: '조하상', content: '여기 좋아요', rate: 4 },
+    ],
+  };
 
   const [isLike, setIsLike] = useState<boolean>();
 
@@ -89,7 +92,7 @@ const index = () => {
       <div className={variants.map}>지도 자리</div>
       <section className="mt-[25px]">
         <p className={clsx('mb-[7px]', variants.label)}>코스 장소</p>
-        {placeDummy.map((d) => {
+        {dummy.placeItems.map((d) => {
           return (
             <div key={uuid()}>
               <PlaceItem
@@ -105,14 +108,14 @@ const index = () => {
       </section>
       <section className="flex flex-col gap-[9px] mt-[11px]">
         <div className={variants.headerLayout}>
-          <p className={variants.label}>리뷰 ({reviewDummy.length})</p>
+          <p className={variants.label}>리뷰 ({dummy.reviewItems.length})</p>
           <Button size={'xs'} shape={'square'} color={'sub_300'}>
             리뷰작성
           </Button>
         </div>
         <div className={variants.reviewContainer}>
           {/* TODO: scrollbar 커스텀 */}
-          {reviewDummy.map((d) => {
+          {dummy.reviewItems.map((d) => {
             return (
               <ReviewItem
                 key={uuid()}
