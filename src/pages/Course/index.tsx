@@ -26,8 +26,9 @@ const variants = {
 const index = () => {
   const { courseId } = useParams();
   const dummy: CourseDetailType = {
-    heartCount: 0,
     title: '성수동 데이트',
+    isLike: true,
+    heartCount: 36,
     placeItems: [
       {
         id: 0,
@@ -58,9 +59,15 @@ const index = () => {
     ],
   };
 
-  const [isLike, setIsLike] = useState<boolean>();
+  const [isLike, setIsLike] = useState<boolean>(dummy.isLike);
+  const [likeCount, setLikeCount] = useState<number>(dummy.heartCount);
 
   const handleLike = () => {
+    if (isLike) {
+      setLikeCount((prev) => prev - 1);
+    } else {
+      setLikeCount((prev) => prev + 1);
+    }
     setIsLike((prev) => !prev);
   };
 
@@ -82,7 +89,7 @@ const index = () => {
                 onClick={handleLike}
               />
             )}
-            <p className={variants.heartCount}>36</p>
+            <p className={variants.heartCount}>{likeCount}</p>
           </div>
           <Button size={'xs'} shape={'square'} color={'sub_300'}>
             채팅방
