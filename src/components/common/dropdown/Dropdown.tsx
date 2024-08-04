@@ -10,6 +10,7 @@ import {
 } from './Dropdown.types';
 
 import clsx from 'clsx';
+import { v4 as uuid } from 'uuid';
 
 const styles: {
   base: string;
@@ -84,7 +85,7 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
 
             return (
               <ul
-                key={item.id + item.text}
+                key={uuid()}
                 className={clsx(
                   styles.base,
                   styles.sizes[size],

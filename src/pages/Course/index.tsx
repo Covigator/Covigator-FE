@@ -9,6 +9,8 @@ import ReviewItem from '../../components/community/ReviewItem';
 import { Topbar } from '../../layouts';
 import { PlaceItemType, ReviewItemType } from '../../types/community';
 
+import { v4 as uuid } from 'uuid';
+
 const index = () => {
   const { courseId } = useParams();
   const dummy: PlaceItemType[] = [
@@ -78,16 +80,15 @@ const index = () => {
         <p className="mb-[7px] text-body3 text-bk-80">코스 장소</p>
         {dummy.map((d) => {
           return (
-            <>
+            <div key={uuid()}>
               <PlaceItem
-                key={d.id}
                 type={d.type}
                 name={d.name}
                 desc={d.desc}
                 img={d.img}
               />
               <div className="w-full h-[1px] bg-bk-50" />
-            </>
+            </div>
           );
         })}
       </section>
@@ -103,7 +104,7 @@ const index = () => {
           {reviewDummy.map((d) => {
             return (
               <ReviewItem
-                key={d.id}
+                key={uuid()}
                 name={d.name}
                 content={d.content}
                 rate={d.rate}
