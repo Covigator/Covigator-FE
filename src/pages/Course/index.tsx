@@ -9,11 +9,23 @@ import ReviewItem from '../../components/community/ReviewItem';
 import { Topbar } from '../../layouts';
 import { PlaceItemType, ReviewItemType } from '../../types/community';
 
+import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
+
+const variants = {
+  container: 'w-full h-full px-[30px] pt-[62px] mb-5',
+  headerLayout: 'flex justify-between items-center',
+  heartBtn: 'w-6 h-6 cursor-pointer',
+  heartCount: 'text-bk-70 text-body6 !text-[8px]',
+  map: 'mt-[17px] w-full h-[221px] bg-bk-40',
+  label: 'text-body3 text-bk-80',
+  reviewContainer:
+    'flex gap-[10px] whitespace-nowrap overflow-auto cursor-pointer',
+};
 
 const index = () => {
   const { courseId } = useParams();
-  const dummy: PlaceItemType[] = [
+  const placeDummy: PlaceItemType[] = [
     {
       id: 0,
       type: '카페',
@@ -50,35 +62,34 @@ const index = () => {
   };
 
   return (
-    <div className="w-full h-full px-[30px] pt-[62px] mb-5">
+    <div className={variants.container}>
       <Topbar />
-      <header className="flex justify-between items-center">
+      <header className={variants.headerLayout}>
         <p className="text-bk-90 text-h1">성수동 데이트</p>
         <section className="flex gap-[10px] items-center">
           <div className="flex flex-col items-center">
             {isLike ? (
               <IoMdHeart
-                className="w-6 h-6 cursor-pointer text-primary-500"
+                className={clsx(variants.heartBtn, 'text-primary-500')}
                 onClick={handleLike}
               />
             ) : (
               <IoMdHeartEmpty
-                className="w-6 h-6 cursor-pointer text-bk-70"
+                className={clsx(variants.heartBtn, 'text-bk-70')}
                 onClick={handleLike}
               />
             )}
-
-            <p className="text-bk-70 text-body6 !text-[8px]">36</p>
+            <p className={variants.heartCount}>36</p>
           </div>
           <Button size={'xs'} shape={'square'} color={'sub_300'}>
             채팅방
           </Button>
         </section>
       </header>
-      <div className="mt-[17px] w-full h-[221px] bg-bk-40">지도 자리</div>
-      <section className="mt-[25px] w-full">
-        <p className="mb-[7px] text-body3 text-bk-80">코스 장소</p>
-        {dummy.map((d) => {
+      <div className={variants.map}>지도 자리</div>
+      <section className="mt-[25px]">
+        <p className={clsx('mb-[7px]', variants.label)}>코스 장소</p>
+        {placeDummy.map((d) => {
           return (
             <div key={uuid()}>
               <PlaceItem
@@ -92,14 +103,14 @@ const index = () => {
           );
         })}
       </section>
-      <section>
-        <div className="mt-[11px] mb-[9px] w-full flex justify-between items-center">
-          <p className="text-body3 text-bk-80">리뷰 ({reviewDummy.length})</p>
+      <section className="flex flex-col gap-[9px] mt-[11px]">
+        <div className={variants.headerLayout}>
+          <p className={variants.label}>리뷰 ({reviewDummy.length})</p>
           <Button size={'xs'} shape={'square'} color={'sub_300'}>
             리뷰작성
           </Button>
         </div>
-        <div className="flex gap-[10px] whitespace-nowrap overflow-auto cursor-pointer">
+        <div className={variants.reviewContainer}>
           {/* TODO: scrollbar 커스텀 */}
           {reviewDummy.map((d) => {
             return (
