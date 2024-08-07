@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, PropsWithChildren, useState } from 'react';
 
 import { TextareaProps, TextareaSize } from './Textarea.types';
 
@@ -20,14 +20,13 @@ const styles: {
   },
 };
 
-const Textarea = ({
-  maxLength,
-  placeholder,
-  defaultValue,
-  size,
-  onChange,
-  onKeyDown,
-}: TextareaProps) => {
+const Textarea = forwardRef<
+  HTMLTextAreaElement,
+  PropsWithChildren<TextareaProps>
+>((props, ref) => {
+  const { maxLength, placeholder, defaultValue, size, onChange, onKeyDown } =
+    props;
+
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const [value, setValue] = useState<string>('' || defaultValue!);
@@ -45,6 +44,7 @@ const Textarea = ({
   return (
     <div className={clsx(styles.sizes[size], 'relative')}>
       <textarea
+        ref={ref}
         maxLength={maxLength}
         placeholder={placeholder}
         className={clsx(styles.base, styles.sizes[size])}
@@ -70,6 +70,6 @@ const Textarea = ({
       </p>
     </div>
   );
-};
+});
 
 export default Textarea;
