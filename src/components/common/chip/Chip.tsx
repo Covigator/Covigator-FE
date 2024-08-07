@@ -11,8 +11,8 @@ const style: {
 } = {
   base: 'flex items-center justify-center box-border select-none m-0 cursor-pointer',
   size: {
-    sm: 'w-[55px] h-[25px] py-[7px] px-[22px] text-[10px]',
-    md: 'w-[75px] h-fit py-[7px] px-[22px] text-[12px]',
+    sm: 'w-[55px] h-[25px] py-[7px] px-[22px] text-btn3',
+    md: 'w-[75px] h-fit py-[7px] px-[22px] text-body3',
   },
   state: {
     inactive: 'bg-bk-10 text-bk-50 border border-solid border-bk-50',
