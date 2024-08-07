@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
@@ -58,6 +58,8 @@ const index = () => {
       { id: 5, name: '조하상', content: '여기 좋아요', rate: 4 },
     ],
   };
+
+  const navigate = useNavigate();
 
   const [isLike, setIsLike] = useState<boolean>(dummy.isLike);
   const [likeCount, setLikeCount] = useState<number>(dummy.heartCount);
@@ -116,7 +118,16 @@ const index = () => {
       <section className="flex flex-col gap-[9px] mt-[11px]">
         <div className={variants.headerLayout}>
           <p className={variants.label}>리뷰 ({dummy.reviewItems.length})</p>
-          <Button size={'xs'} shape={'square'} color={'sub_300'}>
+          <Button
+            size={'xs'}
+            shape={'square'}
+            color={'sub_300'}
+            onClick={() =>
+              navigate('/review', {
+                state: { courseId: dummy.id, courseName: dummy.title },
+              })
+            }
+          >
             리뷰작성
           </Button>
         </div>

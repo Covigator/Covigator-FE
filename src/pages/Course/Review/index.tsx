@@ -11,9 +11,7 @@ import { v4 as uuid } from 'uuid';
 
 const index = () => {
   const location = useLocation();
-  // TODO: 리뷰 작성 버튼 클릭 시 Link의 state로 courseId 및 courseName 넘기기
-  //   const courseName = location.state.courseName;
-  const courseName = '코스이름';
+  const courseName = location.state.courseName;
 
   const [rates, setRates] = useState<boolean[]>([
     true,
