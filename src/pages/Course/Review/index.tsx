@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
 import { useLocation } from 'react-router-dom';
 
@@ -23,6 +23,9 @@ const index = () => {
   const [selectedRateIndex, setSelectedRateIndex] = useState<number>(
     rates.lastIndexOf(true),
   );
+
+  const [inputValue, setInputValue] = useState<string>('');
+  const inputValueRef = useRef<HTMLTextAreaElement>(null);
 
   const handleRate = (index: number) => {
     // 클릭한 인덱스가 현재 선택된 인덱스보다 작으면 변화 없음
@@ -62,15 +65,22 @@ const index = () => {
         })}
       </section>
       <Textarea
+        ref={inputValueRef}
         maxLength={150}
         placeholder={'코스에 대한 리뷰를 작성해주세요'}
         size={'lg'}
+        onChange={() => setInputValue(inputValueRef.current?.value || '')}
       />
       <section className="mt-[55px] flex flex-col gap-[14px]">
-        <Button size={'lg'} shape={'rounded'} color={'default'}>
+        <Button
+          size={'lg'}
+          shape={'rounded'}
+          color={inputValue === '' ? 'disabled' : 'default'}
+          disabled={inputValue === ''}
+        >
           등록하기
         </Button>
-        <Button size={'lg'} shape={'rounded'} color={'default'}>
+        <Button size={'lg'} shape={'rounded'} color={'disabled'}>
           돌아가기
         </Button>
       </section>
