@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useState } from 'react';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/common/button';
 import Header from '../../../components/common/header';
@@ -10,6 +10,7 @@ import Textarea from '../../../components/common/textarea';
 import { v4 as uuid } from 'uuid';
 
 const index = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const courseName = location.state.courseName;
 
@@ -80,7 +81,12 @@ const index = () => {
         >
           등록하기
         </Button>
-        <Button size={'lg'} shape={'rounded'} color={'disabled'}>
+        <Button
+          size={'lg'}
+          shape={'rounded'}
+          color={'disabled'}
+          onClick={() => navigate(-1)}
+        >
           돌아가기
         </Button>
       </section>
