@@ -67,13 +67,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           setValue(e.target.value);
         }}
         onKeyDown={onKeyDown}
-        className={clsx(style.base, icon && 'pl-[45px]', className)}
+        className={clsx(
+          style.base,
+          style.sizes[size],
+          icon && 'pl-[45px]',
+          className,
+        )}
       />
       {maxLength && (
         <p
           className={clsx(
             style.sizes[size],
-            'absolute top-3 right-[15px] text-body6',
+            'absolute top-3 right-[15px] !text-body6',
             isFocused ? 'text-bk-70' : 'text-bk-50',
           )}
         >
