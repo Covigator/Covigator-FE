@@ -12,6 +12,7 @@ import { v4 as uuid } from 'uuid';
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const courseId = location.state.courseId;
   const courseName = location.state.courseName;
 
   const [rates, setRates] = useState<boolean[]>([
@@ -85,7 +86,7 @@ const index = () => {
           size={'lg'}
           shape={'rounded'}
           color={'disabled'}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(`/course/${courseId}`)}
         >
           돌아가기
         </Button>

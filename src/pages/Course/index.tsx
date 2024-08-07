@@ -75,7 +75,7 @@ const index = () => {
 
   return (
     <div className={variants.container}>
-      <Topbar />
+      <Topbar handleClick={() => navigate('/community')} />
       <header className={variants.headerLayout}>
         <p className="text-bk-90 text-h1">성수동 데이트</p>
         <section className="flex gap-[10px] items-center">
@@ -124,7 +124,7 @@ const index = () => {
             color={'sub_300'}
             onClick={() =>
               navigate('/review', {
-                state: { courseId: dummy.id, courseName: dummy.title },
+                state: { courseId: courseId, courseName: dummy.title },
               })
             }
           >
