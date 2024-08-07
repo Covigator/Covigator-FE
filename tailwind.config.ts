@@ -133,7 +133,7 @@ const config: Config = {
         btn3: [
           '10px',
           {
-            fontWeight: '600',
+            fontWeight: '400',
             lineHeight: '16px',
           },
         ],

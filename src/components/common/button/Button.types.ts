@@ -24,9 +24,9 @@ export const buttonColors = {
 export type ButtonColor = (typeof buttonColors)[keyof typeof buttonColors];
 
 export type ButtonProps = {
-  size?: ButtonSize;
-  shape?: ButtonShape;
-  color?: ButtonColor;
+  size: ButtonSize;
+  shape: ButtonShape;
+  color: ButtonColor;
   className?: string;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;

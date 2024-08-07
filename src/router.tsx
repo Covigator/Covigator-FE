@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
 import Community from './pages/Community';
+import Course from './pages/Course';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
@@ -29,6 +30,7 @@ const Router = () => {
 
         <Route path="/loading" element={<Loading />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/course/:courseId" element={<Course />} />
         <Route path="/user" element={<User />} />
         {/* <Route path="/order" element={<Outlet />}>
           <Route index element={<Order />} />
