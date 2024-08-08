@@ -17,7 +17,7 @@ export type CourseDetailType = {
 };
 
 export type PlaceItemType = {
-  id: number;
+  id?: number;
   type: string;
   name: string;
   desc: string;

@@ -9,6 +9,7 @@ import Textarea from '../../../components/common/textarea';
 import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
 import { Topbar } from '../../../layouts';
+import { PlaceItemType } from '../../../types/community';
 
 import { v4 as uuid } from 'uuid';
 
@@ -24,12 +25,22 @@ const variants = {
 
 const index = () => {
   const [selectedChip, setSelectedChip] = useState<string>('');
+  const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChips = (chip: string) => {
     setSelectedChip((prev) => (prev != chip ? chip : prev));
+  };
+
+  const handleRegister = () => {
+    /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
+    const name = 'name';
+    const img = 'img';
+    const type = selectedChip;
+    const desc = textAreaRef.current?.value || '';
+    setNewPlaces((prev) => [...prev, { name, type, desc, img }]);
   };
 
   /* 장소 추가 가능 여부 판단 */
@@ -46,9 +57,10 @@ const index = () => {
 
   /* 코스 추가 가능 여부 판단 */
   const isRegisterAble = () => {
-    // if ( ) {
-    //   return true;
-    // } return false;
+    if (newPlaces.length != 0) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -66,6 +78,21 @@ const index = () => {
           placeholder={'코스 제목을 입력해주세요'}
           maxLength={15}
         />
+      </section>
+      <section className="mt-[-2px] mb-[17px]">
+        {newPlaces.map((item) => {
+          return (
+            <div key={uuid()}>
+              <PlaceItem
+                type={item.type}
+                name={item.name}
+                desc={item.desc}
+                img={item.img || ''}
+              />
+              <div className="w-full h-[1px] bg-bk-50" />
+            </div>
+          );
+        })}
       </section>
       <section className={variants.section}>
         <p className={variants.label}>장소 추가</p>
@@ -97,6 +124,7 @@ const index = () => {
           shape={'rounded'}
           color={isAddAble() ? 'sub' : 'disabled'}
           className="!mb-[6px]"
+          onClick={handleRegister}
         >
           장소 추가하기
         </Button>
