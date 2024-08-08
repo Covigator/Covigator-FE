@@ -1,10 +1,12 @@
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
+import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
 import { Topbar } from '../../layouts';
 
 const index = () => {
   return (
     <div className="h-full w-full overflow-x-hidden">
       <Topbar />
+      <RefreshRecommend />
       <CoursePreview
         date="6월 15일"
         weather="맑을"
