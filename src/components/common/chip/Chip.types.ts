@@ -14,5 +14,6 @@ export type ChipProps = {
   size: ChipSize;
   state: ChipState;
   className?: string;
+  onClick?: () => void;
   children?: React.ReactNode;
 };

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useState } from 'react';
 import { HiOutlineLockClosed } from 'react-icons/hi';
 
 import Button from '../../../components/common/button';
@@ -20,6 +22,24 @@ const variants = {
 };
 
 const index = () => {
+  const [selectedChips, setSelectedChips] = useState<string[]>([]);
+
+  const handleChips = (chip: string) => {
+    setSelectedChips(
+      (prev) =>
+        prev.includes(chip)
+          ? prev.filter((item) => item !== chip) // chip이 이미 선택되어 있으면 제거
+          : [...prev, chip], // chip이 선택되어 있지 않으면 추가
+    );
+  };
+
+  const isChipSelected = (chip: string) => {
+    if (selectedChips.includes(chip)) {
+      return 'active';
+    }
+    return 'inactive';
+  };
+
   return (
     <div className={variants.container}>
       <Topbar />
@@ -41,7 +61,12 @@ const index = () => {
         <div className={variants.chipContainer}>
           {PlaceType.map((item) => {
             return (
-              <Chip key={uuid()} size={'md'} state={'inactive'}>
+              <Chip
+                key={uuid()}
+                size={'md'}
+                state={isChipSelected(item)}
+                onClick={() => handleChips(item)}
+              >
                 {item}
               </Chip>
             );
