@@ -54,7 +54,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         {icon}
       </div>
       <input
-        value={value}
+        value={value || ''}
         placeholder={placeholder}
         maxLength={maxLength}
         type={type || 'text'}
