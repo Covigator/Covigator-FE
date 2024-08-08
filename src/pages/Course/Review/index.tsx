@@ -4,6 +4,7 @@ import { IoStar, IoStarOutline } from 'react-icons/io5';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/common/button';
+import Dialog from '../../../components/common/dialog';
 import Header from '../../../components/common/header';
 import Textarea from '../../../components/common/textarea';
 
@@ -28,6 +29,8 @@ const index = () => {
 
   const [inputValue, setInputValue] = useState<string>('');
   const inputValueRef = useRef<HTMLTextAreaElement>(null);
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleRate = (index: number) => {
     // 클릭한 인덱스가 현재 선택된 인덱스보다 작으면 변화 없음
@@ -86,11 +89,19 @@ const index = () => {
           size={'lg'}
           shape={'rounded'}
           color={'disabled'}
-          onClick={() => navigate(`/course/${courseId}`)}
+          onClick={() => setIsOpen(true)}
         >
           돌아가기
         </Button>
       </section>
+      {isOpen && (
+        <Dialog
+          title={'이전 화면으로 돌아가시겠습니까?'}
+          subtitle={'작성 중인 내용은 삭제됩니다'}
+          onConfirm={() => navigate(`/course/${courseId}`)}
+          onCancel={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 };
