@@ -6,6 +6,7 @@ import Button from '../../../components/common/button';
 import Chip from '../../../components/common/chip';
 import Input from '../../../components/common/input';
 import Textarea from '../../../components/common/textarea';
+import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
 import { Topbar } from '../../../layouts';
 
@@ -22,30 +23,19 @@ const variants = {
 };
 
 const index = () => {
-  const [selectedChips, setSelectedChips] = useState<string[]>([]);
+  const [selectedChip, setSelectedChip] = useState<string>('');
+
   const inputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChips = (chip: string) => {
-    setSelectedChips(
-      (prev) =>
-        prev.includes(chip)
-          ? prev.filter((item) => item !== chip) // chip이 이미 선택되어 있으면 제거
-          : [...prev, chip], // chip이 선택되어 있지 않으면 추가
-    );
-  };
-
-  const isChipSelected = (chip: string) => {
-    if (selectedChips.includes(chip)) {
-      return 'active';
-    }
-    return 'inactive';
+    setSelectedChip((prev) => (prev != chip ? chip : prev));
   };
 
   /* 장소 추가 가능 여부 판단 */
   const isAddAble = () => {
     if (
-      selectedChips.length != 0 &&
+      selectedChip != '' &&
       inputRef.current?.value != '' &&
       textAreaRef.current?.value != ''
     ) {
@@ -86,7 +76,7 @@ const index = () => {
               <Chip
                 key={uuid()}
                 size={'md'}
-                state={isChipSelected(item)}
+                state={selectedChip === item ? 'active' : 'inactive'}
                 onClick={() => handleChips(item)}
               >
                 {item}
