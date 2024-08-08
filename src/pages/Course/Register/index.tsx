@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { HiOutlineLockClosed } from 'react-icons/hi';
 
 import Button from '../../../components/common/button';
@@ -23,6 +23,8 @@ const variants = {
 
 const index = () => {
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChips = (chip: string) => {
     setSelectedChips(
@@ -40,6 +42,25 @@ const index = () => {
     return 'inactive';
   };
 
+  /* 장소 추가 가능 여부 판단 */
+  const isAddAble = () => {
+    if (
+      selectedChips.length != 0 &&
+      inputRef.current?.value != '' &&
+      textAreaRef.current?.value != ''
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  /* 코스 추가 가능 여부 판단 */
+  const isRegisterAble = () => {
+    // if ( ) {
+    //   return true;
+    // } return false;
+  };
+
   return (
     <div className={variants.container}>
       <Topbar />
@@ -50,6 +71,7 @@ const index = () => {
       <section className={variants.section}>
         <p className={variants.label}>코스 제목</p>
         <Input
+          ref={inputRef}
           size={'lg'}
           placeholder={'코스 제목을 입력해주세요'}
           maxLength={15}
@@ -73,6 +95,7 @@ const index = () => {
           })}
         </div>
         <Textarea
+          ref={textAreaRef}
           maxLength={50}
           placeholder={'지도에서 선택한 장소를 설명해주세요'}
           size={'md'}
@@ -82,12 +105,16 @@ const index = () => {
         <Button
           size={'lg'}
           shape={'rounded'}
-          color={'sub'}
+          color={isAddAble() ? 'sub' : 'disabled'}
           className="!mb-[6px]"
         >
           장소 추가하기
         </Button>
-        <Button size={'lg'} shape={'rounded'} color={'default'}>
+        <Button
+          size={'lg'}
+          shape={'rounded'}
+          color={isRegisterAble() ? 'default' : 'disabled'}
+        >
           코스 등록하기
         </Button>
       </section>
