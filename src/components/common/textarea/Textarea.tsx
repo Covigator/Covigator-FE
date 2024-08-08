@@ -6,10 +6,12 @@ import clsx from 'clsx';
 
 const styles: {
   base: string;
+  focus: string;
   sizes: Record<TextareaSize, string>;
   countPosition: Record<TextareaSize, string>;
 } = {
-  base: 'rounded-[10px] border border-bk-50 text-body5 text-bk-50 focus:text-bk-90 focus:outline-sub-300 pl-[15px] pt-[15px]',
+  base: 'rounded-[10px] border border-bk-50 text-body5 text-bk-50 pl-[15px] pt-[15px] focus-visible:outline-none',
+  focus: '!text-bk-90 !border-sub-300',
   sizes: {
     md: 'w-full max-w-[280px] h-[96px]',
     lg: 'w-full max-w-[280px] h-[194px]',
@@ -47,9 +49,13 @@ const Textarea = forwardRef<
         ref={ref}
         maxLength={maxLength}
         placeholder={placeholder}
-        className={clsx(styles.base, styles.sizes[size])}
+        className={clsx(
+          styles.base,
+          isFocused && styles.focus,
+          styles.sizes[size],
+        )}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => value.length === 0 && setIsFocused(false)}
         onChange={(e) => {
           onChange?.(e);
           handleCount(e);
