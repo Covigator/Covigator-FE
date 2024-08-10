@@ -71,6 +71,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         onKeyDown={onKeyDown}
         className={clsx(
           style.base,
+          style.sizes[size],
           isFocused && style.focus,
           icon && 'pl-[45px]',
           className,
