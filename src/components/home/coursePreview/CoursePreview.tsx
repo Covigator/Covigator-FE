@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   HiOutlineChevronDoubleDown,
   HiOutlineChevronDoubleUp,
@@ -16,12 +16,7 @@ import {
   TimelineDot,
 } from '@mui/lab';
 
-import { v4 as uuid } from 'uuid';
-
-interface Location {
-  name: string;
-  isSelected: boolean;
-}
+import { Location } from '../../../pages/Result';
 
 interface CoursePreviewProps {
   date: string;
@@ -30,13 +25,17 @@ interface CoursePreviewProps {
   locations: Location[];
 }
 
-const CoursePreview = ({
+const CoursePreview: React.FC<CoursePreviewProps> = ({
   date,
   weather,
   companions,
   locations,
-}: CoursePreviewProps) => {
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = useCallback(() => {
+    setIsExpanded((prev) => !prev);
+  }, []);
 
   return (
     <div className="w-full bg-white rounded-b-[20px] mt-[60px] pl-[22px] pr-[15px]">
@@ -71,8 +70,8 @@ const CoursePreview = ({
           },
         }}
       >
-        {locations.slice(0, locations.length).map((location, index) => (
-          <TimelineItem key={uuid()}>
+        {locations.map((location, index) => (
+          <TimelineItem key={`${location.name}-${index}`}>
             <TimelineSeparator>
               <TimelineDot
                 sx={{
@@ -115,7 +114,7 @@ const CoursePreview = ({
       </Timeline>
 
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={toggleExpanded}
         className="w-full flex justify-center items-center text-bk-90"
       >
         {isExpanded ? (

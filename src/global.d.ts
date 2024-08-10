@@ -9,7 +9,16 @@ interface KakaoMaps {
   Map: new (container: HTMLElement, options: KakaoMapOptions) => kakao.maps.Map;
   Marker: new (options: kakao.maps.MarkerOptions) => kakao.maps.Marker;
   Circle: new (options: kakao.maps.CircleOptions) => kakao.maps.Circle;
-  LatLngBounds: new () => kakao.maps.LatLngBounds; // 추가
+  LatLngBounds: new () => kakao.maps.LatLngBounds;
+  CustomOverlay: new (
+    options: kakao.maps.CustomOverlayOptions,
+  ) => kakao.maps.CustomOverlay;
+  event: {
+    addListener: (target: any, type: string, handler: Function) => void;
+  };
+  MapTypeId: {
+    OVERLAY: number;
+  };
 }
 
 declare namespace kakao {
@@ -23,6 +32,7 @@ declare namespace kakao {
       setLevel(level: number, options?: { animate: boolean }): void;
       getLevel(): number;
       setBounds(bounds: LatLngBounds): void;
+      removeOverlayMapTypeId(mapTypeId: number): void;
     }
     export class Marker {
       constructor(options: MarkerOptions);
@@ -35,6 +45,10 @@ declare namespace kakao {
     export class LatLngBounds {
       constructor();
       extend(latlng: LatLng): void;
+    }
+    export class CustomOverlay {
+      constructor(options: CustomOverlayOptions);
+      setMap(map: Map | null): void;
     }
     export interface MarkerOptions {
       position: LatLng;
@@ -51,6 +65,15 @@ declare namespace kakao {
       fillOpacity?: number;
       map?: Map;
     }
+    export interface CustomOverlayOptions {
+      position: LatLng;
+      content: string | HTMLElement;
+      map?: Map;
+      clickable?: boolean;
+    }
+    export const MapTypeId: {
+      OVERLAY: number;
+    };
   }
 }
 
