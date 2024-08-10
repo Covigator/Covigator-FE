@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
@@ -59,6 +59,8 @@ const index = () => {
     ],
   };
 
+  const navigate = useNavigate();
+
   const [isLike, setIsLike] = useState<boolean>(dummy.isLike);
   const [likeCount, setLikeCount] = useState<number>(dummy.heartCount);
 
@@ -73,7 +75,7 @@ const index = () => {
 
   return (
     <div className={variants.container}>
-      <Topbar />
+      <Topbar handleClick={() => navigate('/community')} />
       <header className={variants.headerLayout}>
         <p className="text-bk-90 text-h1">성수동 데이트</p>
         <section className="flex gap-[10px] items-center">
@@ -116,7 +118,16 @@ const index = () => {
       <section className="flex flex-col gap-[9px] mt-[11px]">
         <div className={variants.headerLayout}>
           <p className={variants.label}>리뷰 ({dummy.reviewItems.length})</p>
-          <Button size={'xs'} shape={'square'} color={'sub_300'}>
+          <Button
+            size={'xs'}
+            shape={'square'}
+            color={'sub_300'}
+            onClick={() =>
+              navigate('/review', {
+                state: { courseId: courseId, courseName: dummy.title },
+              })
+            }
+          >
             리뷰작성
           </Button>
         </div>
