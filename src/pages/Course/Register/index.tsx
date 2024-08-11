@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
-import { HiOutlineLockClosed } from 'react-icons/hi';
+import { HiOutlineLockClosed, HiOutlineLockOpen } from 'react-icons/hi';
 
 import Button from '../../../components/common/button';
 import Chip from '../../../components/common/chip';
@@ -28,6 +28,7 @@ const index = () => {
   const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
+  const [isSecret, setIsSecret] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -73,7 +74,17 @@ const index = () => {
       <Topbar />
       <header className="flex justify-between mb-[13px]">
         <p className="text-h1 text-bk-90">코스 등록</p>
-        <HiOutlineLockClosed className={variants.lockIcon} />
+        {isSecret ? (
+          <HiOutlineLockClosed
+            className={variants.lockIcon}
+            onClick={() => setIsSecret((prev) => !prev)}
+          />
+        ) : (
+          <HiOutlineLockOpen
+            className={variants.lockIcon}
+            onClick={() => setIsSecret((prev) => !prev)}
+          />
+        )}
       </header>
       <section className={variants.section}>
         <p className={variants.label}>코스 제목</p>
