@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HiOutlineLockClosed } from 'react-icons/hi';
 
 import Button from '../../../components/common/button';
@@ -26,42 +26,47 @@ const variants = {
 const index = () => {
   const [selectedChip, setSelectedChip] = useState<string>('');
   const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
+  const [isAddAble, setIsAddAble] = useState<boolean>(false);
+  const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChips = (chip: string) => {
-    setSelectedChip((prev) => (prev != chip ? chip : prev));
+    setSelectedChip(chip);
+  };
+
+  const handleAdd = () => {
+    /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
+    if (isAddAble) {
+      const name = 'name';
+      const img = 'img';
+      const type = selectedChip;
+      const desc = textAreaRef.current?.value || '';
+      setNewPlaces((prev) => [...prev, { name, type, desc, img }]);
+    }
   };
 
   const handleRegister = () => {
-    /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
-    const name = 'name';
-    const img = 'img';
-    const type = selectedChip;
-    const desc = textAreaRef.current?.value || '';
-    setNewPlaces((prev) => [...prev, { name, type, desc, img }]);
+    /* TODO: 코스 등록 */
+    if (isRegisterAble) {
+      console.log('등록 가능');
+    }
   };
 
   /* 장소 추가 가능 여부 판단 */
-  const isAddAble = () => {
-    if (
-      selectedChip != '' &&
-      inputRef.current?.value != '' &&
-      textAreaRef.current?.value != ''
-    ) {
-      return true;
+  useEffect(() => {
+    if (textAreaRef.current?.value != '') {
+      setIsAddAble(true);
     }
-    return false;
-  };
+  }, [selectedChip]);
 
   /* 코스 추가 가능 여부 판단 */
-  const isRegisterAble = () => {
-    if (newPlaces.length != 0) {
-      return true;
+  useEffect(() => {
+    if (inputRef.current?.value != '') {
+      setIsRegisterAble(true);
     }
-    return false;
-  };
+  }, [newPlaces]);
 
   return (
     <div className={variants.container}>
@@ -77,6 +82,14 @@ const index = () => {
           size={'lg'}
           placeholder={'코스 제목을 입력해주세요'}
           maxLength={15}
+          onChange={() => {
+            /* 코스 추가 가능 여부 판단 */
+            if (newPlaces.length != 0 && textAreaRef.current?.value) {
+              setIsRegisterAble(true);
+            } else {
+              setIsRegisterAble(false);
+            }
+          }}
         />
       </section>
       <section className="mt-[-2px] mb-[17px]">
@@ -116,22 +129,31 @@ const index = () => {
           maxLength={50}
           placeholder={'지도에서 선택한 장소를 설명해주세요'}
           size={'md'}
+          onChange={() => {
+            /* 장소 추가 가능 여부 판단 */
+            if (selectedChip != '' && textAreaRef.current?.value) {
+              setIsAddAble(true);
+            } else {
+              setIsAddAble(false);
+            }
+          }}
         />
       </section>
       <section className={variants.btnContainer}>
         <Button
           size={'lg'}
           shape={'rounded'}
-          color={isAddAble() ? 'sub' : 'disabled'}
+          color={isAddAble ? 'sub' : 'disabled'}
           className="!mb-[6px]"
-          onClick={handleRegister}
+          onClick={handleAdd}
         >
           장소 추가하기
         </Button>
         <Button
           size={'lg'}
           shape={'rounded'}
-          color={isRegisterAble() ? 'default' : 'disabled'}
+          color={isRegisterAble ? 'default' : 'disabled'}
+          onClick={handleRegister}
         >
           코스 등록하기
         </Button>
