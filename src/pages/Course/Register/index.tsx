@@ -45,6 +45,12 @@ const index = () => {
       const type = selectedChip;
       const desc = textAreaRef.current?.value || '';
       setNewPlaces((prev) => [...prev, { name, type, desc, img }]);
+      setIsAddAble(false);
+      setSelectedChip('');
+      if (textAreaRef.current) {
+        textAreaRef.current.value = '';
+        textAreaRef.current.focus();
+      }
     }
   };
 
