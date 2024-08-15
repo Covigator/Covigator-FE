@@ -14,7 +14,7 @@ import { PlaceItemType } from '../../../types/community';
 import { v4 as uuid } from 'uuid';
 
 const variants = {
-  container: 'w-full h-full pt-[63px] px-[30px]',
+  container: 'w-full h-full pt-[63px] px-[30px] pb-11',
   section: 'items-center flex flex-col mb-[19px]',
   lockIcon: 'w-6 h-6 text-sub-100 cursor-pointer',
   label: 'w-full text-body3 text-bk-90 mb-[10px]',
