@@ -1,6 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
-import { HiOutlineLockClosed, HiOutlineLockOpen } from 'react-icons/hi';
+import { FiEdit } from 'react-icons/fi';
+import {
+  HiOutlineLockClosed,
+  HiOutlineLockOpen,
+  HiOutlineTrash,
+} from 'react-icons/hi';
 
 import Button from '../../../components/common/button';
 import Chip from '../../../components/common/chip';
@@ -33,6 +38,8 @@ const index = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
+  const [tempId, setTempId] = useState<number>(0);
+
   const handleChips = (chip: string) => {
     setSelectedChip(chip);
   };
@@ -40,13 +47,15 @@ const index = () => {
   const handleAdd = () => {
     /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
     if (isAddAble) {
+      const id = tempId;
       const name = 'name';
       const img = 'img';
       const type = selectedChip;
       const desc = textAreaRef.current?.value || '';
-      setNewPlaces((prev) => [...prev, { name, type, desc, img }]);
+      setNewPlaces((prev) => [...prev, { id, name, type, desc, img }]);
       setIsAddAble(false);
       setSelectedChip('');
+      setTempId((prev) => prev + 1);
       if (textAreaRef.current) {
         textAreaRef.current.value = '';
         textAreaRef.current.focus();
@@ -112,13 +121,27 @@ const index = () => {
       <section className="mt-[-2px] mb-[17px]">
         {newPlaces.map((item) => {
           return (
-            <div key={uuid()}>
+            <div key={uuid()} className="relative">
               <PlaceItem
+                id={item.id}
                 type={item.type}
                 name={item.name}
                 desc={item.desc}
                 img={item.img || ''}
               />
+              <section className="absolute flex gap-[9px] right-[10px] top-[19px]">
+                {/* TODO: 장소 수정 기능 추가 필요 */}
+                <FiEdit className="w-4 h-4 text-sub-400" />
+                <HiOutlineTrash
+                  className="w-[18px] h-[18px] text-sub-400"
+                  onClick={() =>
+                    setNewPlaces((prevPlaces) =>
+                      prevPlaces.filter((place) => place.id !== item.id),
+                    )
+                  }
+                />
+              </section>
+
               <div className="w-full h-[1px] bg-bk-50" />
             </div>
           );
