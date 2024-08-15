@@ -8,7 +8,7 @@ export type CourseItemType = {
 };
 
 export type CourseDetailType = {
-  id?: number;
+  id: number;
   title: string;
   isLike: boolean;
   heartCount: number;
@@ -17,7 +17,7 @@ export type CourseDetailType = {
 };
 
 export type PlaceItemType = {
-  id?: number;
+  id: number;
   type: string;
   name: string;
   desc: string;

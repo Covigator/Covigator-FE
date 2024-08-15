@@ -1,6 +1,7 @@
 import Chip from '../common/chip';
 
 export type PlaceItemProps = {
+  id: number;
   type: string;
   name: string;
   desc: string;
