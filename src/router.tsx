@@ -4,6 +4,7 @@ import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
 import Community from './pages/Community';
 import Course from './pages/Course';
+import Chat from './pages/Course/Chat';
 import Register from './pages/Course/Register';
 import Review from './pages/Course/Review';
 import Home from './pages/Home';
@@ -35,6 +36,7 @@ const Router = () => {
         <Route path="/course">
           <Route path=":courseId" element={<Course />} />
           <Route path="register" element={<Register />} />
+          <Route path="chat/:courseId" element={<Chat />} />
         </Route>
         <Route path="/review" element={<Review />} />
         <Route path="/user" element={<User />} />

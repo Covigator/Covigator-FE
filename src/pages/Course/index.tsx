@@ -94,7 +94,12 @@ const index = () => {
             )}
             <p className={variants.heartCount}>{likeCount}</p>
           </div>
-          <Button size={'xs'} shape={'square'} color={'sub_300'}>
+          <Button
+            size={'xs'}
+            shape={'square'}
+            color={'sub_300'}
+            onClick={() => navigate(`/course/chat/${courseId}`)}
+          >
             채팅방
           </Button>
         </section>
