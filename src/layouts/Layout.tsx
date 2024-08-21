@@ -9,6 +9,7 @@ const Layout = () => {
   const navNotNeeded =
     location.pathname.includes('detail') ||
     location.pathname.includes('chat') ||
+    location.pathname.includes('/course/register') ||
     location.pathname.includes('review');
   // const topbarNeeded =
 

@@ -56,7 +56,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         {icon}
       </div>
       <input
-        value={value}
+        value={value || ''}
         placeholder={placeholder}
         maxLength={maxLength}
         type={type || 'text'}
@@ -71,6 +71,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         onKeyDown={onKeyDown}
         className={clsx(
           style.base,
+          style.sizes[size],
           isFocused && style.focus,
           icon && 'pl-[45px]',
           className,
@@ -80,7 +81,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         <p
           className={clsx(
             style.sizes[size],
-            'absolute top-3 right-[15px] text-body6',
+            'absolute top-3 right-[15px] !text-body6',
             isFocused ? 'text-bk-70' : 'text-bk-50',
           )}
         >
