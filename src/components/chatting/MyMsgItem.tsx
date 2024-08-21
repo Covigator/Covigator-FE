@@ -6,7 +6,7 @@ const MyMsgItem = ({ text, time }: MsgItemProps) => {
       <span className="text-bk-90 font-pretendard font-light text-[8px]">
         {time}
       </span>
-      <div className="rounded-[20px] rounded-tr-none px-[13px] py-2 bg-sub-100 text-wh text-body5">
+      <div className="max-w-48 rounded-[20px] rounded-tr-none px-[13px] py-2 bg-sub-100 text-wh text-body5 whitespace-pre-line">
         {text}
       </div>
     </div>
