@@ -54,7 +54,13 @@ const Textarea = forwardRef<
           isFocused && styles.focus,
           styles.sizes[size],
         )}
-        onFocus={() => setIsFocused(true)}
+        onFocus={(e) => {
+          if (e.target.value.length === 0) {
+            setValue('');
+            setCount(0);
+          }
+          setIsFocused(true);
+        }}
         onBlur={() => value.length === 0 && setIsFocused(false)}
         onChange={(e) => {
           onChange?.(e);

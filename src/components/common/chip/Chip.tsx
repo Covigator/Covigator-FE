@@ -9,10 +9,10 @@ const style: {
   size: Record<ChipSize, string>;
   state: Record<ChipState, string>;
 } = {
-  base: 'flex items-center justify-center box-border select-none m-0 cursor-pointer',
+  base: 'flex items-center justify-center box-border select-none m-0',
   size: {
-    sm: 'w-[55px] h-[25px] py-[7px] px-[22px] text-[10px]',
-    md: 'w-[75px] h-fit py-[7px] px-[22px] text-[12px]',
+    sm: 'w-[55px] h-[25px] py-[7px] px-[22px] text-btn3',
+    md: 'w-[75px] h-fit py-[7px] px-[22px] text-body3 cursor-pointer',
   },
   state: {
     inactive: 'bg-bk-10 text-bk-50 border border-solid border-bk-50',
@@ -24,6 +24,7 @@ const Chip: React.FC<ChipProps> = ({
   size = 'sm',
   state = 'inactive',
   className,
+  onClick,
   children,
   ...rest
 }) => {
@@ -36,6 +37,7 @@ const Chip: React.FC<ChipProps> = ({
         'rounded-[20px] whitespace-nowrap',
         className,
       )}
+      onClick={onClick}
       {...rest}
     >
       {children}

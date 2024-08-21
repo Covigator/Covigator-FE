@@ -26,6 +26,7 @@ const variants = {
 const index = () => {
   const { courseId } = useParams();
   const dummy: CourseDetailType = {
+    id: Number(courseId),
     title: '성수동 데이트',
     isLike: true,
     heartCount: 36,
@@ -105,6 +106,7 @@ const index = () => {
           return (
             <div key={uuid()}>
               <PlaceItem
+                id={d.id}
                 type={d.type}
                 name={d.name}
                 desc={d.desc}
