@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { HiArrowUp } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -6,7 +6,7 @@ import MyMsgItem from '../../../components/chatting/MyMsgItem';
 import OtherMsgItem from '../../../components/chatting/OtherMsgItem';
 import Input from '../../../components/common/input';
 import { Topbar } from '../../../layouts';
-import { MsgItemType } from '../../../types/chatting';
+import { MsgItemType, sendingMsgFrame } from '../../../types/chatting';
 
 import clsx from 'clsx';
 
@@ -18,6 +18,7 @@ const Chat = () => {
   /* TOFIX: 임의로 설정 */
   const myId = 1;
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
 
   const dummyDate = new Date();
@@ -60,6 +61,18 @@ const Chat = () => {
       createdAt: dummyDate,
     },
   ];
+
+  const handleSendMsg = () => {
+    const newMsg: sendingMsgFrame = {
+      senderId: myId,
+      content: inputValue,
+    };
+    console.log(newMsg);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+      inputRef.current.focus();
+    }
+  };
 
   return (
     <div className="w-full h-full pt-[60px] px-[20px]">
@@ -104,6 +117,7 @@ const Chat = () => {
       )}
       <div className="max-w-full fixed left-[10px] right-[10px] bottom-[11px] flex flex-row gap-[6px] items-center">
         <Input
+          ref={inputRef}
           size={'xl'}
           placeholder={'채팅을 입력하세요'}
           onChange={(e) => setInputValue(e.target.value)}
@@ -113,6 +127,7 @@ const Chat = () => {
             'w-6 h-6',
             inputValue === '' ? 'text-bk-50' : 'text-sub-100',
           )}
+          onClick={handleSendMsg}
         />
       </div>
     </div>

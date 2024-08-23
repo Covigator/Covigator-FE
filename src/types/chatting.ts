@@ -16,3 +16,8 @@ export type MsgItemType = {
   content: string;
   createdAt: Date;
 };
+
+export type sendingMsgFrame = {
+  senderId: number;
+  content: string;
+};
