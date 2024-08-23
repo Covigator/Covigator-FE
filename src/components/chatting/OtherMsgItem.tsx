@@ -1,14 +1,44 @@
-import { MsgItemProps } from '../../types/chatting';
+import { OtherMsgItemProps } from '../../types/chatting';
 
-const OtherMsgItem = ({ text, time }: MsgItemProps) => {
+import clsx from 'clsx';
+
+export const variants = {
+  container: 'inline-flex gap-2 justify-start items-start',
+  textContainer: 'flex flex-col gap-[7px] mt-[6px]',
+  content:
+    'max-w-48 rounded-[20px] px-[13px] py-2 text-body5 whitespace-pre-line',
+  time: 'text-bk-90 font-pretendard font-light text-[8px]',
+};
+
+const OtherMsgItem = ({
+  senderName,
+  senderProfileImg,
+  text,
+  time,
+}: OtherMsgItemProps) => {
   return (
-    <div className="inline-flex gap-1 justify-start items-end">
-      <div className="max-w-48 rounded-[20px] rounded-tl-none px-[13px] py-2 bg-bk-30 text-bk-90 text-body5 whitespace-pre-line">
-        {text}
+    <div className={variants.container}>
+      <img
+        src={senderProfileImg}
+        className={clsx(
+          'w-[37px] h-[37px] rounded-full',
+          !senderProfileImg && 'bg-bk-40',
+        )}
+      />
+      <div className={variants.textContainer}>
+        <span className="text-bk-90 text-body6">{senderName}</span>
+        <div className="flex items-end gap-1">
+          <div
+            className={clsx(
+              variants.content,
+              'rounded-tl-none bg-bk-30 text-bk-90 ',
+            )}
+          >
+            {text}
+          </div>
+          <span className={variants.time}>{time}</span>
+        </div>
       </div>
-      <span className="text-bk-90 font-pretendard font-light text-[8px]">
-        {time}
-      </span>
     </div>
   );
 };
