@@ -1,12 +1,15 @@
 import { MsgItemProps } from '../../types/chatting';
+import { variants } from './OtherMsgItem';
+
+import clsx from 'clsx';
 
 const MyMsgItem = ({ text, time }: MsgItemProps) => {
   return (
     <div className="inline-flex gap-1 justify-end items-end">
-      <span className="text-bk-90 font-pretendard font-light text-[8px]">
-        {time}
-      </span>
-      <div className="max-w-48 rounded-[20px] rounded-tr-none px-[13px] py-2 bg-sub-100 text-wh text-body5 whitespace-pre-line">
+      <span className={variants.time}>{time}</span>
+      <div
+        className={clsx(variants.content, 'rounded-tr-none bg-sub-100 text-wh')}
+      >
         {text}
       </div>
     </div>
