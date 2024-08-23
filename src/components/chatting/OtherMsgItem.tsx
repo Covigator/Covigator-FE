@@ -3,7 +3,7 @@ import { OtherMsgItemProps } from '../../types/chatting';
 import clsx from 'clsx';
 
 export const variants = {
-  container: 'inline-flex gap-2 justify-start items-start',
+  container: 'w-full inline-flex gap-2 justify-start items-start',
   textContainer: 'flex flex-col gap-[7px] mt-[6px]',
   content:
     'max-w-48 rounded-[20px] px-[13px] py-2 text-body5 whitespace-pre-line',
@@ -15,6 +15,7 @@ const OtherMsgItem = ({
   senderProfileImg,
   text,
   time,
+  isSameAsPrev,
 }: OtherMsgItemProps) => {
   return (
     <div className={variants.container}>
@@ -23,10 +24,13 @@ const OtherMsgItem = ({
         className={clsx(
           'w-[37px] h-[37px] rounded-full',
           !senderProfileImg && 'bg-bk-40',
+          isSameAsPrev && 'invisible',
         )}
       />
       <div className={variants.textContainer}>
-        <span className="text-bk-90 text-body6">{senderName}</span>
+        {!isSameAsPrev && (
+          <span className="text-bk-90 text-body6">{senderName}</span>
+        )}
         <div className="flex items-end gap-1">
           <div
             className={clsx(

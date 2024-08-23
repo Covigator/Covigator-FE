@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 const MyMsgItem = ({ text, time }: MsgItemProps) => {
   return (
-    <div className="inline-flex gap-1 justify-end items-end">
+    <div className="w-full inline-flex gap-1 justify-end items-end">
       <span className={variants.time}>{time}</span>
       <div
         className={clsx(variants.content, 'rounded-tr-none bg-sub-100 text-wh')}

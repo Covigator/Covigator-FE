@@ -6,6 +6,7 @@ export interface MsgItemProps {
 export interface OtherMsgItemProps extends MsgItemProps {
   senderName: string;
   senderProfileImg: string;
+  isSameAsPrev: boolean;
 }
 
 export type MsgItemType = {

@@ -25,37 +25,37 @@ const Chat = () => {
   const dummy: MsgItemType[] = [
     {
       senderId: 0,
-      sender: '박재욱',
+      senderName: '박재욱',
       content: '하이하이이거어때',
       createdAt: dummyDate,
     },
     {
       senderId: 1,
-      sender: '정서현',
+      senderName: '정서현',
       content: '하이하이이거어때',
       createdAt: dummyDate,
     },
     {
       senderId: 2,
-      sender: '조하상',
+      senderName: '조하상',
       content: '안녕안녕',
       createdAt: dummyDate,
     },
     {
       senderId: 2,
-      sender: '조하상',
+      senderName: '조하상',
       content: '줄바꿈 기준을 글자수에서 width로 변경했습니다',
       createdAt: dummyDate,
     },
     {
       senderId: 1,
-      sender: '정서현',
+      senderName: '정서현',
       content: '네 알겠습니다 그럼 여기도 줄바꿈하겠죠?',
       createdAt: dummyDate,
     },
     {
       senderId: 3,
-      sender: '김경민',
+      senderName: '김경민',
       content: '와우~',
       createdAt: dummyDate,
     },
@@ -75,22 +75,31 @@ const Chat = () => {
           다른 유저들과 채팅해보세요
         </div>
       ) : (
-        <div className="flex flex-col gap-[15px] py-[11px]">
-          {dummy.map((d, i) =>
-            d.senderId === myId ? (
-              <MyMsgItem
+        <div className="flex flex-col py-[11px]">
+          {dummy.map((d, i) => {
+            const isSameAsPrev = i > 0 && dummy[i - 1].senderId === d.senderId;
+            return (
+              <div
                 key={i + d.senderId}
-                text={d.content}
-                time={d.createdAt.toLocaleTimeString()}
-              />
-            ) : (
-              <OtherMsgItem
-                key={i + d.senderId}
-                text={d.content}
-                time={d.createdAt.toLocaleTimeString()}
-              />
-            ),
-          )}
+                className={clsx(isSameAsPrev ? 'mt-[7px]' : 'mt-[15px]')}
+              >
+                {d.senderId === myId ? (
+                  <MyMsgItem
+                    text={d.content}
+                    time={d.createdAt.toLocaleTimeString()}
+                  />
+                ) : (
+                  <OtherMsgItem
+                    isSameAsPrev={isSameAsPrev}
+                    senderName={d.senderName}
+                    senderProfileImg={d.senderProfileImg || ''}
+                    text={d.content}
+                    time={d.createdAt.toLocaleTimeString()}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
       <div className="max-w-full fixed left-[10px] right-[10px] bottom-[11px] flex flex-row gap-[6px] items-center">
