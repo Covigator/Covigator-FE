@@ -9,6 +9,7 @@ import { Topbar } from '../../../layouts';
 import { MsgItemType, sendingMsgFrame } from '../../../types/chatting';
 
 import clsx from 'clsx';
+import { v4 as uuid } from 'uuid';
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const Chat = () => {
             const isSameAsPrev = i > 0 && dummy[i - 1].senderId === d.senderId;
             return (
               <div
-                key={i + d.senderId}
+                key={uuid()}
                 className={clsx(isSameAsPrev ? 'mt-[7px]' : 'mt-[15px]')}
               >
                 {d.senderId === myId ? (
@@ -103,6 +104,7 @@ const Chat = () => {
                   />
                 ) : (
                   <OtherMsgItem
+                    key={uuid()}
                     isSameAsPrev={isSameAsPrev}
                     senderName={d.senderName}
                     senderProfileImg={d.senderProfileImg || ''}
