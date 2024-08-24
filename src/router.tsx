@@ -11,10 +11,10 @@ import Map from './pages/Home/Map';
 import Login from './pages/Login';
 import FindId from './pages/Login/Find/Id';
 import FindPassword from './pages/Login/Find/Password';
+import Mypage from './pages/Mypage';
 import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
-import User from './pages/User';
 
 const Router = () => {
   return (
@@ -37,7 +37,7 @@ const Router = () => {
           <Route path="register" element={<Register />} />
         </Route>
         <Route path="/review" element={<Review />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/mypage" element={<Mypage />} />
         {/* <Route path="/order" element={<Outlet />}>
           <Route index element={<Order />} />
           <Route path="detail/:droneId" element={<OrderDetail />} />
