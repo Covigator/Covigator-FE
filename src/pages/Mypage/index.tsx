@@ -1,21 +1,28 @@
 import { HiOutlineChevronRight } from 'react-icons/hi';
 
-import { MypageMenuItems } from '../../constants/object';
+import { mypageMenuItems } from '../../constants/object';
+import { MypageDataType } from '../../types/mypage';
 
 const Mypage = () => {
+  const dummy: MypageDataType = {
+    img: '',
+    name: '박재욱',
+    email: 'asdf@naver.com',
+  };
+
   return (
     <div className="w-full !px-5 pt-[105px] flex flex-col items-center">
       <img
-        src=""
+        src={dummy.img}
         alt="프로필 사진"
         className="w-[100px] h-[100px] rounded-full mb-[15px] bg-bk-30"
       />
-      <p className="mb-[5px] text-h3 text-bk-90">박재욱</p>
+      <p className="mb-[5px] text-h3 text-bk-90">{dummy.name}</p>
       <div className="px-[15px] py-[3px] rounded-[10px] bg-bk-30 text-body6 text-bk-70">
-        asdf@naver.com
+        {dummy.email}
       </div>
       <div className="w-full flex flex-col gap-[5px] mt-[31px]">
-        {MypageMenuItems.map((d, i) => {
+        {mypageMenuItems.map((d, i) => {
           return (
             <div className="rounded-[10px] !px-5 !py-3 bg-bk-10 flex flex-row justify-between">
               <div className="flex flex-row gap-[10px] whitespace-nowrap">

@@ -6,7 +6,7 @@ import {
 } from 'react-icons/hi';
 
 import { dropdownItemType } from '../components/common/dropdown';
-import { mypageMenuItemType } from '../types/mypage';
+import { MypageMenuItemType } from '../types/mypage';
 
 export const PlaceType: string[] = [
   '식당',
@@ -71,7 +71,7 @@ export const regionDropdownItems: dropdownItemType[] = [
   },
 ];
 
-export const MypageMenuItems: mypageMenuItemType[] = [
+export const mypageMenuItems: MypageMenuItemType[] = [
   { icon: HiOutlineUserCircle, text: '내 정보' },
   { icon: HiOutlineHeart, text: '찜한 코스 모아보기' },
   { icon: HiOutlineFolderOpen, text: '마이 코스 모아보기' },
