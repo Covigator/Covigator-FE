@@ -1,10 +1,14 @@
 import { HiOutlineChevronRight } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 import { mypageMenuItems } from '../../constants/object';
 import { MypageDataType } from '../../types/mypage';
 
+import { v4 as uuid } from 'uuid';
+
 const Mypage = () => {
   const dummy: MypageDataType = {
+    id: 0,
     img: '',
     name: '박재욱',
     email: 'asdf@naver.com',
@@ -24,13 +28,18 @@ const Mypage = () => {
       <div className="w-full flex flex-col gap-[5px] mt-[31px]">
         {mypageMenuItems.map((d, i) => {
           return (
-            <div className="rounded-[10px] !px-5 !py-3 bg-bk-10 flex flex-row justify-between">
+            <Link
+              key={uuid()}
+              className="rounded-[10px] !px-5 !py-3 bg-bk-10 flex flex-row justify-between"
+              to={d.link}
+              state={{ userId: dummy.id }}
+            >
               <div className="flex flex-row gap-[10px] whitespace-nowrap">
                 {<d.icon className="w-6 h-6 text-bk-90" />}
                 <span className="text-body1 text-bk-90">{d.text}</span>
               </div>
               <HiOutlineChevronRight className="w-6 h-6 text-bk-90" />
-            </div>
+            </Link>
           );
         })}
       </div>

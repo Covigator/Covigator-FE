@@ -72,8 +72,24 @@ export const regionDropdownItems: dropdownItemType[] = [
 ];
 
 export const mypageMenuItems: MypageMenuItemType[] = [
-  { icon: HiOutlineUserCircle, text: '내 정보' },
-  { icon: HiOutlineHeart, text: '찜한 코스 모아보기' },
-  { icon: HiOutlineFolderOpen, text: '마이 코스 모아보기' },
-  { icon: HiOutlineSpeakerphone, text: '공지사항' },
+  {
+    icon: HiOutlineUserCircle,
+    text: '내 정보',
+    link: '/mypage/info',
+  },
+  {
+    icon: HiOutlineHeart,
+    text: '찜한 코스 모아보기',
+    link: '/mypage/like',
+  },
+  {
+    icon: HiOutlineFolderOpen,
+    text: '마이 코스 모아보기',
+    link: '/mypage/mycourse',
+  },
+  {
+    icon: HiOutlineSpeakerphone,
+    text: '공지사항',
+    link: '/mypage/notice',
+  },
 ];
