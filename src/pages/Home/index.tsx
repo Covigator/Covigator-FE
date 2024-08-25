@@ -79,17 +79,8 @@ const Home = () => {
     const companionSelected = selectedCompanion.id !== 0;
     const placesSelected = Object.values(selectedPlaces).some(Boolean);
 
-    // console.log('--------------------');
-    // console.log('Date selected:', dateSelected);
-    // console.log('Location selected:', locationSelected);
-    // console.log('Companion selected:', companionSelected);
-    // console.log('Places selected:', placesSelected);
-
     const allSelected =
       dateSelected && locationSelected && companionSelected && placesSelected;
-
-    // console.log('All selected:', allSelected);
-    // console.log('--------------------');
 
     setIsAllSelected(allSelected);
   }, [selectedDate, selectedLocation, selectedCompanion, selectedPlaces]);

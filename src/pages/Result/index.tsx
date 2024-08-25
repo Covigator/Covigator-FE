@@ -1,42 +1,64 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
 import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
 import { Topbar } from '../../layouts';
-import Map from '../Home/Map';
+import Map from '../../pages/Home/Map';
 
 export interface Location {
   name: string;
   isSelected: boolean;
   lat: number;
   lng: number;
+  image?: string;
+  description?: string;
+  time?: string;
 }
 
 const Index = () => {
   const [locations, setLocations] = useState<Location[]>([
-    { name: '마우스래빗', isSelected: false, lat: 37.541, lng: 127.0695 },
-    { name: 'CGV 건대입구점', isSelected: false, lat: 37.5407, lng: 127.0691 },
-    { name: '스타벅스 건대점', isSelected: false, lat: 37.5412, lng: 127.0699 },
+    {
+      name: '마우스래빗',
+      isSelected: false,
+      lat: 37.541,
+      lng: 127.0695,
+
+      image: '/src/assets/image/restaurant_temporary.jpg',
+      description: '맛있는 음식과 아늑한 분위기의 카페',
+    },
+    {
+      name: 'CGV 건대입구점',
+      isSelected: false,
+      lat: 37.5407,
+      lng: 127.0691,
+
+      image: '/src/assets/image/restaurant_temporary.jpg',
+      description: '최신 영화를 즐길 수 있는 멀티플렉스 영화관',
+    },
+    {
+      name: '스타벅스 건대점',
+      isSelected: false,
+      lat: 37.5412,
+      lng: 127.0699,
+
+      image: '/src/assets/image/restaurant_temporary.jpg',
+      description: '다양한 커피와 음료를 즐길 수 있는 카페',
+    },
   ]);
 
-  const handleLocationSelect = useCallback((index: number) => {
-    setLocations((prevLocations) => {
-      const newLocations = prevLocations.map((location, i) => {
-        if (i === index) {
-          return { ...location, isSelected: !location.isSelected };
-        }
-        return location;
-      });
-      console.log('Updated locations:', newLocations); // 디버깅용 로그
-      return newLocations;
-    });
-  }, []);
+  const handleLocationSelect = (index: number) => {
+    setLocations((prevLocations) =>
+      prevLocations.map((location, i) => ({
+        ...location,
+        isSelected: i === index,
+      })),
+    );
+  };
 
   return (
     <div className="h-full w-full overflow-x-hidden">
       <Topbar />
       <RefreshRecommend />
-
       <CoursePreview
         date="6월 15일"
         weather="맑을"

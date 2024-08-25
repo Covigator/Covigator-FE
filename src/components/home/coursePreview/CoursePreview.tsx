@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
   HiOutlineChevronDoubleDown,
   HiOutlineChevronDoubleUp,
@@ -16,7 +16,14 @@ import {
   TimelineDot,
 } from '@mui/lab';
 
-import { Location } from '../../../pages/Result';
+import { v4 as uuid } from 'uuid';
+
+interface Location {
+  name: string;
+  isSelected: boolean;
+  image?: string;
+  description?: string;
+}
 
 interface CoursePreviewProps {
   date: string;
@@ -25,20 +32,18 @@ interface CoursePreviewProps {
   locations: Location[];
 }
 
-const CoursePreview: React.FC<CoursePreviewProps> = ({
+const CoursePreview = ({
   date,
   weather,
   companions,
   locations,
-}) => {
+}: CoursePreviewProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpanded = useCallback(() => {
-    setIsExpanded((prev) => !prev);
-  }, []);
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
 
   return (
-    <div className="w-full bg-white rounded-b-[20px] mt-[60px] pl-[22px] pr-[15px]">
+    <div className="w-full bg-white rounded-b-[20px] mt-[60px] pl-[22px] pr-[15px] pb-4">
       <div className="flex justify-between">
         <h2 className="text-h2 text-bk-90 mb-4">박재욱님, 이 코스는 어때요?</h2>
         <IoMdHeartEmpty className="w-6 h-6 text-bk-90" />
@@ -61,9 +66,6 @@ const CoursePreview: React.FC<CoursePreviewProps> = ({
       </div>
       <Timeline
         sx={{
-          [`& .MuiTimelineItem-root`]: {
-            minHeight: 'auto',
-          },
           [`& .MuiTimelineItem-root:before`]: {
             flex: 0,
             padding: 0,
@@ -71,7 +73,7 @@ const CoursePreview: React.FC<CoursePreviewProps> = ({
         }}
       >
         {locations.map((location, index) => (
-          <TimelineItem key={`${location.name}-${index}`}>
+          <TimelineItem key={index}>
             <TimelineSeparator>
               <TimelineDot
                 sx={{
@@ -93,34 +95,47 @@ const CoursePreview: React.FC<CoursePreviewProps> = ({
                 />
               )}
             </TimelineSeparator>
-            <TimelineContent
-              sx={{
-                marginLeft: '13px',
-                padding: '0px',
-                height: '10px',
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: '17px',
-              }}
-            >
-              <p
-                className={`text-body3 ${location.isSelected ? 'text-bk-90' : 'text-bk-60'}`}
-              >
-                {location.name}
-              </p>
+            <TimelineContent sx={{ py: '12px', px: 2, ml: 0 }}>
+              <div className="flex flex-col">
+                <p
+                  className={`text-body3 ${
+                    location.isSelected ? 'text-bk-90 font-bold' : 'text-bk-60'
+                  }`}
+                >
+                  {location.name}
+                </p>
+                {isExpanded && (
+                  <div className="mt-2 box-border">
+                    {location.image && (
+                      <div className="w-full h-40 mb-2 overflow-hidden rounded-md border border-bk-20">
+                        <img
+                          src={location.image}
+                          alt={location.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+
+                    {location.description && (
+                      <p className="text-body5 text-bk-60">
+                        {location.description}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
             </TimelineContent>
           </TimelineItem>
         ))}
       </Timeline>
-
       <button
         onClick={toggleExpanded}
-        className="w-full flex justify-center items-center text-bk-90"
+        className="w-full flex justify-center items-center text-bk-90 mt-4"
       >
         {isExpanded ? (
-          <HiOutlineChevronDoubleUp />
+          <HiOutlineChevronDoubleUp className="w-6 h-6" />
         ) : (
-          <HiOutlineChevronDoubleDown />
+          <HiOutlineChevronDoubleDown className="w-6 h-6" />
         )}
       </button>
     </div>
