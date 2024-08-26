@@ -3,6 +3,15 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/common/button';
 import { Topbar } from '../../../layouts';
 
+import clsx from 'clsx';
+
+const variants = {
+  container: 'w-full px-10 pt-[105px] flex flex-col items-center',
+  contentContainer: 'w-full flex flex-row gap-6 items-center',
+  label: 'text-body6 text-bk-90',
+  content: 'text-body3 text-bk-90',
+};
+
 const Info = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,20 +26,20 @@ const Info = () => {
   };
 
   return (
-    <div className="w-full px-10 pt-[105px] flex flex-col items-center">
+    <div className={variants.container}>
       <Topbar handleClick={() => navigate('/mypage')} />
       <img
         src={dummy.userImg}
         alt="프로필 사진"
         className="w-[100px] h-[100px] rounded-full bg-bk-40 mb-[41px]"
       />
-      <div className="w-full flex flex-row gap-6 items-center mb-3">
-        <span className="text-body6 text-bk-90">닉네임</span>
-        <span className="text-body3 text-bk-90">{dummy.userName}</span>
+      <div className={clsx(variants.contentContainer, 'mb-3')}>
+        <span className={variants.label}>닉네임</span>
+        <span className={variants.content}>{dummy.userName}</span>
       </div>
-      <div className="w-full flex flex-row gap-6 items-center mb-9">
-        <span className="text-body6 text-bk-90">이메일</span>
-        <span className="text-body3 text-bk-90">{dummy.userEmail}</span>
+      <div className={clsx(variants.contentContainer, 'mb-9')}>
+        <span className={variants.label}>이메일</span>
+        <span className={variants.content}>{dummy.userEmail}</span>
       </div>
       <Link
         to={'/mypage/info/modify'}
