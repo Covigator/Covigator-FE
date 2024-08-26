@@ -10,7 +10,8 @@ const Layout = () => {
     location.pathname.includes('detail') ||
     location.pathname.includes('chat') ||
     location.pathname.includes('/course/register') ||
-    location.pathname.includes('review');
+    location.pathname.includes('review') ||
+    location.pathname.includes('/mypage/info/modify');
   // const topbarNeeded =
 
   return (
