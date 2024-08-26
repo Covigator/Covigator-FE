@@ -13,6 +13,7 @@ import FindId from './pages/Login/Find/Id';
 import FindPassword from './pages/Login/Find/Password';
 import Mypage from './pages/Mypage';
 import Info from './pages/Mypage/Info';
+import Modify from './pages/Mypage/Info/Modify';
 import Like from './pages/Mypage/Like';
 import Mycourse from './pages/Mypage/Mycourse';
 import Notice from './pages/Mypage/Notice';
@@ -44,6 +45,7 @@ const Router = () => {
         <Route path="/mypage">
           <Route index element={<Mypage />} />
           <Route path="info" element={<Info />} />
+          <Route path="info/modify" element={<Modify />} />
           <Route path="like" element={<Like />} />
           <Route path="mycourse" element={<Mycourse />} />
           <Route path="notice" element={<Notice />} />
