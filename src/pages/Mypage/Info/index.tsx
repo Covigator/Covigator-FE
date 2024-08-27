@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../../components/common/button';
 import { Topbar } from '../../../layouts';
@@ -40,18 +40,22 @@ const Info = () => {
         <span className={variants.label}>이메일</span>
         <span className={variants.content}>{dummy.userEmail}</span>
       </div>
-      <Link
-        to={`/mypage/info/modify/${userId}`}
-        state={{
-          userImg: dummy.userImg,
-          userName: dummy.userName,
-          userPassword: dummy.userPassword,
-        }}
+      <Button
+        size={'lg'}
+        shape={'rounded'}
+        color={'default'}
+        onClick={() =>
+          navigate(`/mypage/info/modify/${userId}`, {
+            state: {
+              userImg: dummy.userImg,
+              userName: dummy.userName,
+              userPassword: dummy.userPassword,
+            },
+          })
+        }
       >
-        <Button size={'lg'} shape={'rounded'} color={'default'}>
-          내 정보 수정
-        </Button>
-      </Link>
+        내 정보 수정
+      </Button>
     </div>
   );
 };

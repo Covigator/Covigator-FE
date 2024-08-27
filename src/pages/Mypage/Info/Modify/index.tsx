@@ -62,7 +62,6 @@ const Modify = () => {
 
   const handleModify = () => {
     if (isModifiable && imgInputRef.current) {
-      console.log(profileImg);
       console.log('수정 완료');
     }
   };
