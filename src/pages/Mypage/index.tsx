@@ -33,7 +33,9 @@ const Mypage = () => {
             <div
               key={uuid()}
               className="rounded-[10px] !px-5 !py-3 bg-bk-10 flex flex-row justify-between"
-              onClick={() => navigate(d.link + `/${dummy.id}`)}
+              onClick={() =>
+                navigate(d.link + (d.text !== '공지사항' ? `/${dummy.id}` : ''))
+              }
             >
               <div className="flex flex-row gap-[10px] whitespace-nowrap">
                 {<d.icon className="w-6 h-6 text-bk-90" />}
