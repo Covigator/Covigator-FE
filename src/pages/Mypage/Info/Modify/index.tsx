@@ -13,11 +13,26 @@ const Modify = () => {
   const userName = location.state.userName;
   const userPassword = location.state.userPassword;
 
+  const [profileImg, setProfileImg] = useState<string>(userImg);
+
+  const imgInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const passwordConfirmInputRef = useRef<HTMLInputElement>(null);
 
   const [isModifiable, setIsModifiable] = useState<boolean>(false);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImg(e.target?.result as string);
+        setIsModifiable(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const setBtnActive = () => {
     if (
@@ -46,7 +61,8 @@ const Modify = () => {
   };
 
   const handleModify = () => {
-    if (isModifiable) {
+    if (isModifiable && imgInputRef.current) {
+      console.log(profileImg);
       console.log('수정 완료');
     }
   };
@@ -67,11 +83,21 @@ const Modify = () => {
     <div className="w-full px-10 pt-[105px] flex flex-col items-center">
       {/* TODO: 뒤로가기 클릭 시 현재까지의 정보 저장되지 않는다는 모달창 추가 필요 */}
       <Topbar handleClick={() => navigate(`/mypage/info/${userId}`)} />
-      <img
-        src={userImg}
-        alt="프로필 사진"
-        className="w-[100px] h-[100px] rounded-full bg-bk-40 mb-[41px]"
-      />
+      <form>
+        <input
+          ref={imgInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageChange}
+        />
+        <img
+          src={profileImg}
+          alt="프로필 사진"
+          className="w-[100px] h-[100px] rounded-full bg-bk-40 mb-[41px]"
+          onClick={() => imgInputRef.current?.click()}
+        />
+      </form>
       <div className="flex flex-col gap-6 mb-10">
         <div className="relative w-[300px]">
           <Input
