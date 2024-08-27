@@ -44,10 +44,10 @@ const Router = () => {
         <Route path="/review" element={<Review />} />
         <Route path="/mypage">
           <Route index element={<Mypage />} />
-          <Route path="info" element={<Info />} />
-          <Route path="info/modify" element={<Modify />} />
-          <Route path="like" element={<Like />} />
-          <Route path="mycourse" element={<Mycourse />} />
+          <Route path="info/:userId" element={<Info />} />
+          <Route path="info/modify/:userId" element={<Modify />} />
+          <Route path="like/:userId" element={<Like />} />
+          <Route path="mycourse/:userId" element={<Mycourse />} />
           <Route path="notice" element={<Notice />} />
         </Route>
         {/* <Route path="/order" element={<Outlet />}>

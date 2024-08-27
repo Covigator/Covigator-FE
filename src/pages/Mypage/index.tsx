@@ -1,5 +1,5 @@
 import { HiOutlineChevronRight } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { mypageMenuItems } from '../../constants/object';
 import { MypageDataType } from '../../types/mypage';
@@ -7,6 +7,8 @@ import { MypageDataType } from '../../types/mypage';
 import { v4 as uuid } from 'uuid';
 
 const Mypage = () => {
+  const navigate = useNavigate();
+
   const dummy: MypageDataType = {
     id: 0,
     img: '',
@@ -26,20 +28,19 @@ const Mypage = () => {
         {dummy.email}
       </div>
       <div className="w-full flex flex-col gap-[5px] mt-[31px]">
-        {mypageMenuItems.map((d, i) => {
+        {mypageMenuItems.map((d) => {
           return (
-            <Link
+            <div
               key={uuid()}
               className="rounded-[10px] !px-5 !py-3 bg-bk-10 flex flex-row justify-between"
-              to={d.link}
-              state={{ userId: dummy.id }}
+              onClick={() => navigate(d.link + `/${dummy.id}`)}
             >
               <div className="flex flex-row gap-[10px] whitespace-nowrap">
                 {<d.icon className="w-6 h-6 text-bk-90" />}
                 <span className="text-body1 text-bk-90">{d.text}</span>
               </div>
               <HiOutlineChevronRight className="w-6 h-6 text-bk-90" />
-            </Link>
+            </div>
           );
         })}
       </div>

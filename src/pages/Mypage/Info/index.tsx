@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../../components/common/button';
 import { Topbar } from '../../../layouts';
@@ -14,8 +14,7 @@ const variants = {
 
 const Info = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const userId = location.state.userId;
+  const { userId } = useParams();
 
   /* TODO: userId로 API 호출해서 받은 데이터 */
   const dummy = {
@@ -42,12 +41,10 @@ const Info = () => {
         <span className={variants.content}>{dummy.userEmail}</span>
       </div>
       <Link
-        to={'/mypage/info/modify'}
+        to={`/mypage/info/modify/${userId}`}
         state={{
-          userId: userId,
           userImg: dummy.userImg,
           userName: dummy.userName,
-          userEmail: dummy.userEmail,
           userPassword: dummy.userPassword,
         }}
       >
