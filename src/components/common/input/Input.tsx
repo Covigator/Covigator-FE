@@ -36,7 +36,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const [value, setValue] = useState(defaultValue || '');
 
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(
+    defaultValue?.toString().length || 0,
+  );
   const handleCount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCount(
       maxLength && e.target.value.length >= maxLength
