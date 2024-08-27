@@ -15,16 +15,16 @@ const style: {
   shape: Record<ButtonShape, string>;
   color: Record<ButtonColor, string>;
 } = {
-  base: 'inline-flex items-center justify-center box-border select-none m-0 p-0  cursor-pointer disabled:cursor-default',
+  base: 'inline-flex items-center justify-center box-border select-none m-0 p-0 cursor-pointer disabled:cursor-default',
   size: {
-    xs: 'w-fit h-fit py-[4px] px-[10px]',
-    sm: 'w-[75px] h-[42px] py-[7px] px-[43px]',
-    md: 'w-[115px] h-[43px] py-[7px] px-[43px]',
-    lg: 'w-[280px] h-[54px] py-[17px] px-[102px]',
+    xs: 'w-fit h-fit !py-[4px] !px-[10px] text-btn3',
+    sm: 'w-[75px] h-[42px] py-[7px] px-[43px] text-btn2',
+    md: 'w-[115px] h-[43px] py-[7px] px-[43px] text-btn2',
+    lg: 'w-[280px] h-[54px] py-[17px] px-[102px] text-btn1',
   },
   shape: {
-    square: 'rounded-[10px]',
-    rounded: 'rounded-full',
+    square: 'rounded-[5px]',
+    rounded: 'rounded-[10px]',
   },
   color: {
     default: 'bg-primary-500 text-white',

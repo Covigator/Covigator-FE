@@ -6,9 +6,11 @@ import clsx from 'clsx';
 
 const style: {
   base: string;
+  focus: string;
   sizes: Record<InputSize, string>;
 } = {
-  base: 'flex w-full h-10 rounded-[10px] px-[15px] border border-bk-50 focus:outline-sub-300 bg-wh text-body5 text-bk-90 placeholder-bk-50',
+  base: 'flex w-full h-10 rounded-[10px] px-[15px] border border-bk-50 focus-visible:outline-none bg-wh text-body5 text-bk-90 placeholder-bk-50',
+  focus: '!border-sub-300',
   sizes: {
     sm: 'max-w-60',
     md: 'max-w-[280px]',
@@ -32,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState(defaultValue || '');
 
   const [count, setCount] = useState<number>(0);
   const handleCount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,26 +56,32 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         {icon}
       </div>
       <input
-        value={value}
+        value={value || ''}
         placeholder={placeholder}
         maxLength={maxLength}
         type={type || 'text'}
         ref={ref}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => value === '' && setIsFocused(false)}
         onChange={(e) => {
           onChange?.(e);
           handleCount(e);
           setValue(e.target.value);
         }}
         onKeyDown={onKeyDown}
-        className={clsx(style.base, icon && 'pl-[45px]', className)}
+        className={clsx(
+          style.base,
+          style.sizes[size],
+          isFocused && style.focus,
+          icon && 'pl-[45px]',
+          className,
+        )}
       />
       {maxLength && (
         <p
           className={clsx(
             style.sizes[size],
-            'absolute top-3 right-[15px] text-body6',
+            'absolute top-3 right-[15px] !text-body6',
             isFocused ? 'text-bk-70' : 'text-bk-50',
           )}
         >

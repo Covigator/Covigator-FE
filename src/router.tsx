@@ -3,6 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import Layout from './layouts/Layout';
 import Community from './pages/Community';
+import Course from './pages/Course';
+import Register from './pages/Course/Register';
+import Review from './pages/Course/Review';
 import Home from './pages/Home';
 import Map from './pages/Home/Map';
 import Login from './pages/Login';
@@ -31,6 +34,11 @@ const Router = () => {
 
         <Route path="/loading" element={<Loading />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/course">
+          <Route path=":courseId" element={<Course />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+        <Route path="/review" element={<Review />} />
         <Route path="/user" element={<User />} />
         {/* <Route path="/order" element={<Outlet />}>
           <Route index element={<Order />} />

@@ -5,6 +5,8 @@ import FloatingBtn from '../../components/community/FloatingBtn';
 import { sortDropdownItems } from '../../constants/object';
 import { CourseItemType } from '../../types/community';
 
+import { v4 as uuid } from 'uuid';
+
 const index = () => {
   const dummy: CourseItemType[] = [
     {
@@ -91,7 +93,7 @@ const index = () => {
         {dummy.map((d) => {
           return (
             <CourseItem
-              key={d.id + d.title}
+              key={uuid()}
               id={d.id}
               title={d.title}
               caption={d.caption}

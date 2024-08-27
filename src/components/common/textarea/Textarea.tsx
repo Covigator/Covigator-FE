@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, PropsWithChildren, useState } from 'react';
 
 import { TextareaProps, TextareaSize } from './Textarea.types';
 
@@ -6,10 +6,12 @@ import clsx from 'clsx';
 
 const styles: {
   base: string;
+  focus: string;
   sizes: Record<TextareaSize, string>;
   countPosition: Record<TextareaSize, string>;
 } = {
-  base: 'rounded-[10px] border border-bk-50 text-body5 text-bk-50 focus:text-bk-90 focus:outline-sub-300 pl-[15px] pt-[15px]',
+  base: 'rounded-[10px] border border-bk-50 text-body5 text-bk-50 pl-[15px] pt-[15px] focus-visible:outline-none',
+  focus: '!text-bk-90 !border-sub-300',
   sizes: {
     md: 'w-full max-w-[280px] h-[96px]',
     lg: 'w-full max-w-[280px] h-[194px]',
@@ -20,14 +22,13 @@ const styles: {
   },
 };
 
-const Textarea = ({
-  maxLength,
-  placeholder,
-  defaultValue,
-  size,
-  onChange,
-  onKeyDown,
-}: TextareaProps) => {
+const Textarea = forwardRef<
+  HTMLTextAreaElement,
+  PropsWithChildren<TextareaProps>
+>((props, ref) => {
+  const { maxLength, placeholder, defaultValue, size, onChange, onKeyDown } =
+    props;
+
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const [value, setValue] = useState<string>('' || defaultValue!);
@@ -45,11 +46,22 @@ const Textarea = ({
   return (
     <div className={clsx(styles.sizes[size], 'relative')}>
       <textarea
+        ref={ref}
         maxLength={maxLength}
         placeholder={placeholder}
-        className={clsx(styles.base, styles.sizes[size])}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        className={clsx(
+          styles.base,
+          isFocused && styles.focus,
+          styles.sizes[size],
+        )}
+        onFocus={(e) => {
+          if (e.target.value.length === 0) {
+            setValue('');
+            setCount(0);
+          }
+          setIsFocused(true);
+        }}
+        onBlur={() => value.length === 0 && setIsFocused(false)}
         onChange={(e) => {
           onChange?.(e);
           handleCount(e);
@@ -70,6 +82,6 @@ const Textarea = ({
       </p>
     </div>
   );
-};
+});
 
 export default Textarea;

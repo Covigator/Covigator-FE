@@ -1,5 +1,14 @@
 import { dropdownItemType } from '../components/common/dropdown';
 
+export const PlaceType: string[] = [
+  '식당',
+  '카페',
+  '액티비티',
+  '문화/여가',
+  '자연',
+  '기타',
+];
+
 export const sortDropdownItems: dropdownItemType[] = [
   {
     id: 0,

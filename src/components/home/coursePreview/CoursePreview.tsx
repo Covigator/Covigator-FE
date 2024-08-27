@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   HiOutlineChevronDoubleDown,
   HiOutlineChevronDoubleUp,
@@ -16,20 +15,15 @@ import {
   TimelineDot,
 } from '@mui/lab';
 
-import { v4 as uuid } from 'uuid';
-
-interface Location {
-  name: string;
-  isSelected: boolean;
-  image?: string;
-  description?: string;
-}
+import { Location } from '../../../pages/Result';
 
 interface CoursePreviewProps {
   date: string;
   weather: string;
   companions: string;
   locations: Location[];
+  isExpanded: boolean;
+  onExpand: (expanded: boolean) => void;
 }
 
 const CoursePreview = ({
@@ -37,13 +31,19 @@ const CoursePreview = ({
   weather,
   companions,
   locations,
+  isExpanded,
+  onExpand,
 }: CoursePreviewProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleExpanded = () => setIsExpanded(!isExpanded);
+  const toggleExpanded = () => {
+    onExpand(!isExpanded);
+  };
 
   return (
-    <div className="w-full bg-white rounded-b-[20px] mt-[60px] pl-[22px] pr-[15px] pb-4">
+    <div
+      className={`w-full bg-white rounded-b-[20px] mt-[60px] pl-[22px] pr-[15px] pb-4 ${
+        isExpanded ? 'z-10 relative' : ''
+      }`}
+    >
       <div className="flex justify-between">
         <h2 className="text-h2 text-bk-90 mb-4">박재욱님, 이 코스는 어때요?</h2>
         <IoMdHeartEmpty className="w-6 h-6 text-bk-90" />
@@ -115,7 +115,6 @@ const CoursePreview = ({
                         />
                       </div>
                     )}
-
                     {location.description && (
                       <p className="text-body5 text-bk-60">
                         {location.description}
