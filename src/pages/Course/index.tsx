@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
@@ -61,6 +61,7 @@ const index = () => {
   };
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isLike, setIsLike] = useState<boolean>(dummy.isLike);
   const [likeCount, setLikeCount] = useState<number>(dummy.heartCount);
@@ -76,7 +77,7 @@ const index = () => {
 
   return (
     <div className={variants.container}>
-      <Topbar handleClick={() => navigate('/community')} />
+      <Topbar handleClick={() => navigate(`${location.state}`)} />
       <header className={variants.headerLayout}>
         <p className="text-bk-90 text-h1">성수동 데이트</p>
         <section className="flex gap-[10px] items-center">
