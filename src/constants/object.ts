@@ -1,4 +1,12 @@
+import {
+  HiOutlineUserCircle,
+  HiOutlineHeart,
+  HiOutlineFolderOpen,
+  HiOutlineSpeakerphone,
+} from 'react-icons/hi';
+
 import { dropdownItemType } from '../components/common/dropdown';
+import { MypageMenuItemType } from '../types/mypage';
 
 export const PlaceType: string[] = [
   '식당',
@@ -60,5 +68,28 @@ export const regionDropdownItems: dropdownItemType[] = [
   {
     id: 8,
     text: '영등포구',
+  },
+];
+
+export const mypageMenuItems: MypageMenuItemType[] = [
+  {
+    icon: HiOutlineUserCircle,
+    text: '내 정보',
+    link: '/mypage/info',
+  },
+  {
+    icon: HiOutlineHeart,
+    text: '찜한 코스 모아보기',
+    link: '/mypage/like',
+  },
+  {
+    icon: HiOutlineFolderOpen,
+    text: '마이 코스 모아보기',
+    link: '/mypage/mycourse',
+  },
+  {
+    icon: HiOutlineSpeakerphone,
+    text: '공지사항',
+    link: '/mypage/notice',
   },
 ];

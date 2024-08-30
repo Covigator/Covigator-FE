@@ -1,21 +1,24 @@
 import { forwardRef, useState } from 'react';
 
-import { InputProps, InputSize } from './Input.types';
+import { InputProps, InputSize, InputType } from './Input.types';
 
 import clsx from 'clsx';
 
 const style: {
   base: string;
-  focus: string;
+  focus: Record<InputType, string>;
   sizes: Record<InputSize, string>;
 } = {
   base: 'flex w-full h-10 rounded-[10px] px-[15px] border border-bk-50 focus-visible:outline-none bg-wh text-body5 text-bk-90 placeholder-bk-50',
-  focus: '!border-sub-300',
+  focus: {
+    normal: '!border-sub-300',
+    chat: '!border-sub-100',
+  },
   sizes: {
     sm: 'max-w-60',
     md: 'max-w-[280px]',
     lg: 'max-w-[300px] !text-body4',
-    xl: 'h-[45px] focus:outline-sub-100', // 채팅 입력창
+    xl: 'h-[45px]', // 채팅 입력창
   },
 };
 
@@ -36,7 +39,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const [value, setValue] = useState(defaultValue || '');
 
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(
+    defaultValue?.toString().length || 0,
+  );
   const handleCount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCount(
       maxLength && e.target.value.length >= maxLength
@@ -72,7 +77,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         className={clsx(
           style.base,
           style.sizes[size],
-          isFocused && style.focus,
+          isFocused && style.focus[size === 'xl' ? 'chat' : 'normal'],
           icon && 'pl-[45px]',
           className,
         )}

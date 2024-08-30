@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
 import { IoStar } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export type CourseItemProps = {
   id: number;
@@ -31,6 +31,7 @@ const CourseItem = ({
   isLike,
 }: CourseItemProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const courseId = id;
   const [isLiked, setIsLiked] = useState<boolean>(isLike);
 
@@ -39,19 +40,27 @@ const CourseItem = ({
   };
 
   return (
-    <button
-      className={variants.container}
-      onClick={() => navigate(`/course/${courseId}`)}
-    >
+    <div className={variants.container}>
       <div className="h-[150px] relative">
-        <img src={img} className="w-full h-full bg-bk-50" />
+        <img
+          src={img}
+          className="w-full h-full bg-bk-50"
+          onClick={() =>
+            navigate(`/course/${courseId}`, { state: location.pathname })
+          }
+        />
         {isLiked ? (
           <IoMdHeart className={variants.heartBtn} onClick={handleLike} />
         ) : (
           <IoMdHeartEmpty className={variants.heartBtn} onClick={handleLike} />
         )}
       </div>
-      <section className={variants.content}>
+      <section
+        className={variants.content}
+        onClick={() =>
+          navigate(`/course/${courseId}`, { state: location.pathname })
+        }
+      >
         <div className="flex flex-col gap-[3px] items-start">
           <p className={variants.title}>{title}</p>
           <p className={variants.desc}>{caption}</p>
@@ -61,7 +70,7 @@ const CourseItem = ({
           <p className={variants.desc}>{rate}</p>
         </div>
       </section>
-    </button>
+    </div>
   );
 };
 
