@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
 import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
@@ -45,14 +45,14 @@ const Index = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
 
-  const handleLocationSelect = (index: number) => {
+  const handleLocationSelect = useCallback((index: number) => {
     setLocations((prevLocations) =>
       prevLocations.map((location, i) => ({
         ...location,
         isSelected: i === index,
       })),
     );
-  };
+  }, []);
 
   const handleExpand = (expanded: boolean) => {
     setIsExpanded(expanded);

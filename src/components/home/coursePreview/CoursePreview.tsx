@@ -26,14 +26,14 @@ interface CoursePreviewProps {
   onExpand: (expanded: boolean) => void;
 }
 
-const CoursePreview = ({
+const CoursePreview: React.FC<CoursePreviewProps> = ({
   date,
   weather,
   companions,
   locations,
   isExpanded,
   onExpand,
-}: CoursePreviewProps) => {
+}) => {
   const toggleExpanded = () => {
     onExpand(!isExpanded);
   };
