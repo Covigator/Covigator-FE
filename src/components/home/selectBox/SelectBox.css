@@ -78,8 +78,9 @@
 
 /* 날짜에 마우스 호버 시 스타일 */
 .react-datepicker__day:hover {
-  background-color: #f2f2f2;
+  background-color: #2d387a;
   cursor: pointer;
+  color: white;
 }
 
 .custom-header {
