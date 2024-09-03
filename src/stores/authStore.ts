@@ -9,7 +9,7 @@ interface AuthState {
   logout: () => void;
 }
 
-// Zustand store 생성
+// Zustand 스토어 생성
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
