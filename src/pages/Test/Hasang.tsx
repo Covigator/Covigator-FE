@@ -28,7 +28,14 @@ const Hasang = () => {
 
   return (
     <div className="w-full p-4">
-      <Button onClick={handleOpenDialog}>Dialog Test</Button>
+      <Button
+        onClick={handleOpenDialog}
+        size={'xs'}
+        shape={'square'}
+        color={'sub'}
+      >
+        Dialog Test
+      </Button>
       {modalState?.type === 'Dialog' && (
         <Dialog
           title={modalState.props.title}

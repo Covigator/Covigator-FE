@@ -101,7 +101,7 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
                   isFirst && 'rounded-b-none !border-b-[0.5px]',
                   isLast && 'rounded-t-none !border-t-0',
                 )}
-                onClick={(e) => handleSelect(item)}
+                onClick={() => handleSelect(item)}
               >
                 {item.text}
               </ul>
