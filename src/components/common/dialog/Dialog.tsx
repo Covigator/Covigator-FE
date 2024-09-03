@@ -1,10 +1,8 @@
-import React from 'react';
-
 import useModal from '../../../hooks/useModal';
 import Button from '../button/Button';
 import { DialogProps } from './Dialog.types';
 
-const Dialog: React.FC<DialogProps> = ({
+const Dialog = ({
   title,
   subtitle,
   content,
@@ -13,7 +11,7 @@ const Dialog: React.FC<DialogProps> = ({
   confirmText = '확인',
   cancelText = '닫기',
   showSubtitle = true,
-}) => {
+}: DialogProps) => {
   const { closeModal } = useModal();
 
   const handleConfirm = () => {
@@ -29,7 +27,7 @@ const Dialog: React.FC<DialogProps> = ({
   return (
     <>
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
         onClick={handleCancel}
       ></div>
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
