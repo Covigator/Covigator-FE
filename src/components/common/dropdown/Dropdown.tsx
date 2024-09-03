@@ -43,7 +43,7 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full box-border">
       <button
         className={clsx(
           styles.base,
@@ -78,7 +78,12 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
         mountOnEnter
         unmountOnExit
       >
-        <div className="w-full h-0 z-10 absolute pt-1">
+        <div
+          className={clsx(
+            'h-0 z-10 absolute pt-1',
+            size === 'sm' ? 'w-full max-w-[60px]' : 'w-full max-w-[280px]',
+          )}
+        >
           {dropdownItems.map((item) => {
             const isFirst = item.id === 0;
             const isLast = item.id === dropdownItems.length - 1;
