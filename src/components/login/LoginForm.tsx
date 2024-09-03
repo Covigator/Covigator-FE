@@ -2,10 +2,12 @@ import React, { useState, ChangeEvent } from 'react';
 import { CiLock } from 'react-icons/ci';
 import { HiOutlineEnvelope } from 'react-icons/hi2';
 import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 import { loginUser } from '../../api/auth';
 import Button from '../../components/common/button/Button';
 import Input from '../../components/common/input';
+import { useAuthStore } from '../../stores/authStore';
 
 import { z } from 'zod';
 
@@ -22,6 +24,9 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
+
   // 폼 데이터 상태 관리
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -36,11 +41,16 @@ const LoginForm = () => {
 
   // 로그인 API 호출을 위한 React Query mutation 설정
   const loginMutation = useMutation(loginUser, {
-    onSuccess: (data) => {
-      console.log('로그인 성공', data);
+    onSuccess: (token) => {
+      console.log('로그인 성공', token);
+      setAuth(token); // Zustand store 업데이트
+      navigate('/'); // 홈페이지로 리다이렉트
     },
     onError: (error) => {
       console.error('로그인 실패', error);
+      setErrors({
+        email: '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
+      });
     },
   });
 
