@@ -105,6 +105,7 @@ const index = () => {
           </Link>
         </section>
       </header>
+      <p className="mt-2 text-bk-80 text-body3">코스 설명 자리</p>
       <div className={variants.map}>지도 자리</div>
       <section className="mt-[25px]">
         <p className={clsx('mb-[7px]', variants.label)}>코스 장소</p>

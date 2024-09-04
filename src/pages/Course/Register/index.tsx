@@ -118,6 +118,22 @@ const index = () => {
           }}
         />
       </section>
+      <section className={variants.section}>
+        <p className={variants.label}>코스 설명</p>
+        <Input
+          size={'lg'}
+          placeholder={'코스 설명을 입력해주세요'}
+          maxLength={20}
+          onChange={() => {
+            /* 코스 추가 가능 여부 판단 */
+            if (newPlaces.length != 0 && textAreaRef.current?.value) {
+              setIsRegisterAble(true);
+            } else {
+              setIsRegisterAble(false);
+            }
+          }}
+        />
+      </section>
       <section className="mt-[-2px] mb-[17px]">
         {newPlaces.map((item) => {
           return (
