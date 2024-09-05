@@ -5,7 +5,7 @@ import {
   HiOutlineSpeakerphone,
 } from 'react-icons/hi';
 
-import { dropdownItemType } from '../components/common/dropdown';
+import { DropdownItemType } from '../components/common/dropdown';
 import { MypageMenuItemType } from '../types/mypage';
 
 export const PlaceType: string[] = [
@@ -17,7 +17,7 @@ export const PlaceType: string[] = [
   '기타',
 ];
 
-export const sortDropdownItems: dropdownItemType[] = [
+export const sortDropdownItems: DropdownItemType[] = [
   {
     id: 0,
     text: '최신순',
@@ -32,7 +32,7 @@ export const sortDropdownItems: dropdownItemType[] = [
   },
 ];
 
-export const regionDropdownItems: dropdownItemType[] = [
+export const regionDropdownItems: DropdownItemType[] = [
   {
     id: 0,
     text: '성동구',
