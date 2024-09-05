@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import CourseItem from '../../../components/community/CourseItem';
 import { Topbar } from '../../../layouts';
@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 const Like = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
+  // const { userId } = useParams();
 
   return (
     <div className="w-full pt-[63px] px-[30px]">

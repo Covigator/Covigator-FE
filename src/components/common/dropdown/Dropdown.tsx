@@ -47,7 +47,7 @@ const DropDown = ({ dropdownItems, size, type, onSelect }: DropdownProps) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full box-border">
       <button
         className={clsx(
           styles.base,
@@ -82,7 +82,12 @@ const DropDown = ({ dropdownItems, size, type, onSelect }: DropdownProps) => {
         mountOnEnter
         unmountOnExit
       >
-        <div className="w-full h-0 z-10 absolute pt-1">
+        <div
+          className={clsx(
+            'h-0 z-10 absolute pt-1',
+            size === 'sm' ? 'w-full max-w-[60px]' : 'w-full max-w-[280px]',
+          )}
+        >
           {dropdownItems.slice(1).map((item) => {
             // 0번째 항목을 제외하고 렌더링
             const isFirst = item.id === 1; // 1번째 항목이 이제 첫 번째가 됨
@@ -101,7 +106,7 @@ const DropDown = ({ dropdownItems, size, type, onSelect }: DropdownProps) => {
                   isFirst && 'rounded-b-none !border-b-[0.5px]',
                   isLast && 'rounded-t-none !border-t-0',
                 )}
-                onClick={(e) => handleSelect(item)}
+                onClick={() => handleSelect(item)}
               >
                 {item.text}
               </ul>
