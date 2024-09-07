@@ -13,5 +13,4 @@ export const KakaoLoginResponseSchema = z.object({
 
 // 스키마로부터 타입 추론
 
-// prettier-ignore
 export type KakaoLoginResponse = z.infer<typeof KakaoLoginResponseSchema>;

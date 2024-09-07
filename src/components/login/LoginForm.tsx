@@ -18,9 +18,6 @@ const loginSchema = z.object({
 });
 
 // LoginFormData 타입 정의 (Zod 스키마로부터 추론)
-// 에러 발생 방지를 위한 prettier-ignore 사용
-
-// prettier-ignore
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
@@ -35,8 +32,6 @@ const LoginForm = () => {
 
   // 에러 상태 관리
 
-  // 에러 발생 방지를 위한 prettier-ignore 사용
-  // prettier-ignore
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
   // 로그인 API 호출을 위한 React Query mutation 설정
@@ -56,8 +51,6 @@ const LoginForm = () => {
 
   // 입력 필드 변경 핸들러
   const handleInputChange = (
-    // 에러 발생 방지를 위한 prettier-ignore 사용
-    // prettier-ignore
     e: ChangeEvent<HTMLInputElement>,
     fieldName: keyof LoginFormData,
   ) => {
@@ -78,8 +71,6 @@ const LoginForm = () => {
       if (error instanceof z.ZodError) {
         // Zod 에러 처리 및 에러 메시지 설정
 
-        // 에러 발생 방지를 위한 prettier-ignore 사용
-        // prettier-ignore
         const fieldErrors: Partial<LoginFormData> = {};
         error.errors.forEach((err) => {
           if (err.path[0]) {
