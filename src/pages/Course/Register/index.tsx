@@ -35,8 +35,9 @@ const index = () => {
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descRef = useRef<HTMLInputElement>(null);
+  const courseDescRef = useRef<HTMLTextAreaElement>(null);
 
   const [tempId, setTempId] = useState<number>(0);
 
@@ -51,14 +52,14 @@ const index = () => {
       const name = 'name';
       const img = 'img';
       const type = selectedChip;
-      const desc = textAreaRef.current?.value || '';
+      const desc = courseDescRef.current?.value || '';
       setNewPlaces((prev) => [...prev, { id, name, type, desc, img }]);
       setIsAddAble(false);
       setSelectedChip('');
       setTempId((prev) => prev + 1);
-      if (textAreaRef.current) {
-        textAreaRef.current.value = '';
-        textAreaRef.current.focus();
+      if (courseDescRef.current) {
+        courseDescRef.current.value = '';
+        courseDescRef.current.focus();
       }
     }
   };
@@ -72,14 +73,14 @@ const index = () => {
 
   /* 장소 추가 가능 여부 판단 */
   useEffect(() => {
-    if (textAreaRef.current?.value != '') {
+    if (courseDescRef.current?.value != '') {
       setIsAddAble(true);
     }
   }, [selectedChip]);
 
   /* 코스 추가 가능 여부 판단 */
   useEffect(() => {
-    if (inputRef.current?.value != '') {
+    if (titleRef.current?.value != '') {
       setIsRegisterAble(true);
     }
   }, [newPlaces]);
@@ -104,13 +105,30 @@ const index = () => {
       <section className={variants.section}>
         <p className={variants.label}>코스 제목</p>
         <Input
-          ref={inputRef}
+          ref={titleRef}
           size={'lg'}
           placeholder={'코스 제목을 입력해주세요'}
           maxLength={15}
           onChange={() => {
             /* 코스 추가 가능 여부 판단 */
-            if (newPlaces.length != 0 && textAreaRef.current?.value) {
+            if (newPlaces.length != 0 && courseDescRef.current?.value) {
+              setIsRegisterAble(true);
+            } else {
+              setIsRegisterAble(false);
+            }
+          }}
+        />
+      </section>
+      <section className={variants.section}>
+        <p className={variants.label}>코스 설명</p>
+        <Input
+          ref={descRef}
+          size={'lg'}
+          placeholder={'코스 설명을 입력해주세요'}
+          maxLength={20}
+          onChange={() => {
+            /* 코스 추가 가능 여부 판단 */
+            if (newPlaces.length != 0 && courseDescRef.current?.value) {
               setIsRegisterAble(true);
             } else {
               setIsRegisterAble(false);
@@ -165,13 +183,13 @@ const index = () => {
           })}
         </div>
         <Textarea
-          ref={textAreaRef}
+          ref={courseDescRef}
           maxLength={50}
           placeholder={'지도에서 선택한 장소를 설명해주세요'}
           size={'md'}
           onChange={() => {
             /* 장소 추가 가능 여부 판단 */
-            if (selectedChip != '' && textAreaRef.current?.value) {
+            if (selectedChip != '' && courseDescRef.current?.value) {
               setIsAddAble(true);
             } else {
               setIsAddAble(false);

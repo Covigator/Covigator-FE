@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as RadioBtn_active } from '../../../assets/image/locationDialog/radioBtn_active.svg';
 import { ReactComponent as RadioBtn_inactive } from '../../../assets/image/locationDialog/radioBtn_inactive.svg';
@@ -56,7 +55,9 @@ const LocationDialog = ({
   return (
     <Dialog
       title="지역을 선택해주세요"
-      subtitle={`원하는 반경을 선택 후\n지도에 직접 원하는 범위를 표시해주세요!`}
+      subtitle={
+        '원하는 반경을 선택 후\n지도에 직접 원하는 범위를 표시해주세요!'
+      }
       content={content}
       onConfirm={handleConfirm}
       onCancel={onClose}
