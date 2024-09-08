@@ -1,3 +1,5 @@
+// global.d.ts
+
 interface KakaoMapOptions {
   center: kakao.maps.LatLng;
   level: number;
@@ -19,6 +21,15 @@ interface KakaoMaps {
   MapTypeId: {
     OVERLAY: number;
   };
+}
+
+interface KakaoAuth {
+  authorize: (settings: { redirectUri: string }) => void;
+}
+
+interface KakaoSDK {
+  init: (appKey: string) => void;
+  isInitialized: () => boolean;
 }
 
 declare namespace kakao {
@@ -77,11 +88,24 @@ declare namespace kakao {
   }
 }
 
+// Window 객체에 카카오맵 API와 카카오 SDK를 추가하는 인터페이스 확장
+
 interface Window {
   kakao: {
     maps: KakaoMaps;
   };
+  Kakao: {
+    init: (appKey: string) => void;
+    isInitialized: () => boolean;
+    Auth: KakaoAuth;
+  };
 }
 
+// 전역 Kakao 객체 선언
+declare const Kakao: {
+  init: (appKey: string) => void;
+  isInitialized: () => boolean;
+  Auth: KakaoAuth;
+};
 declare module 'clsx';
 declare module 'react-datepicker';
