@@ -17,7 +17,7 @@
     "@mui/material": "^5.16.6",
     "@types/react-datepicker": "^7.0.0",
     "@types/uuid": "^10.0.0",
-    "axios": "^1.6.8",
+    "axios": "^1.7.6",
     "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-datepicker": "^7.3.0",
@@ -28,7 +28,8 @@
     "react-spinners": "^0.13.8",
     "uuid": "^10.0.0",
     "vite-plugin-svgr": "^4.2.0",
-    "zustand": "^4.5.2"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@svgr/rollup": "^8.1.0",
