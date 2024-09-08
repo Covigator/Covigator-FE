@@ -18,6 +18,7 @@ import Modify from './pages/Mypage/Info/Modify';
 import Like from './pages/Mypage/Like';
 import Mycourse from './pages/Mypage/Mycourse';
 import Notice from './pages/Mypage/Notice';
+import Result from './pages/Result';
 import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
@@ -27,7 +28,8 @@ const Router = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/map" element={<Map />} />
+        <Route path="/result" element={<Result />} />
+        <Route path="/map" element={<Map lat={37.5385} lng={127.0823} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
