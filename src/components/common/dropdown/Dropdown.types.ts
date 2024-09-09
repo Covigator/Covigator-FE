@@ -1,7 +1,12 @@
 export type DropdownProps = {
-  dropdownItems: dropdownItemType[];
+  dropdownItems: DropdownItemType[];
   size: DropdownSize;
   type: DropdownType;
+  onSelect?: (item: DropdownItemType) => void;
+};
+
+export type LocationItemType = DropdownItemType & {
+  radius?: number;
 };
 
 export const dropdownSize = {
@@ -16,7 +21,9 @@ export const dropdownType = {
 } as const;
 export type DropdownType = (typeof dropdownType)[keyof typeof dropdownType];
 
-export type dropdownItemType = {
+export type DropdownItemType = {
   id: number;
   text: string;
+  lat?: number;
+  lng?: number;
 };

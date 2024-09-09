@@ -36,15 +36,14 @@ const Navigation = () => {
           />
           <NavigationButton
             Icon={HiOutlineUser}
-            title="유저"
-            isActive={activeButton === 'user'}
-            onClick={() => handleNavigation('/user', 'user')}
+            title="마이페이지"
+            isActive={activeButton === 'mypage'}
+            onClick={() => handleNavigation('/mypage', 'mypage')}
           />
         </div>
       </nav>
     </section>
   );
 };
-
 
 export default Navigation;

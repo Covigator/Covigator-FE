@@ -17,3 +17,9 @@ export const inputSize = {
   xl: 'xl',
 } as const;
 export type InputSize = (typeof inputSize)[keyof typeof inputSize];
+
+export const inputType = {
+  normal: 'normal',
+  chat: 'chat',
+} as const;
+export type InputType = (typeof inputType)[keyof typeof inputType];

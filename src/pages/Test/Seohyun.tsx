@@ -1,6 +1,8 @@
 import { HiOutlineMail } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
+import MyMsgItem from '../../components/chatting/MyMsgItem';
+import OtherMsgItem from '../../components/chatting/OtherMsgItem';
 import Button from '../../components/common/button';
 import Dropdown from '../../components/common/dropdown';
 import Input from '../../components/common/input';
@@ -16,6 +18,14 @@ const Seohyun = () => {
 
   return (
     <div className="w-full flex flex-col gap-3 pt-20 px-2">
+      <MyMsgItem text={'하이하이이거어때'} time={'오전 10:24'} />
+      <OtherMsgItem
+        text={'15자 넘어가면 줄바꿈합니다 이렇게~'}
+        time={'오전 10:24'}
+        senderName={''}
+        senderProfileImg={''}
+        isSameAsPrev={false}
+      />
       <Button size={'xs'} shape={'square'} color={'sub_300'}>
         채팅방
       </Button>
@@ -32,7 +42,7 @@ const Seohyun = () => {
       <Dropdown dropdownItems={sortDropdownItems} size="sm" type={'primary'} />
       <Dropdown dropdownItems={regionDropdownItems} size="lg" type={'sub'} />
       {/* topbar 테스트 */}
-      <Topbar handleClick={(e: React.MouseEvent) => handleTopbar()} />
+      <Topbar handleClick={() => handleTopbar()} />
       {/* common textarea 테스트 */}
       <Textarea maxLength={50} placeholder={'md textarea'} size={'md'} />
       <Textarea maxLength={150} placeholder={'lg textarea'} size={'lg'} />

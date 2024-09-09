@@ -3,7 +3,7 @@ import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
 import {
-  dropdownItemType,
+  DropdownItemType,
   DropdownProps,
   DropdownSize,
   DropdownType,
@@ -28,7 +28,7 @@ const styles: {
   },
 };
 
-const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
+const DropDown = ({ dropdownItems, size, type, onSelect }: DropdownProps) => {
   const animationTiming = {
     enter: 100,
     exit: 300,
@@ -37,13 +37,17 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<number>(dropdownItems[0].id);
 
-  const handleSelect = (item: dropdownItemType) => {
-    setSelectedItem(item.id);
-    setIsOpen(!isOpen);
+  const handleSelect = (item: DropdownItemType) => {
+    if (item.id !== 0) {
+      // 0번째 항목은 선택하지 않음
+      setSelectedItem(item.id);
+      setIsOpen(false); // 항목 선택 시 드롭다운을 닫음
+      onSelect && onSelect(item); // onSelect가 제공되었을 때만 호출
+    }
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full box-border">
       <button
         className={clsx(
           styles.base,
@@ -78,9 +82,15 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
         mountOnEnter
         unmountOnExit
       >
-        <div className="w-full h-0 z-10 absolute pt-1">
-          {dropdownItems.map((item) => {
-            const isFirst = item.id === 0;
+        <div
+          className={clsx(
+            'h-0 z-10 absolute pt-1',
+            size === 'sm' ? 'w-full max-w-[60px]' : 'w-full max-w-[280px]',
+          )}
+        >
+          {dropdownItems.slice(1).map((item) => {
+            // 0번째 항목을 제외하고 렌더링
+            const isFirst = item.id === 1; // 1번째 항목이 이제 첫 번째가 됨
             const isLast = item.id === dropdownItems.length - 1;
 
             return (
@@ -96,7 +106,7 @@ const DropDown = ({ dropdownItems, size, type }: DropdownProps) => {
                   isFirst && 'rounded-b-none !border-b-[0.5px]',
                   isLast && 'rounded-t-none !border-t-0',
                 )}
-                onClick={(e) => handleSelect(item)}
+                onClick={() => handleSelect(item)}
               >
                 {item.text}
               </ul>

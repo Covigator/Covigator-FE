@@ -40,6 +40,7 @@ const config: Config = {
         pretendard: 'Pretendard',
       },
       fontWeight: {
+        light: '300',
         regular: '400',
         medium: '500',
         semibold: '600',

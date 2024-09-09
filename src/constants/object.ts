@@ -1,6 +1,23 @@
-import { dropdownItemType } from '../components/common/dropdown';
+import {
+  HiOutlineUserCircle,
+  HiOutlineHeart,
+  HiOutlineFolderOpen,
+  HiOutlineSpeakerphone,
+} from 'react-icons/hi';
 
-export const sortDropdownItems: dropdownItemType[] = [
+import { DropdownItemType } from '../components/common/dropdown';
+import { MypageMenuItemType } from '../types/mypage';
+
+export const PlaceType: string[] = [
+  '식당',
+  '카페',
+  '액티비티',
+  '문화/여가',
+  '자연',
+  '기타',
+];
+
+export const sortDropdownItems: DropdownItemType[] = [
   {
     id: 0,
     text: '최신순',
@@ -15,7 +32,7 @@ export const sortDropdownItems: dropdownItemType[] = [
   },
 ];
 
-export const regionDropdownItems: dropdownItemType[] = [
+export const regionDropdownItems: DropdownItemType[] = [
   {
     id: 0,
     text: '성동구',
@@ -51,5 +68,28 @@ export const regionDropdownItems: dropdownItemType[] = [
   {
     id: 8,
     text: '영등포구',
+  },
+];
+
+export const mypageMenuItems: MypageMenuItemType[] = [
+  {
+    icon: HiOutlineUserCircle,
+    text: '내 정보',
+    link: '/mypage/info',
+  },
+  {
+    icon: HiOutlineHeart,
+    text: '찜한 코스 모아보기',
+    link: '/mypage/like',
+  },
+  {
+    icon: HiOutlineFolderOpen,
+    text: '마이 코스 모아보기',
+    link: '/mypage/mycourse',
+  },
+  {
+    icon: HiOutlineSpeakerphone,
+    text: '공지사항',
+    link: '/mypage/notice',
   },
 ];

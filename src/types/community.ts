@@ -8,8 +8,9 @@ export type CourseItemType = {
 };
 
 export type CourseDetailType = {
-  id?: number;
+  id: number;
   title: string;
+  desc: string;
   isLike: boolean;
   heartCount: number;
   placeItems: PlaceItemType[];
