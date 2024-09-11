@@ -1,3 +1,10 @@
+/* TODO: CourseItemType으로 병합 필요 */
+export interface CourseType {
+  name: string;
+  description: string;
+  score: number;
+}
+
 export type CourseItemType = {
   id: number;
   title: string;
@@ -31,4 +38,9 @@ export type ReviewItemType = {
   content: string;
   img?: string;
   rate: number;
+};
+
+export type AllCourseResponse = {
+  courses: CourseType[];
+  hasNext: boolean;
 };
