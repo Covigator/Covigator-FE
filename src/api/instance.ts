@@ -5,6 +5,9 @@ const instance = axios.create({
   timeout: 10000, // 10초
   headers: {
     'Content-Type': 'application/json',
+    Authorization:
+      localStorage.getItem('accessToken') &&
+      `Bearer ${localStorage.getItem('accessToken')}`,
   },
 });
 
