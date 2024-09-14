@@ -1,9 +1,9 @@
 /* TODO: CourseItemType으로 병합 필요 */
-export interface CourseType {
+export type CourseType = {
   name: string;
   description: string;
   score: number;
-}
+};
 
 export type CourseItemType = {
   id: number;
@@ -22,6 +22,15 @@ export type CourseDetailType = {
   heartCount: number;
   placeItems: PlaceItemType[];
   reviewItems: ReviewItemType[];
+};
+
+/* TODO: PlaceItemType으로 병합 필요 */
+
+export type PlaceType = {
+  placeName: string;
+  address: string;
+  category: string;
+  description: string;
 };
 
 export type PlaceItemType = {
@@ -43,4 +52,12 @@ export type ReviewItemType = {
 export type AllCourseResponse = {
   courses: CourseType[];
   hasNext: boolean;
+};
+
+export type CourseDetailResponse = {
+  courseName: string;
+  courseDescription: string;
+  likeCnt: number;
+  isLiked: boolean;
+  places: PlaceType[];
 };
