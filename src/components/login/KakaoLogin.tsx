@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { kakaoLogin } from '../../api/auth';
 import kakaoLoginBtn from '../../assets/image/login/kakaoLoginBtn.png';
+import { useAuthStore } from '../../stores/authStore';
 
 const KakaoLogin = () => {
-  // Kakao SDK 로딩 상태를 관리하는 state
   const [isKakaoSDKLoaded, setIsKakaoSDKLoaded] = useState(false);
+  const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   useEffect(() => {
-    // Kakao SDK를 동적으로 로드하는 스크립트 생성
+    // Kakao SDK 로딩 코드
     const script = document.createElement('script');
     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
     script.async = true;
     script.onload = () => {
       if (window.Kakao) {
-        // Kakao SDK가 초기화되지 않았다면 초기화 진행
         if (!window.Kakao.isInitialized()) {
           const kakaoJSKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
           if (!kakaoJSKey) {
@@ -22,36 +25,50 @@ const KakaoLogin = () => {
           }
           window.Kakao.init(kakaoJSKey);
         }
-        // SDK 로딩 완료 상태로 설정
         setIsKakaoSDKLoaded(true);
       }
     };
-    // body에 스크립트 추가
     document.body.appendChild(script);
-
-    // 컴포넌트 언마운트 시 스크립트 제거
     return () => {
       document.body.removeChild(script);
     };
   }, []);
 
-  // 카카오 로그인 처리 함수
+  useEffect(() => {
+    // URL 파라미터에서 인증 코드 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get('code');
+
+    if (authCode) {
+      handleKakaoLoginCallback(authCode);
+    }
+  }, [navigate, setAuth]);
+
+  const handleKakaoLoginCallback = async (code: string) => {
+    try {
+      const response = await kakaoLogin(code);
+      setAuth(response.access_token);
+      navigate('/'); // 메인 페이지로 리다이렉트
+    } catch (error) {
+      console.error('카카오 로그인 처리 중 오류 발생:', error);
+    }
+  };
+
   const handleKakaoLogin = () => {
-    // SDK가 로드되지 않았다면 에러 출력 후 함수 종료
     if (!isKakaoSDKLoaded) {
       console.error('카카오 SDK가 아직 로드되지 않았습니다');
       return;
     }
 
-    // Kakao.Auth.authorize 메서드가 존재하지 않으면 에러 출력 후 함수 종료
     if (!window.Kakao?.Auth?.authorize) {
       console.error('카카오 인증 기능을 사용할 수 없습니다');
       return;
     }
 
-    // 카카오 로그인 실행
+    const redirectUri = `${import.meta.env.VITE_API_BASE_URL}/accounts/oauth/kakao`;
+
     window.Kakao.Auth.authorize({
-      redirectUri: 'http://localhost:8080/accounts/oauth/kakao',
+      redirectUri: redirectUri,
     });
   };
 
@@ -59,7 +76,7 @@ const KakaoLogin = () => {
     <button
       className="w-[280px]"
       onClick={handleKakaoLogin}
-      disabled={!isKakaoSDKLoaded} // SDK 로딩 전에는 버튼 비활성화
+      disabled={!isKakaoSDKLoaded}
     >
       <img src={kakaoLoginBtn} alt="카카오 로그인" className="w-full" />
     </button>
