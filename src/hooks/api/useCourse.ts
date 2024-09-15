@@ -2,11 +2,11 @@ import { useQuery } from 'react-query';
 
 import { getAllCourseApi, getCourseDetailApi } from '../../api/community';
 
-export const useAllCourses = () => {
+export const useAllCourses = (page: number, sort: string) => {
   const { data, isLoading, error, refetch } = useQuery({
     /* TODO: queryKey에 사용자 정보 수정 추가 */
     queryKey: ['ALL_COURSES'],
-    queryFn: () => getAllCourseApi(),
+    queryFn: () => getAllCourseApi(page, sort),
   });
   return { data, isLoading, error, refetch };
 };

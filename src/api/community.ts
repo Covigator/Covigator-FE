@@ -5,10 +5,15 @@ import instance from './instance';
 import axios, { AxiosError } from 'axios';
 
 /** GET: 전체 코스 조회 */
-export const getAllCourseApi = async (): Promise<AllCourseResponse> => {
+export const getAllCourseApi = async (
+  page: number,
+  sort: string,
+): Promise<AllCourseResponse> => {
   try {
     // 전체 코스 조회 요청 보내기
-    const response = await instance.get('/community/courses');
+    const response = await instance.get(
+      `/community/courses?page=${page || 0}&size=10&sort=${sort || 'likeCnt'}`,
+    );
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
       response,
