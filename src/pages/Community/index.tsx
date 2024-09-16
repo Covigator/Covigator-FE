@@ -79,13 +79,20 @@ export const dummy: CourseItemType[] = [
 
 const index = () => {
   const [resData, setResData] = useState<AllCourseResponse>();
-  const { data, isLoading, refetch } = useAllCourses();
+  const [page, setPage] = useState<number>(0);
+  const [sort, setSort] = useState<string>('');
+
+  const { data, isLoading, refetch } = useAllCourses(page, sort);
 
   useEffect(() => {
     if (data) {
       setResData(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, [page, sort]);
 
   return (
     <div className="w-full h-full pt-[67px] px-[30px] pb-5">
@@ -99,6 +106,7 @@ const index = () => {
             dropdownItems={sortDropdownItems}
             size={'sm'}
             type={'primary'}
+            onSelect={(selectedSort) => setSort(selectedSort.text)}
           />
         </div>
       </header>
