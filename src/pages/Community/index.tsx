@@ -106,7 +106,9 @@ const index = () => {
             dropdownItems={sortDropdownItems}
             size={'sm'}
             type={'primary'}
-            onSelect={(selectedSort) => setSort(selectedSort.text)}
+            onSelect={(selectedSort) =>
+              setSort(selectedSort.value ? selectedSort.value : '')
+            }
           />
         </div>
       </header>

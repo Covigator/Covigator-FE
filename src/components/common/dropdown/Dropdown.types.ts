@@ -24,6 +24,7 @@ export type DropdownType = (typeof dropdownType)[keyof typeof dropdownType];
 export type DropdownItemType = {
   id: number;
   text: string;
+  value?: string;
   lat?: number;
   lng?: number;
 };

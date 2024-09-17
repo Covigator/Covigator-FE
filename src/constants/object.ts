@@ -20,14 +20,17 @@ export const PlaceType: string[] = [
 export const sortDropdownItems: DropdownItemType[] = [
   {
     id: 0,
+    value: 'createdAt',
     text: '최신순',
   },
   {
     id: 1,
+    value: 'avgScore',
     text: '별점순',
   },
   {
     id: 2,
+    value: 'likeCnt',
     text: '좋아요순',
   },
 ];

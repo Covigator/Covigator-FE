@@ -12,7 +12,7 @@ export const getAllCourseApi = async (
   try {
     // 전체 코스 조회 요청 보내기
     const response = await instance.get(
-      `/community/courses?page=${page || 0}&size=10&sort=${sort || 'likeCnt'}`,
+      `/community/courses?page=${page || 0}&size=10&sort=${sort || 'createdAt'}`,
     );
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
