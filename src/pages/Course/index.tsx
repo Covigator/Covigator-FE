@@ -6,9 +6,13 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
 import ReviewItem from '../../components/community/ReviewItem';
-import { useCourseDetail } from '../../hooks/api/useCourse';
+import { useCourseDetail, useCourseReviews } from '../../hooks/api/useCourse';
 import { Topbar } from '../../layouts';
-import { CourseDetailResponse, CourseDetailType } from '../../types/community';
+import {
+  CourseDetailResponse,
+  CourseDetailType,
+  ReviewResponse,
+} from '../../types/community';
 
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
@@ -28,7 +32,14 @@ const index = () => {
   const { courseId } = useParams();
 
   const [resData, setResData] = useState<CourseDetailResponse>();
+  const [reviewResData, setReviewResData] = useState<ReviewResponse>();
+
   const { data, isLoading, refetch } = useCourseDetail(Number(courseId));
+  const {
+    data: reviewData,
+    isLoading: isReviewLoading,
+    refetch: reviewRefetch,
+  } = useCourseReviews(Number(courseId));
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,10 +61,11 @@ const index = () => {
   };
 
   useEffect(() => {
-    if (data) {
+    if (data && reviewData) {
       setResData(data);
+      setReviewResData(reviewData);
     }
-  }, [data]);
+  }, [data, reviewData]);
 
   return (
     <div className={variants.container}>
@@ -109,14 +121,16 @@ const index = () => {
       </section>
       <section className="flex flex-col gap-[9px] mt-[11px]">
         <div className={variants.headerLayout}>
-          {/* <p className={variants.label}>리뷰 ({dummy.reviewItems.length})</p> */}
+          <p className={variants.label}>
+            리뷰 ({reviewResData?.reviews.length})
+          </p>
           <Button
             size={'xs'}
             shape={'square'}
             color={'sub_300'}
             onClick={() =>
               navigate('/review', {
-                // state: { courseId: courseId, courseName: dummy.title },
+                state: { courseId: courseId, courseName: resData?.courseName },
               })
             }
           >
@@ -125,16 +139,16 @@ const index = () => {
         </div>
         <div className={variants.reviewContainer}>
           {/* TODO: scrollbar 커스텀 */}
-          {/* {dummy.reviewItems.map((d) => {
+          {reviewResData?.reviews.map((d) => {
             return (
               <ReviewItem
                 key={uuid()}
-                name={d.name}
-                content={d.content}
-                rate={d.rate}
+                name={d.author}
+                content={d.comment}
+                rate={d.score}
               />
             );
-          })} */}
+          })}
         </div>
       </section>
     </div>

@@ -1,6 +1,10 @@
 import { useQuery } from 'react-query';
 
-import { getAllCourseApi, getCourseDetailApi } from '../../api/community';
+import {
+  getAllCourseApi,
+  getCourseDetailApi,
+  getCourseReviewApi,
+} from '../../api/community';
 
 export const useAllCourses = (page: number, sort: string) => {
   const { data, isLoading, error, refetch } = useQuery({
@@ -15,6 +19,14 @@ export const useCourseDetail = (courseId: number) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['COURSE_DETAIL'],
     queryFn: () => getCourseDetailApi(courseId),
+  });
+  return { data, isLoading, error, refetch };
+};
+
+export const useCourseReviews = (courseId: number) => {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['COURSE_REVIEWS'],
+    queryFn: () => getCourseReviewApi(courseId),
   });
   return { data, isLoading, error, refetch };
 };

@@ -61,3 +61,15 @@ export type CourseDetailResponse = {
   isLiked: boolean;
   places: PlaceType[];
 };
+
+/* TODO: ReviewItemType으로 병합 필요 */
+export type ReviewItem = {
+  author: string;
+  score: number;
+  comment: string;
+};
+
+export type ReviewResponse = {
+  reviews: ReviewItem[];
+  hasNext: boolean;
+};
