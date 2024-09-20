@@ -59,7 +59,7 @@ export const getCourseDetailApi = async (
   courseId: number,
 ): Promise<CourseDetailResponse> => {
   try {
-    // 전체 코스 조회 요청 보내기
+    // 코스 상세 조회 요청 보내기
     const response = await instance.get(`/community/courses/${courseId}`);
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
