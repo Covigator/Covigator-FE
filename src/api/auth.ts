@@ -14,7 +14,7 @@ export const loginUser = async (data: {
   try {
     // 로그인 요청 보내기
     const response = await instance.post<{ token: string }>(
-      '/accounts/login',
+      '/accounts/sign-in',
       data,
     );
 

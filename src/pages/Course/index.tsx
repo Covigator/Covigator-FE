@@ -1,13 +1,18 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
 import ReviewItem from '../../components/community/ReviewItem';
+import { useCourseDetail, useCourseReviews } from '../../hooks/api/useCourse';
 import { Topbar } from '../../layouts';
-import { CourseDetailType } from '../../types/community';
+import {
+  CourseDetailResponse,
+  CourseDetailType,
+  ReviewResponse,
+} from '../../types/community';
 
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
@@ -25,47 +30,26 @@ const variants = {
 
 const index = () => {
   const { courseId } = useParams();
-  const dummy: CourseDetailType = {
-    id: Number(courseId),
-    title: '성수동 데이트',
-    desc: '성수동 좋아~',
-    isLike: true,
-    heartCount: 36,
-    placeItems: [
-      {
-        id: 0,
-        type: '카페',
-        name: '스타벅스',
-        desc: '굿굿',
-      },
-      {
-        id: 1,
-        type: '카페',
-        name: '스타벅스',
-        desc: '굿굿',
-      },
-      {
-        id: 2,
-        type: '카페',
-        name: '스타벅스',
-        desc: '굿굿',
-      },
-    ],
-    reviewItems: [
-      { id: 0, name: '조하상', content: '여기 좋아요', rate: 4 },
-      { id: 1, name: '조하상', content: '여기 좋아요', rate: 4 },
-      { id: 2, name: '조하상', content: '여기 좋아요', rate: 4 },
-      { id: 3, name: '조하상', content: '여기 좋아요', rate: 4 },
-      { id: 4, name: '조하상', content: '여기 좋아요', rate: 4 },
-      { id: 5, name: '조하상', content: '여기 좋아요', rate: 4 },
-    ],
-  };
+
+  const [resData, setResData] = useState<CourseDetailResponse>();
+  const [reviewResData, setReviewResData] = useState<ReviewResponse>();
+
+  const { data, isLoading, refetch } = useCourseDetail(Number(courseId));
+  const {
+    data: reviewData,
+    isLoading: isReviewLoading,
+    refetch: reviewRefetch,
+  } = useCourseReviews(Number(courseId));
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isLike, setIsLike] = useState<boolean>(dummy.isLike);
-  const [likeCount, setLikeCount] = useState<number>(dummy.heartCount);
+  const [isLike, setIsLike] = useState<boolean>(
+    resData != undefined && resData?.isLiked,
+  );
+  const [likeCount, setLikeCount] = useState<number>(
+    resData != undefined ? resData?.likeCnt : 0,
+  );
 
   const handleLike = () => {
     if (isLike) {
@@ -76,11 +60,18 @@ const index = () => {
     setIsLike((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (data && reviewData) {
+      setResData(data);
+      setReviewResData(reviewData);
+    }
+  }, [data, reviewData]);
+
   return (
     <div className={variants.container}>
       <Topbar handleClick={() => navigate(`${location.state}`)} />
       <header className={variants.headerLayout}>
-        <p className="text-bk-90 text-h1">{dummy.title}</p>
+        <p className="text-bk-90 text-h1">{resData?.courseName}</p>
         <section className="flex gap-[10px] items-center">
           <div className="flex flex-col items-center">
             {isLike ? (
@@ -98,7 +89,10 @@ const index = () => {
           </div>
           <Link
             to={`/course/chat/${courseId}`}
-            state={{ courseId: `${dummy.id}`, courseName: `${dummy.title}` }}
+            state={{
+              courseId: `${courseId}`,
+              courseName: `${resData?.courseName}`,
+            }}
           >
             <Button size={'xs'} shape={'square'} color={'sub_300'}>
               채팅방
@@ -106,19 +100,19 @@ const index = () => {
           </Link>
         </section>
       </header>
-      <p className="mt-2 text-bk-80 text-body3">{dummy.desc}</p>
+      <p className="mt-2 text-bk-80 text-body3">{resData?.courseDescription}</p>
       <div className={variants.map}>지도 자리</div>
       <section className="mt-[25px]">
         <p className={clsx('mb-[7px]', variants.label)}>코스 장소</p>
-        {dummy.placeItems.map((d) => {
+        {resData?.places.map((d) => {
           return (
             <div key={uuid()}>
               <PlaceItem
-                id={d.id}
-                type={d.type}
-                name={d.name}
-                desc={d.desc}
-                img={d.img}
+                id={0}
+                type={d.category}
+                name={d.placeName}
+                desc={d.description}
+                img={''}
               />
               <div className="w-full h-[1px] bg-bk-50" />
             </div>
@@ -127,14 +121,16 @@ const index = () => {
       </section>
       <section className="flex flex-col gap-[9px] mt-[11px]">
         <div className={variants.headerLayout}>
-          <p className={variants.label}>리뷰 ({dummy.reviewItems.length})</p>
+          <p className={variants.label}>
+            리뷰 ({reviewResData?.reviews.length})
+          </p>
           <Button
             size={'xs'}
             shape={'square'}
             color={'sub_300'}
             onClick={() =>
               navigate('/review', {
-                state: { courseId: courseId, courseName: dummy.title },
+                state: { courseId: courseId, courseName: resData?.courseName },
               })
             }
           >
@@ -143,13 +139,13 @@ const index = () => {
         </div>
         <div className={variants.reviewContainer}>
           {/* TODO: scrollbar 커스텀 */}
-          {dummy.reviewItems.map((d) => {
+          {reviewResData?.reviews.map((d) => {
             return (
               <ReviewItem
                 key={uuid()}
-                name={d.name}
-                content={d.content}
-                rate={d.rate}
+                name={d.author}
+                content={d.comment}
+                rate={d.score}
               />
             );
           })}
