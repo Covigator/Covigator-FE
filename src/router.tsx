@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import Loading from './components/common/Loading';
+import KakaoCallback from './components/login/KakaoCallback';
 import Layout from './layouts/Layout';
 import Community from './pages/Community';
 import Course from './pages/Course';
@@ -22,6 +23,8 @@ import Result from './pages/Result';
 import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
+
+// 새로 추가
 
 const Router = () => {
   return (
@@ -54,15 +57,12 @@ const Router = () => {
           <Route path="mycourse/:userId" element={<Mycourse />} />
           <Route path="notice" element={<Notice />} />
         </Route>
-        {/* <Route path="/order" element={<Outlet />}>
-          <Route index element={<Order />} />
-          <Route path="detail/:droneId" element={<OrderDetail />} />
-          <Route path="estimate" element={<Estimate />} />
-        </Route> */}
         <Route path="/test">
           <Route path="seohyun" element={<Seohyun />} />
           <Route path="hasang" element={<Hasang />} />
         </Route>
+
+        <Route path="/accounts/oauth/kakao" element={<KakaoCallback />} />
       </Route>
     </Routes>
   );

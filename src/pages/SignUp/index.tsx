@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { HiUser } from 'react-icons/hi2';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -12,20 +12,15 @@ import { useAuthStore } from '../../stores/authStore';
 
 import { z } from 'zod';
 
-// Zod 스키마를 사용하여 폼 유효성 검사 규칙 정의
+// Zod 스키마 수정
 const signupSchema = z
   .object({
-    image_url: z.string().optional(),
-    name: z
-      .string()
-      .min(1, '이름은 필수입니다')
-      .max(15, '이름은 15자 이하여야 합니다'),
+    image: z.instanceof(File).optional(),
+    email: z.string().email('유효한 이메일 주소를 입력해주세요'),
     nickname: z
       .string()
       .min(1, '닉네임은 필수입니다')
       .max(10, '닉네임은 10자 이하여야 합니다'),
-
-    email: z.string().email('유효한 이메일 주소를 입력해주세요'),
     password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
     confirmPassword: z.string(),
   })
@@ -34,32 +29,32 @@ const signupSchema = z
     path: ['confirmPassword'],
   });
 
-// Zod 스키마로부터 타입 추론
 type SignupFormData = z.infer<typeof signupSchema>;
 
+// 에러 메시지를 위한 별도의 타입 정의
+type FormErrors = {
+  [K in keyof SignupFormData]?: string;
+};
+
 const Signup = () => {
-  // 폼 데이터 상태 관리
   const [formData, setFormData] = useState<SignupFormData>({
-    image_url: '',
-    name: '',
-    nickname: '',
     email: '',
+    nickname: '',
     password: '',
     confirmPassword: '',
   });
-  // 에러 상태 관리
-  const [errors, setErrors] = useState<Partial<SignupFormData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
-  // Zustand 스토어에서 인증 설정 함수 가져오기
   const setAuth = useAuthStore((state) => state.setAuth);
 
-  // React Query를 사용한 회원가입 mutation 설정
   const signupMutation = useMutation(signupUser, {
     onSuccess: (token) => {
-      setAuth(token); // 성공 시 인증 상태 설정
-      navigate('/'); // 홈페이지로 이동
+      setAuth(token);
+      navigate('/');
     },
     onError: (error) => {
       console.error('회원가입 실패', error);
@@ -80,10 +75,16 @@ const Signup = () => {
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const fieldErrors: Partial<SignupFormData> = {};
+        const fieldErrors: FormErrors = {};
         error.errors.forEach((err) => {
           if (err.path[0]) {
-            fieldErrors[err.path[0] as keyof SignupFormData] = err.message;
+            // image 필드에 대한 특별한 처리
+            if (err.path[0] === 'image') {
+              fieldErrors.image = err.message;
+            } else {
+              fieldErrors[err.path[0] as keyof Omit<SignupFormData, 'image'>] =
+                err.message;
+            }
           }
         });
         setErrors(fieldErrors);
@@ -92,7 +93,6 @@ const Signup = () => {
     }
   };
 
-  // 입력 필드 변경 핸들러
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof SignupFormData,
@@ -100,12 +100,35 @@ const Signup = () => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  // 폼 제출 핸들러
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData({ ...formData, image: file });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsFormSubmitted(true);
     if (validateForm()) {
-      signupMutation.mutate(formData);
+      const formDataToSend = new FormData();
+      if (formData.image) {
+        formDataToSend.append('image', formData.image);
+      }
+      formDataToSend.append(
+        'postSignUpRequest',
+        JSON.stringify({
+          email: formData.email,
+          nickname: formData.nickname,
+          password: formData.password,
+        }),
+      );
+      signupMutation.mutate(formDataToSend);
     }
   };
 
@@ -121,20 +144,36 @@ const Signup = () => {
       >
         {/* 프로필 이미지 섹션 */}
         <div className="flex justify-center mb-6">
-          <div className="h-[100px] w-[100px] border border-bk-50 rounded-full flex items-center justify-center relative">
-            <span className="text-bk-50">
-              <HiUser className="h-20 w-20" />
-            </span>
+          <div className="h-[100px] w-[100px] border border-bk-50 rounded-full flex items-center justify-center relative overflow-hidden">
+            {previewImage ? (
+              <img
+                src={previewImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-bk-50">
+                <HiUser className="h-20 w-20" />
+              </span>
+            )}
           </div>
         </div>
 
         {/* 프로필 사진 등록 버튼 */}
         <div className="mt-3 mb-[23px]">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+            className="hidden"
+            accept="image/*"
+          />
           <Button
             size="xs"
             color="sub_300"
             shape="square"
             className="rounded-[5px] !px-[10px] !py-[4px]"
+            onClick={() => fileInputRef.current?.click()}
           >
             프로필 사진 등록하기
           </Button>
@@ -142,7 +181,6 @@ const Signup = () => {
 
         {/* 입력 필드 섹션 */}
         <div className="flex flex-col items-center gap-y-3 w-full">
-          {/* 닉네임 입력 필드 */}
           <Input
             size="md"
             placeholder="닉네임을 입력해주세요"
@@ -151,17 +189,6 @@ const Signup = () => {
           />
           {isFormSubmitted && errors.nickname && (
             <p className="text-red-500 text-sm">{errors.nickname}</p>
-          )}
-
-          {/* 이름 입력 필드 */}
-          <Input
-            size="md"
-            placeholder="이름을 입력해주세요"
-            maxLength={15}
-            onChange={(e) => handleInputChange(e, 'name')}
-          />
-          {isFormSubmitted && errors.name && (
-            <p className="text-red-500 text-sm">{errors.name}</p>
           )}
 
           <Input
@@ -173,7 +200,6 @@ const Signup = () => {
             <p className="text-red-500 text-sm">{errors.email}</p>
           )}
 
-          {/* 비밀번호 입력 필드 */}
           <Input
             size="md"
             placeholder="비밀번호를 입력해주세요"
@@ -185,7 +211,6 @@ const Signup = () => {
             <p className="text-red-500 text-sm">{errors.password}</p>
           )}
 
-          {/* 비밀번호 확인 입력 필드 */}
           <Input
             size="md"
             placeholder="비밀번호를 확인해주세요"

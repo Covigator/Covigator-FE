@@ -50,10 +50,10 @@ export const loginUser = async (data: {
 export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
   try {
     // 카카오 로그인 요청 보내기
-    const response = await instance.post<KakaoLoginResponse>(
-      '/accounts/kakao-login',
+    const response = await instance.get<KakaoLoginResponse>(
+      '/accounts/oauth/kakao',
       {
-        code,
+        params: { code },
       },
     );
     // 응답 데이터 유효성 검사 및 반환
@@ -73,18 +73,17 @@ export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
 };
 
 // 회원가입 함수
-export const signupUser = async (data: {
-  image_url?: string;
-  name: string;
-  nickname: string;
-  email: string;
-  password: string;
-}): Promise<string> => {
+export const signupUser = async (formData: FormData): Promise<string> => {
   try {
-    // 회원가입 요청 보내기
+    // 회원가입 요청 보내기 (multipart/form-data 형식으로)
     const response = await instance.post<{ token: string }>(
       '/accounts/sign-up',
-      data,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     // 토큰이 응답에 있으면 반환
@@ -99,7 +98,7 @@ export const signupUser = async (data: {
       if (axiosError.response) {
         // 서버가 2xx 범위를 벗어나는 상태 코드로 응답한 경우
         throw new Error(
-          `회원가입 실패: ${axiosError.response.status} - ${axiosError.response.data}`,
+          `회원가입 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
         );
       } else if (axiosError.request) {
         // 요청은 보냈지만 응답을 받지 못한 경우
