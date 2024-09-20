@@ -7,12 +7,12 @@ import CourseItem from '../../components/community/CourseItem';
 import FloatingBtn from '../../components/community/FloatingBtn';
 import { sortDropdownItems } from '../../constants/object';
 import { useAllCourses } from '../../hooks/api/useCourse';
-import { AllCourseResponse, CourseItemType } from '../../types/community';
+import { CourseListResponse, CourseItemType } from '../../types/community';
 
 import { v4 as uuid } from 'uuid';
 
 const index = () => {
-  const [resData, setResData] = useState<AllCourseResponse>();
+  const [resData, setResData] = useState<CourseListResponse>();
   const [page, setPage] = useState<number>(0);
   const [sort, setSort] = useState<string>('');
 

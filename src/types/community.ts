@@ -49,7 +49,7 @@ export type ReviewItemType = {
   rate: number;
 };
 
-export type AllCourseResponse = {
+export type CourseListResponse = {
   courses: CourseType[];
   hasNext: boolean;
 };

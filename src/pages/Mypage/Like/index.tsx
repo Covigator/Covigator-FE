@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import CourseItem from '../../../components/community/CourseItem';
 import { useLikeCourse } from '../../../hooks/api/useMypage';
 import { Topbar } from '../../../layouts';
-import { AllCourseResponse } from '../../../types/community';
+import { CourseListResponse } from '../../../types/community';
 
 import { v4 as uuid } from 'uuid';
 
 const Like = () => {
   const navigate = useNavigate();
-  const [resData, setResData] = useState<AllCourseResponse>();
+  const [resData, setResData] = useState<CourseListResponse>();
   const { data, isLoading, refetch } = useLikeCourse();
 
   useEffect(() => {

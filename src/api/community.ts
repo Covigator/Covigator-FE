@@ -1,5 +1,5 @@
 import {
-  AllCourseResponse,
+  CourseListResponse,
   CourseDetailResponse,
   ReviewResponse,
 } from '../types/community';
@@ -12,7 +12,7 @@ import axios, { AxiosError } from 'axios';
 export const getAllCourseApi = async (
   page: number,
   sort: string,
-): Promise<AllCourseResponse> => {
+): Promise<CourseListResponse> => {
   try {
     // 전체 코스 조회 요청 보내기
     const response = await instance.get(
@@ -21,7 +21,7 @@ export const getAllCourseApi = async (
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
       response,
-    ) as AllCourseResponse;
+    ) as CourseListResponse;
 
     return convertedResponse;
   } catch (error) {

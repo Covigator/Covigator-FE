@@ -1,18 +1,18 @@
-import { AllCourseResponse } from '../types/community';
+import { CourseListResponse } from '../types/community';
 import { convertObjectPropertiesSnakeCaseToCamelCase } from '../utils/common';
 import instance from './instance';
 
 import axios, { AxiosError } from 'axios';
 
 /** GET: 마이 코스 조회 */
-export const getMyCourseApi = async (): Promise<AllCourseResponse> => {
+export const getMyCourseApi = async (): Promise<CourseListResponse> => {
   try {
     // 마이 코스 조회 요청 보내기
     const response = await instance.get('/my-page/my-courses');
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
       response,
-    ) as AllCourseResponse;
+    ) as CourseListResponse;
 
     return convertedResponse;
   } catch (error) {
@@ -40,14 +40,14 @@ export const getMyCourseApi = async (): Promise<AllCourseResponse> => {
 };
 
 /** GET: 찜한 코스 조회 */
-export const getLikeCourseApi = async (): Promise<AllCourseResponse> => {
+export const getLikeCourseApi = async (): Promise<CourseListResponse> => {
   try {
     // 찜한 코스 조회 요청 보내기
     const response = await instance.get('/my-page/liked-courses');
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
       response,
-    ) as AllCourseResponse;
+    ) as CourseListResponse;
 
     return convertedResponse;
   } catch (error) {
