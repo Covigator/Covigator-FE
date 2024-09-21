@@ -1,9 +1,10 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import {
   getAllCourseApi,
   getCourseDetailApi,
   getCourseReviewApi,
+  postCourseReviewApi,
 } from '../../api/community';
 
 export const useAllCourses = (page: number, sort: string) => {
@@ -29,4 +30,17 @@ export const useCourseReviews = (courseId: number) => {
     queryFn: () => getCourseReviewApi(courseId),
   });
   return { data, isLoading, error, refetch };
+};
+
+export const usePostCourseReview = (
+  courseId: number,
+  requestBody: { score: number; comment: string },
+) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_REVIEW_POST', courseId],
+    mutationFn: () => postCourseReviewApi(courseId, requestBody),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
 };
