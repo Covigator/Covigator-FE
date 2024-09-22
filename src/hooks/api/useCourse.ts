@@ -1,9 +1,11 @@
 import { useMutation, useQuery } from 'react-query';
 
 import {
+  deleteCourseLikeApi,
   getAllCourseApi,
   getCourseDetailApi,
   getCourseReviewApi,
+  postCourseLikeApi,
   postCourseReviewApi,
 } from '../../api/community';
 
@@ -39,6 +41,26 @@ export const usePostCourseReview = (
   const { mutate, isLoading } = useMutation({
     mutationKey: ['COURSE_REVIEW_POST', courseId],
     mutationFn: () => postCourseReviewApi(courseId, requestBody),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
+};
+
+export const usePostCourseLike = (courseId: number) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_LIKE_POST', courseId],
+    mutationFn: () => postCourseLikeApi(courseId),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
+};
+
+export const useDeleteCourseLike = (courseId: number) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_LIKE_DELETE', courseId],
+    mutationFn: () => deleteCourseLikeApi(courseId),
     onSuccess: () => {},
     onError: () => {},
   });
