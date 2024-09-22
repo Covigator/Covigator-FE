@@ -35,7 +35,7 @@ const KakaoLogin = () => {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
       import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
     }&redirect_uri=${encodeURIComponent(
-      `${window.location.origin}/login`,
+      `${window.location.origin}/login/oauth2/callback/kakao`,
     )}&response_type=code`;
 
     window.location.href = KAKAO_AUTH_URL;

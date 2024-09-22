@@ -33,7 +33,10 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/result" element={<Result />} />
         <Route path="/map" element={<Map lat={37.5385} lng={127.0823} />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login">
+          <Route index element={<Login />} />
+          <Route path="oauth2/callback/kakao" element={<KakaoCallback />} />
+        </Route>
         <Route path="/signup" element={<SignUp />} />
 
         <Route path="/find">
