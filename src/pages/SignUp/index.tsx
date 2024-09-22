@@ -15,7 +15,7 @@ import { z } from 'zod';
 // Zod 스키마 수정
 const signupSchema = z
   .object({
-    image: z.instanceof(File).optional(),
+    image: z.string().optional(), // 이미지를 string(Base64)으로 변경
     email: z.string().email('유효한 이메일 주소를 입력해주세요'),
     nickname: z
       .string()
@@ -31,7 +31,6 @@ const signupSchema = z
 
 type SignupFormData = z.infer<typeof signupSchema>;
 
-// 에러 메시지를 위한 별도의 타입 정의
 type FormErrors = {
   [K in keyof SignupFormData]?: string;
 };
@@ -42,6 +41,7 @@ const Signup = () => {
     nickname: '',
     password: '',
     confirmPassword: '',
+    image: undefined,
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -78,13 +78,7 @@ const Signup = () => {
         const fieldErrors: FormErrors = {};
         error.errors.forEach((err) => {
           if (err.path[0]) {
-            // image 필드에 대한 특별한 처리
-            if (err.path[0] === 'image') {
-              fieldErrors.image = err.message;
-            } else {
-              fieldErrors[err.path[0] as keyof Omit<SignupFormData, 'image'>] =
-                err.message;
-            }
+            fieldErrors[err.path[0] as keyof SignupFormData] = err.message;
           }
         });
         setErrors(fieldErrors);
@@ -103,10 +97,11 @@ const Signup = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData({ ...formData, image: file });
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
+        const base64String = reader.result as string;
+        setPreviewImage(base64String);
+        setFormData({ ...formData, image: base64String }); // 전체 base64 문자열 저장
       };
       reader.readAsDataURL(file);
     }
@@ -117,21 +112,36 @@ const Signup = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
       const formDataToSend = new FormData();
-      if (formData.image) {
-        formDataToSend.append('image', formData.image);
-      }
+
+      const postSignUpRequest = {
+        image_url: formData.image ? formData.image.split(',')[1] : '',
+        email: formData.email,
+        nickname: formData.nickname,
+        password: formData.password,
+      };
+
       formDataToSend.append(
         'postSignUpRequest',
-        JSON.stringify({
-          email: formData.email,
-          nickname: formData.nickname,
-          password: formData.password,
+        new Blob([JSON.stringify(postSignUpRequest)], {
+          type: 'application/json',
         }),
       );
+
+      if (formData.image) {
+        const byteCharacters = atob(formData.image.split(',')[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+        formDataToSend.append('image', blob, 'profile.jpg');
+      }
+
       signupMutation.mutate(formDataToSend);
     }
   };
-
   return (
     <div className="w-full h-full overflow-x-hidden">
       <div className="fixed top-0 left-0 right-0 z-50">
