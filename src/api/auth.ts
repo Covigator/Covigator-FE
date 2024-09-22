@@ -56,15 +56,23 @@ export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
         params: { code },
       },
     );
-    // 응답 데이터 유효성 검사 및 반환
+
     return KakaoLoginResponseSchema.parse(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
-      // Axios 오류 처리
-      throw new Error(
-        `카카오 로그인 실패: ${axiosError.response?.status} - ${axiosError.response?.data}`,
-      );
+
+      if (axiosError.response) {
+        throw new Error(
+          `카카오 로그인 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
+        );
+      } else if (axiosError.request) {
+        throw new Error('카카오 로그인 요청에 대한 응답이 없습니다.');
+      } else {
+        throw new Error(
+          `카카오 로그인 요청 설정 중 오류 발생: ${axiosError.message}`,
+        );
+      }
     } else {
       // 기타 오류 처리
       throw new Error('카카오 로그인 중 예기치 않은 오류가 발생했습니다');

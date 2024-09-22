@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { kakaoLogin } from '../../api/auth';
 import { useAuthStore } from '../../stores/authStore';
+
+import axios from 'axios';
 
 interface KakaoLoginResponse {
   access_token: string;
-  token_type: string;
-  refresh_token: string;
-  expires_in: number;
-  scope: string;
-  refresh_token_expires_in: number;
+  is_new: string;
 }
 
 const KakaoCallback = () => {
@@ -20,23 +17,25 @@ const KakaoCallback = () => {
 
   useEffect(() => {
     const handleKakaoLogin = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const authCode = urlParams.get('code');
-
-      if (!authCode) {
-        console.error('Authorization code not found');
-        navigate('/login');
-        return;
-      }
-
       try {
-        const response: KakaoLoginResponse = await kakaoLogin(authCode);
-        console.log('Kakao login response:', response);
-        setAuth(response.access_token);
-        navigate('/'); // 로그인 성공 후 홈페이지로 이동
+        const code = new URLSearchParams(window.location.search).get('code');
+
+        if (!code) {
+          throw new Error('Authorization code not found');
+        }
+
+        const response = await axios.get<KakaoLoginResponse>(
+          `${import.meta.env.VITE_API_BASE_URL}/accounts/oauth/kakao`,
+          { params: { code } },
+        );
+
+        console.log('Kakao login response:', response.data);
+
+        setAuth(response.data.access_token);
+        navigate('/');
       } catch (error) {
-        console.error('Error during Kakao login:', error);
-        navigate('/login'); // 에러 발생 시 로그인 페이지로 리다이렉트
+        console.error('카카오 로그인 중 에러 발생:', error);
+        navigate('/login');
       } finally {
         setLoading(false);
       }
