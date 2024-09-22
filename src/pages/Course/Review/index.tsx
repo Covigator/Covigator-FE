@@ -7,6 +7,7 @@ import Button from '../../../components/common/button';
 import Dialog from '../../../components/common/dialog';
 import Header from '../../../components/common/header';
 import Textarea from '../../../components/common/textarea';
+import { usePostCourseReview } from '../../../hooks/api/useCourse';
 
 import { v4 as uuid } from 'uuid';
 
@@ -31,6 +32,11 @@ const index = () => {
   const inputValueRef = useRef<HTMLTextAreaElement>(null);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const { mutate, isLoading } = usePostCourseReview(courseId, {
+    score: rates.filter(Boolean).length,
+    comment: inputValueRef.current?.value || '',
+  });
 
   const handleRate = (index: number) => {
     // 클릭한 인덱스가 현재 선택된 인덱스보다 작으면 변화 없음
@@ -82,6 +88,10 @@ const index = () => {
           shape={'rounded'}
           color={inputValue === '' ? 'disabled' : 'default'}
           disabled={inputValue === ''}
+          onClick={() => {
+            mutate();
+            navigate('/course/{courseId}');
+          }}
         >
           등록하기
         </Button>
