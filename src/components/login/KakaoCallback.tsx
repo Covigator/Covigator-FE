@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '../../stores/authStore';
+import Loading from '../common/Loading';
 
 import axios from 'axios';
 
@@ -45,7 +46,7 @@ const KakaoCallback = () => {
   }, [navigate, setAuth]);
 
   if (loading) {
-    return <div>카카오 로그인 처리 중...</div>;
+    return <Loading />;
   }
 
   return null;
