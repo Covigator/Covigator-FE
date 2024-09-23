@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
+import { BiSolidImageAdd } from 'react-icons/bi';
 import { FiEdit } from 'react-icons/fi';
 import {
   HiOutlineLockClosed,
@@ -23,6 +24,8 @@ const variants = {
   section: 'items-center flex flex-col mb-[19px]',
   lockIcon: 'w-6 h-6 text-sub-100 cursor-pointer',
   label: 'w-full text-body3 text-bk-90 mb-[10px]',
+  imagePreview:
+    'w-full max-w-[280px] h-[220px] rounded-[10px] flex justify-center items-center border border-bk-50 mb-[11px]',
   chipContainer:
     'w-full grid mb-[13px] grid-cols-3 justify-items-center gap-y-[11px]',
   btnContainer: 'flex flex-col items-center',
@@ -34,15 +37,26 @@ const index = () => {
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const courseDescRef = useRef<HTMLTextAreaElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const [tempId, setTempId] = useState<number>(0);
 
   const handleChips = (chip: string) => {
     setSelectedChip(chip);
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleAdd = () => {
@@ -182,6 +196,24 @@ const index = () => {
             );
           })}
         </div>
+        <label className={variants.imagePreview}>
+          {selectedImage ? (
+            <img
+              src={imagePreview}
+              alt="Selected"
+              className="rounded-[10px] object-cover w-full h-full"
+            />
+          ) : (
+            <BiSolidImageAdd className="w-12 h-12 text-bk-60" />
+          )}
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            className="collapse"
+            onChange={handleImageUpload}
+          />
+        </label>
         <Textarea
           ref={courseDescRef}
           maxLength={50}
