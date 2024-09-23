@@ -1,31 +1,22 @@
-/* TODO: CourseItemType으로 병합 필요 */
-export type CourseType = {
+export type CourseItemType = {
+  courseId: number;
   name: string;
   description: string;
   score: number;
-};
-
-export type CourseItemType = {
-  id: number;
-  title: string;
-  caption: string;
-  img?: string;
-  rate: number;
-  isLike: boolean;
+  imageUrl: string;
+  // isLike: boolean;
 };
 
 export type CourseDetailType = {
-  id: number;
-  title: string;
-  desc: string;
-  isLike: boolean;
-  heartCount: number;
-  placeItems: PlaceItemType[];
-  reviewItems: ReviewItemType[];
+  courseId: number;
+  courseName: string;
+  courseDescription: string;
+  dibsCnt: number;
+  dibs: boolean;
+  places: PlaceType[];
 };
 
 /* TODO: PlaceItemType으로 병합 필요 */
-
 export type PlaceType = {
   placeName: string;
   address: string;
@@ -50,15 +41,16 @@ export type ReviewItemType = {
 };
 
 export type CourseListResponse = {
-  courses: CourseType[];
+  courses: CourseItemType[];
   hasNext: boolean;
 };
 
 export type CourseDetailResponse = {
+  courseId: number;
   courseName: string;
   courseDescription: string;
-  likeCnt: number;
-  isLiked: boolean;
+  dibsCnt: number;
+  dibs: boolean;
   places: PlaceType[];
 };
 
