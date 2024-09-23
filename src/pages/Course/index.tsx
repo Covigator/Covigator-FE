@@ -8,11 +8,7 @@ import PlaceItem from '../../components/community/PlaceItem';
 import ReviewItem from '../../components/community/ReviewItem';
 import { useCourseDetail, useCourseReviews } from '../../hooks/api/useCourse';
 import { Topbar } from '../../layouts';
-import {
-  CourseDetailResponse,
-  CourseDetailType,
-  ReviewResponse,
-} from '../../types/community';
+import { CourseDetailResponse, ReviewResponse } from '../../types/community';
 
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
@@ -34,21 +30,17 @@ const index = () => {
   const [resData, setResData] = useState<CourseDetailResponse>();
   const [reviewResData, setReviewResData] = useState<ReviewResponse>();
 
-  const { data, isLoading, refetch } = useCourseDetail(Number(courseId));
-  const {
-    data: reviewData,
-    isLoading: isReviewLoading,
-    refetch: reviewRefetch,
-  } = useCourseReviews(Number(courseId));
+  const { data } = useCourseDetail(Number(courseId));
+  const { data: reviewData } = useCourseReviews(Number(courseId));
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const [isLike, setIsLike] = useState<boolean>(
-    resData != undefined && resData?.isLiked,
+    resData != undefined && resData?.dibs,
   );
   const [likeCount, setLikeCount] = useState<number>(
-    resData != undefined ? resData?.likeCnt : 0,
+    resData != undefined ? resData?.dibsCnt : 0,
   );
 
   const handleLike = () => {
