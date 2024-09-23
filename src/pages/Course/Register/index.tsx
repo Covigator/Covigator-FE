@@ -62,12 +62,17 @@ const index = () => {
   const handleAdd = () => {
     /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
     if (isAddAble) {
-      const id = tempId;
-      const name = 'name';
-      const img = 'img';
-      const type = selectedChip;
-      const desc = courseDescRef.current?.value || '';
-      setNewPlaces((prev) => [...prev, { id, name, type, desc, img }]);
+      const img = imagePreview;
+      setNewPlaces((prev) => [
+        ...prev,
+        {
+          placeId: tempId,
+          placeName: descRef.current?.value || '',
+          address: 'address',
+          category: selectedChip,
+          description: courseDescRef.current?.value || '',
+        },
+      ]);
       setIsAddAble(false);
       setSelectedChip('');
       setTempId((prev) => prev + 1);
@@ -155,11 +160,11 @@ const index = () => {
           return (
             <div key={uuid()} className="relative">
               <PlaceItem
-                id={item.id}
-                type={item.type}
-                name={item.name}
-                desc={item.desc}
-                img={item.img || ''}
+                id={item.placeId}
+                type={item.category}
+                name={item.placeName}
+                desc={item.description}
+                img={''}
               />
               <section className="absolute flex gap-[9px] right-[10px] top-[19px]">
                 {/* TODO: 장소 수정 기능 추가 필요 */}
@@ -168,7 +173,9 @@ const index = () => {
                   className="w-[18px] h-[18px] text-sub-400"
                   onClick={() =>
                     setNewPlaces((prevPlaces) =>
-                      prevPlaces.filter((place) => place.id !== item.id),
+                      prevPlaces.filter(
+                        (place) => place.placeId !== item.placeId,
+                      ),
                     )
                   }
                 />
