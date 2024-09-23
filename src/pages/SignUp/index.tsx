@@ -15,7 +15,7 @@ import { z } from 'zod';
 // Zod 스키마 수정
 const signupSchema = z
   .object({
-    image: z.string().optional(), // 이미지를 string(Base64)으로 변경
+    image: z.string().optional(),
     email: z.string().email('유효한 이메일 주소를 입력해주세요'),
     nickname: z
       .string()
@@ -53,11 +53,14 @@ const Signup = () => {
 
   const signupMutation = useMutation(signupUser, {
     onSuccess: (token) => {
+      console.log('회원가입 성공, 토큰 받음:', token);
       setAuth(token);
-      navigate('/');
+
+      // 상태 업데이트 후 네비게이션을 위해 setTimeout 사용
+      setTimeout(() => navigate('/'), 0);
     },
-    onError: (error) => {
-      console.error('회원가입 실패', error);
+    onError: (error: any) => {
+      console.error('회원가입 실패', error.response?.data || error.message);
       setErrors({ email: '회원가입에 실패했습니다. 다시 시도해 주세요.' });
     },
   });
@@ -69,11 +72,14 @@ const Signup = () => {
   }, [formData, isFormSubmitted]);
 
   const validateForm = () => {
+    console.log('validateForm 시작');
     try {
       signupSchema.parse(formData);
+      console.log('validateForm 성공');
       setErrors({});
       return true;
     } catch (error) {
+      console.log('validateForm 실패:', error);
       if (error instanceof z.ZodError) {
         const fieldErrors: FormErrors = {};
         error.errors.forEach((err) => {
@@ -91,55 +97,81 @@ const Signup = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof SignupFormData,
   ) => {
+    console.log(`handleInputChange 호출: ${field} = ${e.target.value}`);
     setFormData({ ...formData, [field]: e.target.value });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleImageChange 시작');
     const file = e.target.files?.[0];
     if (file) {
+      console.log('파일 선택됨:', file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
+        console.log('FileReader 로드 완료');
         const base64String = reader.result as string;
         setPreviewImage(base64String);
-        setFormData({ ...formData, image: base64String }); // 전체 base64 문자열 저장
+        setFormData({ ...formData, image: base64String });
+        console.log('이미지 상태 업데이트 완료');
+      };
+      reader.onerror = (error) => {
+        console.error('FileReader 오류:', error);
       };
       reader.readAsDataURL(file);
+    } else {
+      console.log('파일이 선택되지 않음');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log('handleSubmit 시작');
     e.preventDefault();
     setIsFormSubmitted(true);
     if (validateForm()) {
-      const formDataToSend = new FormData();
+      console.log('폼 유효성 검사 통과');
+      try {
+        const formDataToSend = new FormData();
 
-      const postSignUpRequest = {
-        image_url: formData.image ? formData.image.split(',')[1] : '',
-        email: formData.email,
-        nickname: formData.nickname,
-        password: formData.password,
-      };
+        const postSignUpRequest = {
+          image_url: formData.image ? formData.image.split(',')[1] : '',
+          email: formData.email,
+          nickname: formData.nickname,
+          password: formData.password,
+        };
 
-      formDataToSend.append(
-        'postSignUpRequest',
-        new Blob([JSON.stringify(postSignUpRequest)], {
-          type: 'application/json',
-        }),
-      );
+        console.log('postSignUpRequest 생성:', postSignUpRequest);
 
-      if (formData.image) {
-        const byteCharacters = atob(formData.image.split(',')[1]);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        formDataToSend.append(
+          'postSignUpRequest',
+          new Blob([JSON.stringify(postSignUpRequest)], {
+            type: 'application/json',
+          }),
+        );
+
+        if (formData.image) {
+          console.log('이미지 처리 시작');
+          const byteCharacters = atob(formData.image.split(',')[1]);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+          formDataToSend.append('image', blob, 'profile.jpg');
+          console.log('이미지 처리 완료');
+        } else {
+          console.log('이미지 없음');
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-        formDataToSend.append('image', blob, 'profile.jpg');
+        console.log('서버 요청 시작');
+        await signupMutation.mutateAsync(formDataToSend);
+        console.log('서버 요청 성공');
+      } catch (error) {
+        console.error('회원가입 제출 중 오류 발생:', error);
       }
-
-      signupMutation.mutate(formDataToSend);
+    } else {
+      console.log('폼 유효성 검사 실패');
     }
   };
   return (
