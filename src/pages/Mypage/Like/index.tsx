@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid';
 const Like = () => {
   const navigate = useNavigate();
   const [resData, setResData] = useState<CourseListResponse>();
-  const { data, isLoading, refetch } = useLikeCourse();
+  const { data } = useLikeCourse();
 
   useEffect(() => {
     if (data) {
