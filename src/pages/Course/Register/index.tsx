@@ -16,6 +16,7 @@ import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
 import { Topbar } from '../../../layouts';
 import { PlaceItemType } from '../../../types/community';
+import Map from '../../Home/Map';
 
 import { v4 as uuid } from 'uuid';
 
@@ -32,6 +33,8 @@ const variants = {
 };
 
 const index = () => {
+  const [currentLat, setCurrentLat] = useState<number>(37.541);
+  const [currentLng, setCurrentLng] = useState<number>(127.0695);
   const [selectedChip, setSelectedChip] = useState<string>('');
   const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
@@ -40,12 +43,30 @@ const index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
 
+  // 선택된 위치의 좌표를 저장하는 상태
+  const [selectedLocation, setSelectedLocation] = useState<{
+    lat: number;
+    lng: number;
+  }>({ lat: currentLat, lng: currentLng });
+
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const courseDescRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const [tempId, setTempId] = useState<number>(0);
+
+  const handleLocationSelect = (
+    lat: number,
+    lng: number,
+    isMarker?: boolean,
+  ) => {
+    if (!isMarker) {
+      setCurrentLat(lat);
+      setCurrentLng(lng);
+      setSelectedLocation({ lat, lng });
+    }
+  };
 
   const handleChips = (chip: string) => {
     setSelectedChip(chip);
@@ -188,7 +209,14 @@ const index = () => {
       </section>
       <section className={variants.section}>
         <p className={variants.label}>장소 추가</p>
-        <div className="w-full h-[194px] bg-bk-40 mb-[14px]">지도자리</div>
+        <div className="w-full h-[194px] bg-bk-40 mb-[14px]">
+          <Map
+            lat={currentLat}
+            lng={currentLng}
+            locations={[]}
+            onLocationSelect={handleLocationSelect}
+          />
+        </div>
         <div className={variants.chipContainer}>
           {PlaceType.map((item) => {
             return (
