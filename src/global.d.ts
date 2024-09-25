@@ -94,7 +94,6 @@ declare namespace kakao {
     };
 
     export class MouseEvent {
-      constructor();
       latLng: LatLng;
     }
   }
