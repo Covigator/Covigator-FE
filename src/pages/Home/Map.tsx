@@ -16,7 +16,7 @@ interface MapProps {
   lng: number;
   radius?: number;
   locations?: Location[];
-  onLocationSelect?: (index: number) => void;
+  onLocationSelect?: (lat: number, lng: number, isMarker?: boolean) => void;
 }
 
 // Kakao Maps API의 Circle 인터페이스를 확장
@@ -43,7 +43,7 @@ const Map = ({
 
   // 마커 콘텐츠를 생성하는 함수
   const createMarkerContent = useCallback(
-    (location: Location, index: number) => {
+    (location: Location) => {
       const markerElement = document.createElement('div');
       markerElement.style.padding = '5px';
       markerElement.style.cursor = 'pointer';
@@ -59,7 +59,8 @@ const Map = ({
       markerElement.appendChild(iconElement);
 
       // 마커 클릭 이벤트 처리
-      markerElement.onclick = () => onLocationSelect?.(index);
+      markerElement.onclick = () =>
+        onLocationSelect?.(location.lat, location.lng, true);
 
       return markerElement;
     },
@@ -130,11 +131,23 @@ const Map = ({
           );
           newMap.setBounds(bounds);
         }
+
+        window.kakao.maps.event.addListener(
+          newMap,
+          'click',
+          (mouseEvent: kakao.maps.MouseEvent) => {
+            onLocationSelect?.(
+              mouseEvent.latLng.getLat(),
+              mouseEvent.latLng.getLng(),
+              false,
+            );
+          },
+        );
       });
     };
 
     loadKakaoMaps();
-  }, [lat, lng, radius]);
+  }, [lat, lng, onLocationSelect, radius]);
 
   // 위치 정보가 변경될 때마다 마커(오버레이) 업데이트
   useEffect(() => {
@@ -146,12 +159,12 @@ const Map = ({
 
     if (Array.isArray(locations) && locations.length > 0) {
       // 새 오버레이 생성 및 추가
-      locations.forEach((location, index) => {
+      locations.forEach((location) => {
         const position = new window.kakao.maps.LatLng(
           location.lat,
           location.lng,
         );
-        const content = createMarkerContent(location, index);
+        const content = createMarkerContent(location);
 
         const customOverlay = new window.kakao.maps.CustomOverlay({
           position: position,

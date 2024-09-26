@@ -1,17 +1,10 @@
-/* TODO: CourseItemType으로 병합 필요 */
-export type CourseType = {
+export type CourseItemType = {
+  courseId: number;
   name: string;
   description: string;
   score: number;
-};
-
-export type CourseItemType = {
-  id: number;
-  title: string;
-  caption: string;
-  img?: string;
-  rate: number;
-  isLike: boolean;
+  imageUrl: string;
+  dibs: boolean;
 };
 
 export type CourseDetailType = {
@@ -24,33 +17,16 @@ export type CourseDetailType = {
   reviewItems: ReviewItemType[];
 };
 
-/* TODO: PlaceItemType으로 병합 필요 */
-
-export type PlaceType = {
+export type PlaceItemType = {
+  placeId: number;
   placeName: string;
   address: string;
   category: string;
   description: string;
 };
 
-export type PlaceItemType = {
-  id: number;
-  type: string;
-  name: string;
-  desc: string;
-  img?: string;
-};
-
-export type ReviewItemType = {
-  id: number;
-  name: string;
-  content: string;
-  img?: string;
-  rate: number;
-};
-
 export type CourseListResponse = {
-  courses: CourseType[];
+  courses: CourseItemType[];
   hasNext: boolean;
 };
 
@@ -59,17 +35,29 @@ export type CourseDetailResponse = {
   courseDescription: string;
   likeCnt: number;
   isLiked: boolean;
-  places: PlaceType[];
+  places: PlaceItemType[];
 };
 
-/* TODO: ReviewItemType으로 병합 필요 */
-export type ReviewItem = {
+export type CoursePostInfoType = {
+  courseName: string;
+  courseDescription: string;
+  places: PlaceItemType[];
+  isPublic: string;
+};
+
+export type CoursePostRequest = {
+  postCourseRequest: CoursePostInfoType;
+  image: File[];
+};
+
+export type ReviewItemType = {
   author: string;
   score: number;
   comment: string;
+  // img?: string;
 };
 
 export type ReviewResponse = {
-  reviews: ReviewItem[];
+  reviews: ReviewItemType[];
   hasNext: boolean;
 };
