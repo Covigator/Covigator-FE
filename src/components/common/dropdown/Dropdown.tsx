@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
@@ -129,7 +129,7 @@ const DropDown: React.FC<DropdownProps> = ({
             const isLast = index === dropdownItems.length - 2;
 
             return (
-              <div
+              <ul
                 key={uuid()}
                 className={clsx(
                   styles.base,
@@ -141,7 +141,7 @@ const DropDown: React.FC<DropdownProps> = ({
                 onClick={() => handleSelect(item)}
               >
                 {item.text}
-              </div>
+              </ul>
             );
           })}
         </div>
