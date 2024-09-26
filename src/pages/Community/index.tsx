@@ -26,7 +26,7 @@ const index = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, sort]);
+  }, [page, refetch, sort]);
 
   return (
     <div className="w-full h-full pt-[67px] px-[30px] pb-5">

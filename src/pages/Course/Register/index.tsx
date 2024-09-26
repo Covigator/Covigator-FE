@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
+import { BiSolidImageAdd } from 'react-icons/bi';
 import { FiEdit } from 'react-icons/fi';
 import {
   HiOutlineLockClosed,
@@ -15,6 +16,7 @@ import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
 import { Topbar } from '../../../layouts';
 import { PlaceItemType } from '../../../types/community';
+import Map from '../../Home/Map';
 
 import { v4 as uuid } from 'uuid';
 
@@ -23,37 +25,75 @@ const variants = {
   section: 'items-center flex flex-col mb-[19px]',
   lockIcon: 'w-6 h-6 text-sub-100 cursor-pointer',
   label: 'w-full text-body3 text-bk-90 mb-[10px]',
+  imagePreview:
+    'w-full max-w-[280px] h-[220px] rounded-[10px] flex justify-center items-center border border-bk-50 mb-[11px]',
   chipContainer:
     'w-full grid mb-[13px] grid-cols-3 justify-items-center gap-y-[11px]',
   btnContainer: 'flex flex-col items-center',
 };
 
 const index = () => {
+  const [currentLat, setCurrentLat] = useState<number>(37.541);
+  const [currentLng, setCurrentLng] = useState<number>(127.0695);
   const [selectedChip, setSelectedChip] = useState<string>('');
   const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+
+  // 선택된 위치의 좌표를 저장하는 상태
+  const [selectedLocation, setSelectedLocation] = useState<{
+    lat: number;
+    lng: number;
+  }>({ lat: currentLat, lng: currentLng });
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const courseDescRef = useRef<HTMLTextAreaElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const [tempId, setTempId] = useState<number>(0);
+
+  const handleLocationSelect = (
+    lat: number,
+    lng: number,
+    isMarker?: boolean,
+  ) => {
+    if (!isMarker) {
+      setCurrentLat(lat);
+      setCurrentLng(lng);
+      setSelectedLocation({ lat, lng });
+    }
+  };
 
   const handleChips = (chip: string) => {
     setSelectedChip(chip);
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleAdd = () => {
     /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
     if (isAddAble) {
-      const id = tempId;
-      const name = 'name';
-      const img = 'img';
-      const type = selectedChip;
-      const desc = courseDescRef.current?.value || '';
-      setNewPlaces((prev) => [...prev, { id, name, type, desc, img }]);
+      const img = imagePreview;
+      setNewPlaces((prev) => [
+        ...prev,
+        {
+          placeId: tempId,
+          placeName: descRef.current?.value || '',
+          address: 'address',
+          category: selectedChip,
+          description: courseDescRef.current?.value || '',
+        },
+      ]);
       setIsAddAble(false);
       setSelectedChip('');
       setTempId((prev) => prev + 1);
@@ -141,11 +181,11 @@ const index = () => {
           return (
             <div key={uuid()} className="relative">
               <PlaceItem
-                id={item.id}
-                type={item.type}
-                name={item.name}
-                desc={item.desc}
-                img={item.img || ''}
+                id={item.placeId}
+                type={item.category}
+                name={item.placeName}
+                desc={item.description}
+                img={''}
               />
               <section className="absolute flex gap-[9px] right-[10px] top-[19px]">
                 {/* TODO: 장소 수정 기능 추가 필요 */}
@@ -154,7 +194,9 @@ const index = () => {
                   className="w-[18px] h-[18px] text-sub-400"
                   onClick={() =>
                     setNewPlaces((prevPlaces) =>
-                      prevPlaces.filter((place) => place.id !== item.id),
+                      prevPlaces.filter(
+                        (place) => place.placeId !== item.placeId,
+                      ),
                     )
                   }
                 />
@@ -167,7 +209,14 @@ const index = () => {
       </section>
       <section className={variants.section}>
         <p className={variants.label}>장소 추가</p>
-        <div className="w-full h-[194px] bg-bk-40 mb-[14px]">지도자리</div>
+        <div className="w-full h-[194px] bg-bk-40 mb-[14px]">
+          <Map
+            lat={currentLat}
+            lng={currentLng}
+            locations={[]}
+            onLocationSelect={handleLocationSelect}
+          />
+        </div>
         <div className={variants.chipContainer}>
           {PlaceType.map((item) => {
             return (
@@ -182,6 +231,24 @@ const index = () => {
             );
           })}
         </div>
+        <label className={variants.imagePreview}>
+          {selectedImage ? (
+            <img
+              src={imagePreview}
+              alt="Selected"
+              className="rounded-[10px] object-cover w-full h-full"
+            />
+          ) : (
+            <BiSolidImageAdd className="w-12 h-12 text-bk-60" />
+          )}
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            className="collapse"
+            onChange={handleImageUpload}
+          />
+        </label>
         <Textarea
           ref={courseDescRef}
           maxLength={50}
