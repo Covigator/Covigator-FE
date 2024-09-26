@@ -45,14 +45,19 @@ const Index = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
 
-  const handleLocationSelect = useCallback((index: number) => {
-    setLocations((prevLocations) =>
-      prevLocations.map((location, i) => ({
-        ...location,
-        isSelected: i === index,
-      })),
-    );
-  }, []);
+  const handleLocationSelect = useCallback(
+    (lat: number, lng: number, isMarker?: boolean) => {
+      if (isMarker) {
+        setLocations((prevLocations) =>
+          prevLocations.map((location) => ({
+            ...location,
+            isSelected: location.lat === lat && location.lng === lng,
+          })),
+        );
+      }
+    },
+    [],
+  );
 
   const handleExpand = (expanded: boolean) => {
     setIsExpanded(expanded);

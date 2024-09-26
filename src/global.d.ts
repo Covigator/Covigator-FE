@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 // global.d.ts
 
 interface KakaoMapOptions {
@@ -16,7 +17,11 @@ interface KakaoMaps {
     options: kakao.maps.CustomOverlayOptions,
   ) => kakao.maps.CustomOverlay;
   event: {
-    addListener: (target: any, type: string, handler: Function) => void;
+    addListener: (
+      target: unknown,
+      type: string,
+      handler: (event: kakao.maps.event.MouseEvent) => void,
+    ) => void;
   };
   MapTypeId: {
     OVERLAY: number;
@@ -36,6 +41,8 @@ declare namespace kakao {
   export namespace maps {
     export class LatLng {
       constructor(lat: number, lng: number);
+      getLat(): number;
+      getLng(): number;
     }
     export class Map {
       constructor(container: HTMLElement, options: KakaoMapOptions);
@@ -85,6 +92,10 @@ declare namespace kakao {
     export const MapTypeId: {
       OVERLAY: number;
     };
+
+    export class MouseEvent {
+      latLng: LatLng;
+    }
   }
 }
 
