@@ -97,6 +97,7 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 
     // 토큰이 응답에 있는지 확인하고 반환
     if (response.data.access_token) {
+      localStorage.setItem('auth_token', response.data.access_token);
       return response.data.access_token;
     } else {
       throw new Error('회원가입 실패: 응답에 토큰이 없습니다');
