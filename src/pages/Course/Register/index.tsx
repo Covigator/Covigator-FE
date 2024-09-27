@@ -14,8 +14,9 @@ import Input from '../../../components/common/input';
 import Textarea from '../../../components/common/textarea';
 import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
+import { usePostCourse } from '../../../hooks/api/useCourse';
 import { Topbar } from '../../../layouts';
-import { PlaceItemType } from '../../../types/community';
+import { CoursePostInfoType, PlaceItemType } from '../../../types/community';
 import Map from '../../Home/Map';
 
 import { v4 as uuid } from 'uuid';
@@ -40,8 +41,18 @@ const index = () => {
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  // const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [textData, setTextData] = useState<CoursePostInfoType>({
+    course_name: '',
+    course_description: '',
+    places: [],
+    is_public: 'false',
+  });
+
+  const completeData = new FormData();
+
+  const { mutate, isLoading } = usePostCourse(completeData);
 
   // 선택된 위치의 좌표를 저장하는 상태
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -75,15 +86,20 @@ const index = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file));
+      setSelectedImages((prev: File[] | []) => {
+        return [...prev, file];
+      });
+      const newImg = URL.createObjectURL(file);
+      // setImagePreviews((prev: string[] | []) => {
+      //   return { ...prev, newImg };
+      // });
     }
   };
 
   const handleAdd = () => {
-    /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
     if (isAddAble) {
-      const img = imagePreview;
+      // const img = imagePreviews[newPlaces.length];
+      const img = URL.createObjectURL(selectedImages[newPlaces.length]);
       setNewPlaces((prev) => [
         ...prev,
         {
@@ -92,6 +108,7 @@ const index = () => {
           address: 'address',
           category: selectedChip,
           description: courseDescRef.current?.value || '',
+          img: img,
         },
       ]);
       setIsAddAble(false);
@@ -105,9 +122,13 @@ const index = () => {
   };
 
   const handleRegister = () => {
-    /* TODO: 코스 등록 */
     if (isRegisterAble) {
-      console.log('등록 가능');
+      setTextData({
+        course_name: titleRef.current?.value || '',
+        course_description: descRef.current?.value || '',
+        places: newPlaces,
+        is_public: !isSecret ? 'true' : 'false',
+      });
     }
   };
 
@@ -124,6 +145,14 @@ const index = () => {
       setIsRegisterAble(true);
     }
   }, [newPlaces]);
+
+  useEffect(() => {
+    if (textData.course_name != '') {
+      completeData.append('postCourseRequest', JSON.stringify(textData));
+      selectedImages.map((img) => completeData.append('image', img));
+      mutate();
+    }
+  }, [textData]);
 
   return (
     <div className={variants.container}>
@@ -177,7 +206,7 @@ const index = () => {
         />
       </section>
       <section className="mt-[-2px] mb-[17px]">
-        {newPlaces.map((item) => {
+        {newPlaces.map((item, i) => {
           return (
             <div key={uuid()} className="relative">
               <PlaceItem
@@ -185,7 +214,7 @@ const index = () => {
                 type={item.category}
                 name={item.placeName}
                 desc={item.description}
-                img={''}
+                img={item.img}
               />
               <section className="absolute flex gap-[9px] right-[10px] top-[19px]">
                 {/* TODO: 장소 수정 기능 추가 필요 */}
@@ -232,9 +261,9 @@ const index = () => {
           })}
         </div>
         <label className={variants.imagePreview}>
-          {selectedImage ? (
+          {selectedImages.length > 0 ? (
             <img
-              src={imagePreview}
+              src={URL.createObjectURL(selectedImages[newPlaces.length])}
               alt="Selected"
               className="rounded-[10px] object-cover w-full h-full"
             />
