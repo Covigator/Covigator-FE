@@ -28,12 +28,13 @@ const styles: {
   },
 };
 
-const DropDown: React.FC<DropdownProps> = ({
+const DropDown = ({
   dropdownItems,
   size,
   type,
   onSelect,
-}) => {
+  isHome = false,
+}: DropdownProps) => {
   const animationTiming = {
     enter: 100,
     exit: 300,
@@ -60,14 +61,13 @@ const DropDown: React.FC<DropdownProps> = ({
     `;
     document.head.appendChild(style);
 
-    // Clean up function
     return () => {
       document.head.removeChild(style);
     };
   }, []);
 
   const handleSelect = (item: DropdownItemType) => {
-    if (item.id !== 0) {
+    if (!isHome || item.id !== 0) {
       setSelectedItem(item.id);
       setIsOpen(false);
       onSelect && onSelect(item);
@@ -77,7 +77,10 @@ const DropDown: React.FC<DropdownProps> = ({
   const itemHeight = size === 'sm' ? 26 : 40;
   const maxVisibleItems = 3;
   const dropdownHeight =
-    Math.min(dropdownItems.length - 1, maxVisibleItems) * itemHeight;
+    Math.min(
+      isHome ? dropdownItems.length - 1 : dropdownItems.length,
+      maxVisibleItems,
+    ) * itemHeight;
 
   return (
     <div className="w-full box-border relative">
@@ -125,25 +128,29 @@ const DropDown: React.FC<DropdownProps> = ({
           )}
           style={{ maxHeight: `${dropdownHeight}px` }}
         >
-          {dropdownItems.slice(1).map((item, index) => {
-            const isLast = index === dropdownItems.length - 2;
+          {(isHome ? dropdownItems.slice(1) : dropdownItems).map(
+            (item, index) => {
+              const isLast =
+                index ===
+                (isHome ? dropdownItems.length - 2 : dropdownItems.length - 1);
 
-            return (
-              <ul
-                key={uuid()}
-                className={clsx(
-                  styles.base,
-                  styles.sizes[size],
-                  'px-[15px]',
-                  !isLast && 'border-b border-bk-50',
-                  'mx-0',
-                )}
-                onClick={() => handleSelect(item)}
-              >
-                {item.text}
-              </ul>
-            );
-          })}
+              return (
+                <ul
+                  key={uuid()}
+                  className={clsx(
+                    styles.base,
+                    styles.sizes[size],
+                    'px-[15px]',
+                    !isLast && 'border-b border-bk-50',
+                    'mx-0',
+                  )}
+                  onClick={() => handleSelect(item)}
+                >
+                  {item.text}
+                </ul>
+              );
+            },
+          )}
         </div>
       </CSSTransition>
     </div>
