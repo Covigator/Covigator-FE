@@ -13,15 +13,16 @@ export type CourseDetailType = {
   courseDescription: string;
   dibsCnt: number;
   dibs: boolean;
-  places: PlaceType[];
+  places: PlaceItemType[];
 };
 
 export type PlaceItemType = {
-  placeId: number;
+  placeId?: number;
   placeName: string;
   address: string;
   category: string;
   description: string;
+  img?: string;
 };
 
 export type CourseListResponse = {
@@ -39,10 +40,10 @@ export type CourseDetailResponse = {
 };
 
 export type CoursePostInfoType = {
-  courseName: string;
-  courseDescription: string;
+  course_name: string;
+  course_description: string;
   places: PlaceItemType[];
-  isPublic: string;
+  is_public: string;
 };
 
 export type CoursePostRequest = {
