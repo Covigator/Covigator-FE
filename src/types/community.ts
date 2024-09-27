@@ -22,7 +22,6 @@ export type PlaceItemType = {
   address: string;
   category: string;
   description: string;
-  img?: string;
 };
 
 export type CourseListResponse = {
@@ -42,8 +41,18 @@ export type CourseDetailResponse = {
 export type CoursePostInfoType = {
   course_name: string;
   course_description: string;
-  places: PlaceItemType[];
+  places: PlaceItemSnakeType[];
   is_public: string;
+};
+
+export type PlaceItemSnakeType = {
+  placeId?: number;
+  place_name: string;
+  address: string;
+  category: string;
+  description: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type CoursePostRequest = {

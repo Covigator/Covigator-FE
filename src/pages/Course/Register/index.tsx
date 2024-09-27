@@ -16,7 +16,10 @@ import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
 import { usePostCourse } from '../../../hooks/api/useCourse';
 import { Topbar } from '../../../layouts';
-import { CoursePostInfoType, PlaceItemType } from '../../../types/community';
+import {
+  CoursePostInfoType,
+  PlaceItemSnakeType,
+} from '../../../types/community';
 import Map from '../../Home/Map';
 
 import { v4 as uuid } from 'uuid';
@@ -37,7 +40,7 @@ const index = () => {
   const [currentLat, setCurrentLat] = useState<number>(37.541);
   const [currentLng, setCurrentLng] = useState<number>(127.0695);
   const [selectedChip, setSelectedChip] = useState<string>('');
-  const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
+  const [newPlaces, setNewPlaces] = useState<PlaceItemSnakeType[]>([]);
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
@@ -94,6 +97,15 @@ const index = () => {
       //   return { ...prev, newImg };
       // });
     }
+    if (
+      imageInputRef.current?.value &&
+      placeTitleRef.current?.value &&
+      placeDescRef.current?.value
+    ) {
+      setIsAddAble(true);
+    } else {
+      setIsAddAble(false);
+    }
   };
 
   const handleAdd = () => {
@@ -104,20 +116,27 @@ const index = () => {
         ...prev,
         {
           placeId: tempId,
-          placeName: placeTitleRef.current?.value || '',
+          place_name: placeTitleRef.current?.value || '',
           address: 'address',
           category: selectedChip,
           description: placeDescRef.current?.value || '',
           img: img,
+          longitude: 0,
+          latitude: 0,
         },
       ]);
       setIsAddAble(false);
       setSelectedChip('');
       setTempId((prev) => prev + 1);
-      if (placeTitleRef.current && placeDescRef.current) {
+      if (
+        placeTitleRef.current &&
+        placeDescRef.current &&
+        imageInputRef.current
+      ) {
         placeTitleRef.current.value = '';
         placeTitleRef.current.focus();
         placeDescRef.current.value = '';
+        imageInputRef.current.value = '';
         // placeDescRef.current.focus();
       }
     }
@@ -129,7 +148,7 @@ const index = () => {
         course_name: titleRef.current?.value || '',
         course_description: descRef.current?.value || '',
         places: newPlaces,
-        is_public: !isSecret ? 'true' : 'false',
+        is_public: !isSecret ? 'Y' : 'N',
       });
     }
   };
@@ -153,7 +172,10 @@ const index = () => {
 
   useEffect(() => {
     if (textData.course_name != '') {
-      completeData.append('postCourseRequest', JSON.stringify(textData));
+      completeData.append(
+        'postCourseRequest',
+        new Blob([JSON.stringify(textData)], { type: 'application/json' }),
+      );
       selectedImages.map((img) => completeData.append('image', img));
       mutate();
     }
@@ -225,9 +247,9 @@ const index = () => {
               <PlaceItem
                 id={item.placeId}
                 type={item.category}
-                name={item.placeName}
+                name={item.place_name}
                 desc={item.description}
-                img={item.img}
+                img={URL.createObjectURL(selectedImages[i])}
               />
               <section className="absolute flex gap-[9px] right-[10px] top-[19px]">
                 {/* TODO: 장소 수정 기능 추가 필요 */}
@@ -281,7 +303,11 @@ const index = () => {
             maxLength={15}
             onChange={() => {
               /* 장소 추가 가능 여부 판단 */
-              if (placeTitleRef.current?.value && placeDescRef.current?.value) {
+              if (
+                imageInputRef.current?.value &&
+                placeTitleRef.current?.value &&
+                placeDescRef.current?.value
+              ) {
                 setIsAddAble(true);
               } else {
                 setIsAddAble(false);
@@ -293,7 +319,9 @@ const index = () => {
           {selectedImages.length > 0 &&
           newPlaces.length == selectedImages.length - 1 ? (
             <img
-              src={URL.createObjectURL(selectedImages[newPlaces.length])}
+              src={URL.createObjectURL(
+                selectedImages[selectedImages.length - 1],
+              )}
               alt="Selected"
               className="rounded-[10px] object-cover w-full h-full"
             />
@@ -315,7 +343,11 @@ const index = () => {
           size={'md'}
           onChange={() => {
             /* 장소 추가 가능 여부 판단 */
-            if (placeTitleRef.current?.value && placeDescRef.current?.value) {
+            if (
+              imageInputRef.current?.value &&
+              placeTitleRef.current?.value &&
+              placeDescRef.current?.value
+            ) {
               setIsAddAble(true);
             } else {
               setIsAddAble(false);
