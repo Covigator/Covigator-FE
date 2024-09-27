@@ -5,6 +5,7 @@ import {
   getAllCourseApi,
   getCourseDetailApi,
   getCourseReviewApi,
+  postCourseApi,
   postCourseLikeApi,
   postCourseReviewApi,
 } from '../../api/community';
@@ -24,6 +25,16 @@ export const useCourseDetail = (courseId: number) => {
     queryFn: () => getCourseDetailApi(courseId),
   });
   return { data, isLoading, error, refetch };
+};
+
+export const usePostCourse = (data: FormData) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_POST'],
+    mutationFn: () => postCourseApi(data),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
 };
 
 export const useCourseReviews = (courseId: number) => {

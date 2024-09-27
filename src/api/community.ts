@@ -48,6 +48,34 @@ export const getAllCourseApi = async (
   }
 };
 
+/** POST: 코스 등록 */
+export const postCourseApi = async (formData: FormData): Promise<string> => {
+  try {
+    const response = await instance.post('/community/courses', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return 'ok';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        throw new Error(
+          `코스 등록 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
+        );
+      } else if (axiosError.request) {
+        throw new Error('코스 등록 실패: 서버로부터 응답을 받지 못했습니다');
+      } else {
+        throw new Error(`코스 등록 실패: ${axiosError.message}`);
+      }
+    } else {
+      throw new Error('코스 등록 중 예기치 않은 오류가 발생했습니다');
+    }
+  }
+};
+
 /** POST: 코스 좋아요 등록 */
 export const postCourseLikeApi = async (courseId: number): Promise<string> => {
   try {
