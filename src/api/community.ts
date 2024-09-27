@@ -20,7 +20,7 @@ export const getAllCourseApi = async (
     );
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response,
+      response.data,
     ) as CourseListResponse;
 
     return convertedResponse;
@@ -153,7 +153,7 @@ export const getCourseDetailApi = async (
     const response = await instance.get(`/community/courses/${courseId}`);
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response,
+      response.data,
     ) as CourseDetailResponse;
 
     return convertedResponse;
@@ -192,7 +192,7 @@ export const getCourseReviewApi = async (
     );
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response,
+      response.data,
     ) as ReviewResponse;
 
     return convertedResponse;

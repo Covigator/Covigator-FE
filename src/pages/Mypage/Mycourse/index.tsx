@@ -24,19 +24,20 @@ const Mycourse = () => {
       <Topbar handleClick={() => navigate('/mypage')} />
       <p className="text-h3 text-bk-90 mb-[19px]">마이 코스</p>
       <main className="h-full flex flex-col gap-6 ">
-        {resData?.courses.map((d) => {
-          return (
-            <CourseItem
-              key={uuid()}
-              id={0}
-              title={d.name}
-              caption={d.description}
-              img={''}
-              rate={d.score}
-              isLike={false}
-            />
-          );
-        })}
+        {resData?.courses &&
+          resData?.courses.map((d) => {
+            return (
+              <CourseItem
+                key={uuid()}
+                id={d.courseId}
+                title={d.name}
+                caption={d.description}
+                img={d.imageUrl}
+                rate={d.score}
+                isLike={d.dibs}
+              />
+            );
+          })}
       </main>
     </div>
   );

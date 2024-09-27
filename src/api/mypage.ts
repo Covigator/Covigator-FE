@@ -11,7 +11,7 @@ export const getMyCourseApi = async (): Promise<CourseListResponse> => {
     const response = await instance.get('/my-page/my-courses');
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response,
+      response.data,
     ) as CourseListResponse;
 
     return convertedResponse;
@@ -46,7 +46,7 @@ export const getLikeCourseApi = async (): Promise<CourseListResponse> => {
     const response = await instance.get('/my-page/liked-courses');
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response,
+      response.data,
     ) as CourseListResponse;
 
     return convertedResponse;
