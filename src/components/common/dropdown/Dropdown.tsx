@@ -48,6 +48,7 @@ const DropDown = ({
     style.textContent = `
       .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
+        height: 0px;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
         background: transparent;
@@ -94,22 +95,26 @@ const DropDown = ({
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {dropdownItems[selectedItem].text}{' '}
+        <span className="whitespace-nowrap mr-1">
+          {dropdownItems[selectedItem].text}
+        </span>
         {isOpen ? (
           <HiOutlineChevronUp
-            className={
+            className={clsx(
+              'flex-shrink-0',
               type == 'sub'
                 ? 'w-6 h-6 text-sub-400'
-                : 'w-3 h-3 text-primary-500'
-            }
+                : 'w-3 h-3 text-primary-500',
+            )}
           />
         ) : (
           <HiOutlineChevronDown
-            className={
+            className={clsx(
+              'flex-shrink-0',
               type == 'sub'
                 ? 'w-6 h-6 text-sub-400'
-                : 'w-3 h-3 text-primary-500'
-            }
+                : 'w-3 h-3 text-primary-500',
+            )}
           />
         )}
       </button>
@@ -121,7 +126,7 @@ const DropDown = ({
       >
         <div
           className={clsx(
-            'absolute z-10 mt-2 overflow-y-auto bg-white custom-scrollbar',
+            'absolute z-10 mt-2 overflow-y-auto overflow-x-hidden bg-white custom-scrollbar',
             size === 'sm' ? 'w-full max-w-[60px]' : 'w-full max-w-[280px]',
             styles.types[type],
             'rounded-[5px] pr-[7px]',
@@ -143,6 +148,7 @@ const DropDown = ({
                     'px-[15px]',
                     !isLast && 'border-b border-bk-50',
                     'mx-0',
+                    'whitespace-nowrap',
                   )}
                   onClick={() => handleSelect(item)}
                 >
