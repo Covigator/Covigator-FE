@@ -57,7 +57,7 @@ const Signup = () => {
       setAuth(token);
 
       // 상태 업데이트 후 네비게이션을 위해 setTimeout 사용
-      setTimeout(() => navigate('/'), 0);
+      setTimeout(() => navigate('/onboarding'), 0);
     },
     onError: (error: any) => {
       console.error('회원가입 실패', error.response?.data || error.message);
@@ -97,7 +97,6 @@ const Signup = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof SignupFormData,
   ) => {
-    console.log(`handleInputChange 호출: ${field} = ${e.target.value}`);
     setFormData({ ...formData, [field]: e.target.value });
   };
 

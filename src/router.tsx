@@ -19,12 +19,11 @@ import Modify from './pages/Mypage/Info/Modify';
 import Like from './pages/Mypage/Like';
 import Mycourse from './pages/Mypage/Mycourse';
 import Notice from './pages/Mypage/Notice';
+import Onboarding from './pages/Onboarding';
 import Result from './pages/Result';
 import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
-
-// 새로 추가
 
 const Router = () => {
   return (
@@ -38,6 +37,7 @@ const Router = () => {
           <Route path="oauth2/callback/kakao" element={<KakaoCallback />} />
         </Route>
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/onboarding" element={<Onboarding />} />
 
         <Route path="/find">
           <Route path="id" element={<FindId />} />

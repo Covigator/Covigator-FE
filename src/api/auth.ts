@@ -1,10 +1,12 @@
+import { loginUserResponse, signupUserResponse } from '../types/auth';
 import {
   KakaoLoginResponse,
   KakaoLoginResponseSchema,
 } from '../types/kakaoLogin';
+import { convertObjectPropertiesSnakeCaseToCamelCase } from '../utils/common';
 import instance from './instance';
 
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 // 일반 로그인 함수
 export const loginUser = async (data: {
@@ -13,14 +15,18 @@ export const loginUser = async (data: {
 }): Promise<string> => {
   try {
     // 로그인 요청 보내기
-    const response = await instance.post<{ token: string }>(
+    const response = await instance.post<loginUserResponse>(
       '/accounts/sign-in',
       data,
     );
 
+    const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
+      response.data as unknown as AxiosResponse<string, unknown>,
+    ) as loginUserResponse;
+
     // 토큰이 응답에 있으면 반환
-    if (response.data.token) {
-      return response.data.token;
+    if (convertedResponse.accessToken) {
+      return convertedResponse.accessToken;
     } else {
       throw new Error('로그인 실패: 응답에 토큰이 없습니다');
     }
@@ -82,7 +88,7 @@ export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
 
 export const signupUser = async (formData: FormData): Promise<string> => {
   try {
-    const response = await instance.post<{ access_token: string }>(
+    const response = await instance.post<signupUserResponse>(
       '/accounts/sign-up',
       formData,
       {
@@ -92,13 +98,17 @@ export const signupUser = async (formData: FormData): Promise<string> => {
       },
     );
 
+    const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
+      response.data as unknown as AxiosResponse<string, unknown>,
+    ) as signupUserResponse;
+
     // 응답 구조 로깅
     console.log('서버 응답:', response.data);
 
     // 토큰이 응답에 있는지 확인하고 반환
-    if (response.data.access_token) {
-      localStorage.setItem('auth_token', response.data.access_token);
-      return response.data.access_token;
+    if (convertedResponse.accessToken) {
+      localStorage.setItem('auth_token', convertedResponse.accessToken);
+      return convertedResponse.accessToken;
     } else {
       throw new Error('회원가입 실패: 응답에 토큰이 없습니다');
     }
