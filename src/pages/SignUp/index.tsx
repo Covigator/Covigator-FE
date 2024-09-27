@@ -97,7 +97,6 @@ const Signup = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof SignupFormData,
   ) => {
-    console.log(`handleInputChange 호출: ${field} = ${e.target.value}`);
     setFormData({ ...formData, [field]: e.target.value });
   };
 
