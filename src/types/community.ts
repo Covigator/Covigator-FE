@@ -8,13 +8,12 @@ export type CourseItemType = {
 };
 
 export type CourseDetailType = {
-  id: number;
-  title: string;
-  desc: string;
-  isLike: boolean;
-  heartCount: number;
-  placeItems: PlaceItemType[];
-  reviewItems: ReviewItemType[];
+  courseId: number;
+  courseName: string;
+  courseDescription: string;
+  dibsCnt: number;
+  dibs: boolean;
+  places: PlaceType[];
 };
 
 export type PlaceItemType = {
@@ -31,10 +30,11 @@ export type CourseListResponse = {
 };
 
 export type CourseDetailResponse = {
+  courseId: number;
   courseName: string;
   courseDescription: string;
-  likeCnt: number;
-  isLiked: boolean;
+  dibsCnt: number;
+  dibs: boolean;
   places: PlaceItemType[];
 };
 

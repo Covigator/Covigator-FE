@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid';
 const Mycourse = () => {
   const navigate = useNavigate();
   const [resData, setResData] = useState<CourseListResponse>();
-  const { data, isLoading, refetch } = useMyCourse();
+  const { data } = useMyCourse();
 
   useEffect(() => {
     if (data) {

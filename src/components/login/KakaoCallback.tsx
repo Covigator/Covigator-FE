@@ -1,48 +1,55 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { kakaoLogin } from '../../api/auth';
-import { KakaoLoginResponseSchema } from './../../types/kakaoLogin';
+import { useAuthStore } from '../../stores/authStore';
+import Loading from '../common/Loading';
+
+import axios from 'axios';
+
+interface KakaoLoginResponse {
+  access_token: string;
+  is_new: string;
+}
 
 const KakaoCallback = () => {
   const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 현재 URL에서 파라미터를 추출
-    const params = new URL(document.location.toString()).searchParams;
-    // 'code' 파라미터 값을 가져옴 (카카오에서 제공하는 인증 코드)
-    const code = params.get('code');
+    const handleKakaoLogin = async () => {
+      try {
+        const code = new URLSearchParams(window.location.search).get('code');
 
-    if (code) {
-      // 인증 코드가 존재하면 카카오 로그인 API 호출
-      kakaoLogin(code)
-        .then((response) => {
-          console.log('카카오 로그인 성공', response);
-          // Zod 스키마를 사용하여 응답 데이터 검증
-          const validatedResponse = KakaoLoginResponseSchema.parse(response);
+        if (!code) {
+          throw new Error('Authorization code not found');
+        }
 
-          // 신규 사용자인 경우 회원가입 페이지로 이동
-          if (validatedResponse.is_new) {
-            navigate('/signup');
-          } else {
-            // 기존 사용자인 경우 메인 페이지로 이동
-            navigate('/');
-          }
-        })
-        .catch((error) => {
-          console.error('카카오 로그인 에러', error);
-          // Zod 검증 에러 처리
-          if (error.name === 'ZodError') {
-            console.error('응답 데이터 형식 에러:', error.errors);
-          }
-          // 로그인 실패 시 로그인 페이지로 이동
-          navigate('/login');
-        });
-    }
-  }, [navigate]); // navigate 함수가 변경될 때마다 useEffect 재실행
+        const response = await axios.get<KakaoLoginResponse>(
+          `${import.meta.env.VITE_API_BASE_URL}/accounts/oauth/kakao`,
+          { params: { code } },
+        );
 
-  // 로그인 처리 중 표시
-  return <div>카카오 로그인 처리 중...</div>;
+        console.log('Kakao login response:', response.data);
+
+        setAuth(response.data.access_token);
+        navigate('/');
+      } catch (error) {
+        console.error('카카오 로그인 중 에러 발생:', error);
+        navigate('/login');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    handleKakaoLogin();
+  }, [navigate, setAuth]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return null;
 };
 
 export default KakaoCallback;

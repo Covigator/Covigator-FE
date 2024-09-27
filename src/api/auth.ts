@@ -50,21 +50,29 @@ export const loginUser = async (data: {
 export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
   try {
     // 카카오 로그인 요청 보내기
-    const response = await instance.post<KakaoLoginResponse>(
-      '/accounts/kakao-login',
+    const response = await instance.get<KakaoLoginResponse>(
+      '/accounts/oauth/kakao',
       {
-        code,
+        params: { code },
       },
     );
-    // 응답 데이터 유효성 검사 및 반환
+
     return KakaoLoginResponseSchema.parse(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
-      // Axios 오류 처리
-      throw new Error(
-        `카카오 로그인 실패: ${axiosError.response?.status} - ${axiosError.response?.data}`,
-      );
+
+      if (axiosError.response) {
+        throw new Error(
+          `카카오 로그인 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
+        );
+      } else if (axiosError.request) {
+        throw new Error('카카오 로그인 요청에 대한 응답이 없습니다.');
+      } else {
+        throw new Error(
+          `카카오 로그인 요청 설정 중 오류 발생: ${axiosError.message}`,
+        );
+      }
     } else {
       // 기타 오류 처리
       throw new Error('카카오 로그인 중 예기치 않은 오류가 발생했습니다');
@@ -72,24 +80,25 @@ export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
   }
 };
 
-// 회원가입 함수
-export const signupUser = async (data: {
-  image_url?: string;
-  name: string;
-  nickname: string;
-  email: string;
-  password: string;
-}): Promise<string> => {
+export const signupUser = async (formData: FormData): Promise<string> => {
   try {
-    // 회원가입 요청 보내기
-    const response = await instance.post<{ token: string }>(
+    const response = await instance.post<{ access_token: string }>(
       '/accounts/sign-up',
-      data,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
-    // 토큰이 응답에 있으면 반환
-    if (response.data.token) {
-      return response.data.token;
+    // 응답 구조 로깅
+    console.log('서버 응답:', response.data);
+
+    // 토큰이 응답에 있는지 확인하고 반환
+    if (response.data.access_token) {
+      localStorage.setItem('auth_token', response.data.access_token);
+      return response.data.access_token;
     } else {
       throw new Error('회원가입 실패: 응답에 토큰이 없습니다');
     }
@@ -97,19 +106,17 @@ export const signupUser = async (data: {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
-        // 서버가 2xx 범위를 벗어나는 상태 코드로 응답한 경우
+        console.error('서버 오류 응답:', axiosError.response.data);
         throw new Error(
-          `회원가입 실패: ${axiosError.response.status} - ${axiosError.response.data}`,
+          `회원가입 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
         );
       } else if (axiosError.request) {
-        // 요청은 보냈지만 응답을 받지 못한 경우
         throw new Error('회원가입 실패: 서버로부터 응답을 받지 못했습니다');
       } else {
-        // 요청 설정 중 오류가 발생한 경우
         throw new Error(`회원가입 실패: ${axiosError.message}`);
       }
     } else {
-      // Axios 오류가 아닌 경우
+      console.error('예기치 않은 오류:', error);
       throw new Error('회원가입 중 예기치 않은 오류가 발생했습니다');
     }
   }
