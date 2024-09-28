@@ -45,7 +45,6 @@ const index = () => {
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  // const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [textData, setTextData] = useState<CoursePostInfoType>({
     course_name: '',
     course_description: '',
@@ -55,7 +54,7 @@ const index = () => {
 
   const completeData = new FormData();
 
-  const { mutate, isLoading } = usePostCourse(completeData);
+  const { mutate } = usePostCourse(completeData);
 
   // 선택된 위치의 좌표를 저장하는 상태
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -93,9 +92,6 @@ const index = () => {
       setSelectedImages((prev: File[] | []) => {
         return [...prev, file];
       });
-      // setImagePreviews((prev: string[] | []) => {
-      //   return { ...prev, newImg };
-      // });
     }
     if (
       imageInputRef.current?.value &&
@@ -110,7 +106,6 @@ const index = () => {
 
   const handleAdd = () => {
     if (isAddAble) {
-      // const img = imagePreviews[newPlaces.length];
       const img = URL.createObjectURL(selectedImages[newPlaces.length]);
       setNewPlaces((prev) => [
         ...prev,

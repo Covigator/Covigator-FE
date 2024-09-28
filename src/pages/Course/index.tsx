@@ -12,9 +12,9 @@ import {
   useDeleteCourseLike,
   usePostCourseLike,
 } from '../../hooks/api/useCourse';
-import { useLikeCourse } from '../../hooks/api/useMypage';
 import { Topbar } from '../../layouts';
 import { CourseDetailResponse, ReviewResponse } from '../../types/community';
+import Map from '../Home/Map';
 
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
@@ -47,6 +47,17 @@ const index = () => {
   const [isLike, setIsLike] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(0);
 
+  const [locations, setLocations] = useState<
+    {
+      name: string;
+      isSelected: boolean;
+      lat: number;
+      lng: number;
+      image: string;
+      description: string;
+    }[]
+  >([]);
+
   const handleLike = () => {
     if (isLike) {
       setLikeCount((prev) => prev - 1);
@@ -64,6 +75,19 @@ const index = () => {
       setReviewResData(reviewData);
       setIsLike(data.dibs);
       setLikeCount(data.dibsCnt);
+      // places 데이터를 locations 형태로 변환
+      const newLocations = data.places.map((place) => ({
+        name: place.place_name,
+        isSelected: true,
+        lat: parseFloat(place.latitude),
+        lng: parseFloat(place.longitude),
+        // lat: 37.541,
+        // lng: 127.0695,
+        image: place.image_url,
+        description: place.place_description,
+      }));
+
+      setLocations(newLocations); // 변환한 데이터를 locations에 설정
     }
   }, [data, reviewData]);
 
@@ -101,7 +125,9 @@ const index = () => {
         </section>
       </header>
       <p className="mt-2 text-bk-80 text-body3">{resData?.courseDescription}</p>
-      <div className={variants.map}>지도 자리</div>
+      <div className={variants.map}>
+        <Map lat={37.541} lng={127.0695} locations={locations} />
+      </div>
       <section className="mt-[25px]">
         <p className={clsx('mb-[7px]', variants.label)}>코스 장소</p>
         {resData?.places.map((d) => {
