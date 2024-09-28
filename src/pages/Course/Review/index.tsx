@@ -90,7 +90,7 @@ const index = () => {
           disabled={inputValue === ''}
           onClick={() => {
             mutate();
-            navigate('/course/{courseId}');
+            navigate(`/course/${courseId}`);
           }}
         >
           등록하기
