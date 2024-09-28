@@ -36,7 +36,7 @@ const OnboardingPage = () => {
           totalSteps={onboardingOptions.length}
         />
         <div className="mt-[151px] text-btn1 mb-[134px]">{currentQuestion}</div>
-        {currentOptions.map((option, index) => (
+        {currentOptions.map((option) => (
           <div key={uuid()} className={'mb-[34px]'}>
             <Button
               onClick={() => handleOptionClick(option)}

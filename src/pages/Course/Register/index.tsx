@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
 import { BiSolidImageAdd } from 'react-icons/bi';
@@ -68,8 +70,6 @@ const index = () => {
   const placeDescRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const [tempId, setTempId] = useState<number>(0);
-
   const handleLocationSelect = (
     lat: number,
     lng: number,
@@ -110,19 +110,18 @@ const index = () => {
       setNewPlaces((prev) => [
         ...prev,
         {
-          placeId: tempId,
           place_name: placeTitleRef.current?.value || '',
           address: 'address',
           category: selectedChip,
           description: placeDescRef.current?.value || '',
           img: img,
-          longitude: 0,
-          latitude: 0,
+          longitude: selectedLocation.lng,
+          latitude: selectedLocation.lat,
         },
       ]);
       setIsAddAble(false);
       setSelectedChip('');
-      setTempId((prev) => prev + 1);
+      setSelectedLocation({ lat: 0.0, lng: 0.0 });
       if (
         placeTitleRef.current &&
         placeDescRef.current &&

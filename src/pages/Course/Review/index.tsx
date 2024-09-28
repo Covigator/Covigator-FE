@@ -33,7 +33,7 @@ const index = () => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { mutate, isLoading } = usePostCourseReview(courseId, {
+  const { mutate } = usePostCourseReview(courseId, {
     score: rates.filter(Boolean).length,
     comment: inputValueRef.current?.value || '',
   });

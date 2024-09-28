@@ -51,7 +51,7 @@ export const getAllCourseApi = async (
 /** POST: 코스 등록 */
 export const postCourseApi = async (formData: FormData): Promise<string> => {
   try {
-    const response = await instance.post('/community/courses', formData, {
+    await instance.post('/community/courses', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -80,7 +80,7 @@ export const postCourseApi = async (formData: FormData): Promise<string> => {
 export const postCourseLikeApi = async (courseId: number): Promise<string> => {
   try {
     // 코스 좋아요 등록 요청 보내기
-    const response = await instance.post(`/community/courses/${courseId}/dibs`);
+    await instance.post(`/community/courses/${courseId}/dibs`);
 
     return 'ok';
   } catch (error) {
@@ -113,9 +113,7 @@ export const deleteCourseLikeApi = async (
 ): Promise<string> => {
   try {
     // 코스 좋아요 삭제 요청 보내기
-    const response = await instance.delete(
-      `/community/courses/${courseId}/dibs`,
-    );
+    await instance.delete(`/community/courses/${courseId}/dibs`);
 
     return 'ok';
   } catch (error) {
@@ -226,10 +224,7 @@ export const postCourseReviewApi = async (
 ): Promise<string> => {
   try {
     // 리뷰 등록 요청 보내기
-    const response = await instance.post(
-      `/community/courses/${courseId}/reviews`,
-      requestBody,
-    );
+    await instance.post(`/community/courses/${courseId}/reviews`, requestBody);
 
     return 'ok';
   } catch (error) {
