@@ -34,7 +34,7 @@ const Like = () => {
                 caption={d.description}
                 img={d.image_url}
                 rate={d.score}
-                isLike={d.dibs}
+                isLike={true}
               />
             );
           })

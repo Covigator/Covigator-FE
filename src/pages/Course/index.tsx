@@ -6,7 +6,13 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/common/button';
 import PlaceItem from '../../components/community/PlaceItem';
 import ReviewItem from '../../components/community/ReviewItem';
-import { useCourseDetail, useCourseReviews } from '../../hooks/api/useCourse';
+import {
+  useCourseDetail,
+  useCourseReviews,
+  useDeleteCourseLike,
+  usePostCourseLike,
+} from '../../hooks/api/useCourse';
+import { useLikeCourse } from '../../hooks/api/useMypage';
 import { Topbar } from '../../layouts';
 import { CourseDetailResponse, ReviewResponse } from '../../types/community';
 
@@ -32,22 +38,22 @@ const index = () => {
 
   const { data } = useCourseDetail(Number(courseId));
   const { data: reviewData } = useCourseReviews(Number(courseId));
+  const { mutate: postMutate } = usePostCourseLike(Number(courseId));
+  const { mutate: deleteMutate } = useDeleteCourseLike(Number(courseId));
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isLike, setIsLike] = useState<boolean>(
-    resData != undefined && resData?.dibs,
-  );
-  const [likeCount, setLikeCount] = useState<number>(
-    resData != undefined ? resData?.dibsCnt : 0,
-  );
+  const [isLike, setIsLike] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(0);
 
   const handleLike = () => {
     if (isLike) {
       setLikeCount((prev) => prev - 1);
+      deleteMutate();
     } else {
       setLikeCount((prev) => prev + 1);
+      postMutate();
     }
     setIsLike((prev) => !prev);
   };
@@ -56,6 +62,8 @@ const index = () => {
     if (data && reviewData) {
       setResData(data);
       setReviewResData(reviewData);
+      setIsLike(data.dibs);
+      setLikeCount(data.dibsCnt);
     }
   }, [data, reviewData]);
 
@@ -143,7 +151,7 @@ const index = () => {
               );
             })
           ) : (
-            <div className="flex items-center justify-center w-full text-bk-70 text-body5">
+            <div className="mt-2 flex items-center justify-center w-full text-bk-70 text-body5">
               등록된 리뷰가 없어요
             </div>
           )}

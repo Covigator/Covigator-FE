@@ -80,9 +80,7 @@ export const postCourseApi = async (formData: FormData): Promise<string> => {
 export const postCourseLikeApi = async (courseId: number): Promise<string> => {
   try {
     // 코스 좋아요 등록 요청 보내기
-    const response = await instance.post(
-      `/community/courses/${courseId}/likes`,
-    );
+    const response = await instance.post(`/community/courses/${courseId}/dibs`);
 
     return 'ok';
   } catch (error) {
@@ -116,7 +114,7 @@ export const deleteCourseLikeApi = async (
   try {
     // 코스 좋아요 삭제 요청 보내기
     const response = await instance.delete(
-      `/community/courses/${courseId}/likes`,
+      `/community/courses/${courseId}/dibs`,
     );
 
     return 'ok';

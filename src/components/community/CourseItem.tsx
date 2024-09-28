@@ -3,6 +3,11 @@ import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io';
 import { IoStar } from 'react-icons/io5';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import {
+  useDeleteCourseLike,
+  usePostCourseLike,
+} from '../../hooks/api/useCourse';
+
 export type CourseItemProps = {
   id: number;
   title: string;
@@ -34,7 +39,15 @@ const CourseItem = ({
   const location = useLocation();
   const [isLiked, setIsLiked] = useState<boolean>(isLike);
 
+  const { mutate: postMutate } = usePostCourseLike(id);
+  const { mutate: deleteMutate } = useDeleteCourseLike(id);
+
   const handleLike = () => {
+    if (isLike) {
+      deleteMutate();
+    } else {
+      postMutate();
+    }
     setIsLiked((prev) => !prev);
   };
 
