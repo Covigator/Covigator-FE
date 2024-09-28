@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 
+import PrivateRoute from './components/PrivateRoute';
 import Loading from './components/common/Loading';
+import KakaoCallback from './components/login/KakaoCallback';
 import Layout from './layouts/Layout';
 import Community from './pages/Community';
 import Course from './pages/Course';
@@ -18,6 +20,7 @@ import Modify from './pages/Mypage/Info/Modify';
 import Like from './pages/Mypage/Like';
 import Mycourse from './pages/Mypage/Mycourse';
 import Notice from './pages/Mypage/Notice';
+import Onboarding from './pages/Onboarding';
 import Result from './pages/Result';
 import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
@@ -27,42 +30,169 @@ const Router = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/map" element={<Map lat={37.5385} lng={127.0823} />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/result"
+          element={
+            <PrivateRoute>
+              <Result />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/map"
+          element={
+            <PrivateRoute>
+              <Map lat={37.5385} lng={127.0823} />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/login">
+          <Route index element={<Login />} />
+          <Route path="oauth2/callback/kakao" element={<KakaoCallback />} />
+        </Route>
         <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/onboarding"
+          element={
+            <PrivateRoute>
+              <Onboarding />
+            </PrivateRoute>
+          }
+        />
 
         <Route path="/find">
           <Route path="id" element={<FindId />} />
           <Route path="password" element={<FindPassword />} />
         </Route>
 
-        <Route path="/loading" element={<Loading />} />
-        <Route path="/community" element={<Community />} />
+        <Route
+          path="/loading"
+          element={
+            <PrivateRoute>
+              <Loading />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/community"
+          element={
+            <PrivateRoute>
+              <Community />
+            </PrivateRoute>
+          }
+        />
         <Route path="/course">
-          <Route path=":courseId" element={<Course />} />
-          <Route path="register" element={<Register />} />
-          <Route path="chat/:courseId" element={<Chat />} />
+          <Route
+            path=":courseId"
+            element={
+              <PrivateRoute>
+                <Course />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <PrivateRoute>
+                <Register />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="chat/:courseId"
+            element={
+              <PrivateRoute>
+                <Chat />
+              </PrivateRoute>
+            }
+          />
         </Route>
-        <Route path="/review" element={<Review />} />
+        <Route
+          path="/review"
+          element={
+            <PrivateRoute>
+              <Review />
+            </PrivateRoute>
+          }
+        />
         <Route path="/mypage">
-          <Route index element={<Mypage />} />
-          <Route path="info/:userId" element={<Info />} />
-          <Route path="info/modify/:userId" element={<Modify />} />
-          <Route path="like/:userId" element={<Like />} />
-          <Route path="mycourse/:userId" element={<Mycourse />} />
-          <Route path="notice" element={<Notice />} />
+          <Route
+            index
+            element={
+              <PrivateRoute>
+                <Mypage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="info/:userId"
+            element={
+              <PrivateRoute>
+                <Info />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="info/modify/:userId"
+            element={
+              <PrivateRoute>
+                <Modify />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="like/:userId"
+            element={
+              <PrivateRoute>
+                <Like />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="mycourse/:userId"
+            element={
+              <PrivateRoute>
+                <Mycourse />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="notice"
+            element={
+              <PrivateRoute>
+                <Notice />
+              </PrivateRoute>
+            }
+          />
         </Route>
-        {/* <Route path="/order" element={<Outlet />}>
-          <Route index element={<Order />} />
-          <Route path="detail/:droneId" element={<OrderDetail />} />
-          <Route path="estimate" element={<Estimate />} />
-        </Route> */}
         <Route path="/test">
-          <Route path="seohyun" element={<Seohyun />} />
-          <Route path="hasang" element={<Hasang />} />
+          <Route
+            path="seohyun"
+            element={
+              <PrivateRoute>
+                <Seohyun />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="hasang"
+            element={
+              <PrivateRoute>
+                <Hasang />
+              </PrivateRoute>
+            }
+          />
         </Route>
+
+        <Route path="/accounts/oauth/kakao" element={<KakaoCallback />} />
       </Route>
     </Routes>
   );

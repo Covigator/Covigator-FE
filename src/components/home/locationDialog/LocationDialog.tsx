@@ -34,17 +34,19 @@ const LocationDialog = ({
       className="flex gap-x-1 cursor-pointer"
       onClick={() => handleRadiusSelect(radius)}
     >
-      <p className="text-body6 text-bk-70 whitespace-nowrap">반경 {radius}km</p>
+      <p className="text-body6 text-bk-70 whitespace-nowrap">
+        반경 {Number.isInteger(radius) ? radius + 'km' : radius * 1000 + 'm'}
+      </p>
       {selectedRadius === radius ? <RadioBtn_active /> : <RadioBtn_inactive />}
     </div>
   );
 
   const content = (
     <div className="flex flex-col items-center">
-      <div className="flex gap-x-[19px] mb-[11px]">
+      <div className="flex gap-x-4 mb-[11px]">
+        <RadioButton radius={0.3} />
+        <RadioButton radius={0.5} />
         <RadioButton radius={1} />
-        <RadioButton radius={5} />
-        <RadioButton radius={10} />
       </div>
       <div className="w-[241px] h-[224px] flex-shrink-0">
         <Map lat={lat} lng={lng} radius={selectedRadius} />
