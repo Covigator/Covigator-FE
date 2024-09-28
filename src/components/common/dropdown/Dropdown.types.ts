@@ -3,6 +3,7 @@ export type DropdownProps = {
   size: DropdownSize;
   type: DropdownType;
   onSelect?: (item: DropdownItemType) => void;
+  isHome?: boolean;
 };
 
 export type LocationItemType = DropdownItemType & {

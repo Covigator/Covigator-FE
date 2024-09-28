@@ -108,6 +108,7 @@ const Home = () => {
                 size="lg"
                 type="sub"
                 onSelect={handleLocationSelect}
+                isHome={true}
               />
             </div>
           </div>
@@ -124,6 +125,7 @@ const Home = () => {
                 size="lg"
                 type="sub"
                 onSelect={handleCompanionSelect}
+                isHome={true}
               />
             </div>
           </div>
