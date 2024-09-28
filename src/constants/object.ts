@@ -30,7 +30,7 @@ export const sortDropdownItems: DropdownItemType[] = [
   },
   {
     id: 2,
-    value: 'likeCnt',
+    value: 'dibsCnt',
     text: '좋아요순',
   },
 ];

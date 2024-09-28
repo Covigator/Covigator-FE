@@ -43,7 +43,7 @@ export const getMyCourseApi = async (): Promise<CourseListResponse> => {
 export const getLikeCourseApi = async (): Promise<CourseListResponse> => {
   try {
     // 찜한 코스 조회 요청 보내기
-    const response = await instance.get('/my-page/liked-courses');
+    const response = await instance.get('/my-page/dibs-courses');
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
       response.data,

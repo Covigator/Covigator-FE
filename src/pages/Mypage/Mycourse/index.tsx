@@ -29,10 +29,10 @@ const Mycourse = () => {
             return (
               <CourseItem
                 key={uuid()}
-                id={d.courseId}
+                id={d.course_id}
                 title={d.name}
                 caption={d.description}
-                img={d.imageUrl}
+                img={d.image_url}
                 rate={d.score}
                 isLike={d.dibs}
               />

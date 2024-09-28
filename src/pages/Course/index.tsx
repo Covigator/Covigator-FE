@@ -100,11 +100,11 @@ const index = () => {
           return (
             <div key={uuid()}>
               <PlaceItem
-                id={0}
+                id={d.place_id}
                 type={d.category}
-                name={d.placeName}
-                desc={d.description}
-                img={''}
+                name={d.place_name}
+                desc={d.place_description}
+                img={d.image_url}
               />
               <div className="w-full h-[1px] bg-bk-50" />
             </div>
@@ -131,16 +131,22 @@ const index = () => {
         </div>
         <div className={variants.reviewContainer}>
           {/* TODO: scrollbar 커스텀 */}
-          {reviewResData?.reviews.map((d) => {
-            return (
-              <ReviewItem
-                key={uuid()}
-                name={d.author}
-                content={d.comment}
-                rate={d.score}
-              />
-            );
-          })}
+          {reviewResData?.reviews && reviewResData.reviews.length > 0 ? (
+            reviewResData?.reviews.map((d) => {
+              return (
+                <ReviewItem
+                  key={uuid()}
+                  name={d.author}
+                  content={d.comment}
+                  rate={d.score}
+                />
+              );
+            })
+          ) : (
+            <div className="flex items-center justify-center w-full text-bk-70 text-body5">
+              등록된 리뷰가 없어요
+            </div>
+          )}
         </div>
       </section>
     </div>

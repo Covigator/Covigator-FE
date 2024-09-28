@@ -24,20 +24,25 @@ const Like = () => {
       <Topbar handleClick={() => navigate('/mypage')} />
       <p className="text-h3 text-bk-90 mb-[19px]">찜한 코스</p>
       <main className="h-full flex flex-col gap-6 ">
-        {resData?.courses &&
+        {resData?.courses && resData.courses.length > 0 ? (
           resData?.courses.map((d) => {
             return (
               <CourseItem
                 key={uuid()}
-                id={d.courseId}
+                id={d.course_id}
                 title={d.name}
                 caption={d.description}
-                img={d.imageUrl}
+                img={d.image_url}
                 rate={d.score}
                 isLike={d.dibs}
               />
             );
-          })}
+          })
+        ) : (
+          <div className="w-full mt-60 flex items-center justify-center text-bk-60 text-h4">
+            찜한 코스가 없어요
+          </div>
+        )}
       </main>
     </div>
   );
