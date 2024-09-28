@@ -1,27 +1,21 @@
 export type CourseItemType = {
-  courseId: number;
+  course_id: number;
   name: string;
   description: string;
   score: number;
-  imageUrl: string;
+  image_url: string;
   dibs: boolean;
-};
-
-export type CourseDetailType = {
-  courseId: number;
-  courseName: string;
-  courseDescription: string;
-  dibsCnt: number;
-  dibs: boolean;
-  places: PlaceType[];
 };
 
 export type PlaceItemType = {
-  placeId: number;
-  placeName: string;
-  address: string;
+  place_id: number;
+  place_name: string;
+  place_description: string;
+  longitude: string;
+  latitude: string;
+  // address: string;
   category: string;
-  description: string;
+  image_url: string;
 };
 
 export type CourseListResponse = {
@@ -39,10 +33,20 @@ export type CourseDetailResponse = {
 };
 
 export type CoursePostInfoType = {
-  courseName: string;
-  courseDescription: string;
-  places: PlaceItemType[];
-  isPublic: string;
+  course_name: string;
+  course_description: string;
+  places: PlaceItemSnakeType[];
+  is_public: string;
+};
+
+export type PlaceItemSnakeType = {
+  placeId?: number;
+  place_name: string;
+  address: string;
+  category: string;
+  description: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type CoursePostRequest = {

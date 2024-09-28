@@ -47,17 +47,17 @@ const index = () => {
         </div>
       </header>
       <main className="h-full flex flex-col gap-6 ">
-        {resData &&
+        {resData?.courses &&
           resData.courses.map((d) => {
             return (
               <CourseItem
                 key={uuid()}
-                id={0}
+                id={d.course_id}
                 title={d.name}
                 caption={d.description}
-                img={''}
+                img={d.image_url}
                 rate={d.score}
-                isLike={true}
+                isLike={d.dibs}
               />
             );
           })}

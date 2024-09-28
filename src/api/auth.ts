@@ -26,6 +26,7 @@ export const loginUser = async (data: {
 
     // 토큰이 응답에 있으면 반환
     if (convertedResponse.accessToken) {
+      localStorage.setItem('accessToken', convertedResponse.accessToken);
       return convertedResponse.accessToken;
     } else {
       throw new Error('로그인 실패: 응답에 토큰이 없습니다');
@@ -107,7 +108,7 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 
     // 토큰이 응답에 있는지 확인하고 반환
     if (convertedResponse.accessToken) {
-      localStorage.setItem('auth_token', convertedResponse.accessToken);
+      localStorage.setItem('accessToken', convertedResponse.accessToken);
       return convertedResponse.accessToken;
     } else {
       throw new Error('회원가입 실패: 응답에 토큰이 없습니다');

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
 import { BiSolidImageAdd } from 'react-icons/bi';
@@ -14,15 +16,19 @@ import Input from '../../../components/common/input';
 import Textarea from '../../../components/common/textarea';
 import PlaceItem from '../../../components/community/PlaceItem';
 import { PlaceType } from '../../../constants/object';
+import { usePostCourse } from '../../../hooks/api/useCourse';
 import { Topbar } from '../../../layouts';
-import { PlaceItemType } from '../../../types/community';
+import {
+  CoursePostInfoType,
+  PlaceItemSnakeType,
+} from '../../../types/community';
 import Map from '../../Home/Map';
 
 import { v4 as uuid } from 'uuid';
 
 const variants = {
   container: 'w-full h-full pt-[63px] px-[30px] pb-11',
-  section: 'items-center flex flex-col mb-[19px]',
+  section: 'w-full items-center flex flex-col mb-[19px]',
   lockIcon: 'w-6 h-6 text-sub-100 cursor-pointer',
   label: 'w-full text-body3 text-bk-90 mb-[10px]',
   imagePreview:
@@ -36,12 +42,21 @@ const index = () => {
   const [currentLat, setCurrentLat] = useState<number>(37.541);
   const [currentLng, setCurrentLng] = useState<number>(127.0695);
   const [selectedChip, setSelectedChip] = useState<string>('');
-  const [newPlaces, setNewPlaces] = useState<PlaceItemType[]>([]);
+  const [newPlaces, setNewPlaces] = useState<PlaceItemSnakeType[]>([]);
   const [isAddAble, setIsAddAble] = useState<boolean>(false);
   const [isRegisterAble, setIsRegisterAble] = useState<boolean>(false);
   const [isSecret, setIsSecret] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [textData, setTextData] = useState<CoursePostInfoType>({
+    course_name: '',
+    course_description: '',
+    places: [],
+    is_public: 'false',
+  });
+
+  const completeData = new FormData();
+
+  const { mutate } = usePostCourse(completeData);
 
   // 선택된 위치의 좌표를 저장하는 상태
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -51,10 +66,9 @@ const index = () => {
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
-  const courseDescRef = useRef<HTMLTextAreaElement>(null);
+  const placeTitleRef = useRef<HTMLInputElement>(null);
+  const placeDescRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
-
-  const [tempId, setTempId] = useState<number>(0);
 
   const handleLocationSelect = (
     lat: number,
@@ -75,55 +89,91 @@ const index = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file));
+      setSelectedImages((prev: File[] | []) => {
+        return [...prev, file];
+      });
+    }
+    if (
+      imageInputRef.current?.value &&
+      placeTitleRef.current?.value &&
+      placeDescRef.current?.value
+    ) {
+      setIsAddAble(true);
+    } else {
+      setIsAddAble(false);
     }
   };
 
   const handleAdd = () => {
-    /* TODO: 지도 연동 시 장소 이름 및 이미지 받아오기 */
     if (isAddAble) {
-      const img = imagePreview;
+      const img = URL.createObjectURL(selectedImages[newPlaces.length]);
       setNewPlaces((prev) => [
         ...prev,
         {
-          placeId: tempId,
-          placeName: descRef.current?.value || '',
+          place_name: placeTitleRef.current?.value || '',
           address: 'address',
           category: selectedChip,
-          description: courseDescRef.current?.value || '',
+          description: placeDescRef.current?.value || '',
+          img: img,
+          longitude: selectedLocation.lng,
+          latitude: selectedLocation.lat,
         },
       ]);
       setIsAddAble(false);
       setSelectedChip('');
-      setTempId((prev) => prev + 1);
-      if (courseDescRef.current) {
-        courseDescRef.current.value = '';
-        courseDescRef.current.focus();
+      setSelectedLocation({ lat: 0.0, lng: 0.0 });
+      if (
+        placeTitleRef.current &&
+        placeDescRef.current &&
+        imageInputRef.current
+      ) {
+        placeTitleRef.current.value = '';
+        placeTitleRef.current.focus();
+        placeDescRef.current.value = '';
+        imageInputRef.current.value = '';
+        // placeDescRef.current.focus();
       }
     }
   };
 
   const handleRegister = () => {
-    /* TODO: 코스 등록 */
     if (isRegisterAble) {
-      console.log('등록 가능');
+      setTextData({
+        course_name: titleRef.current?.value || '',
+        course_description: descRef.current?.value || '',
+        places: newPlaces,
+        is_public: !isSecret ? 'Y' : 'N',
+      });
     }
   };
 
   /* 장소 추가 가능 여부 판단 */
   useEffect(() => {
-    if (courseDescRef.current?.value != '') {
+    if (
+      placeTitleRef.current?.value != '' &&
+      placeDescRef.current?.value != ''
+    ) {
       setIsAddAble(true);
     }
   }, [selectedChip]);
 
   /* 코스 추가 가능 여부 판단 */
   useEffect(() => {
-    if (titleRef.current?.value != '') {
+    if (titleRef.current?.value != '' && descRef.current?.value != '') {
       setIsRegisterAble(true);
     }
   }, [newPlaces]);
+
+  useEffect(() => {
+    if (textData.course_name != '') {
+      completeData.append(
+        'postCourseRequest',
+        new Blob([JSON.stringify(textData)], { type: 'application/json' }),
+      );
+      selectedImages.map((img) => completeData.append('image', img));
+      mutate();
+    }
+  }, [textData]);
 
   return (
     <div className={variants.container}>
@@ -148,10 +198,14 @@ const index = () => {
           ref={titleRef}
           size={'lg'}
           placeholder={'코스 제목을 입력해주세요'}
-          maxLength={15}
+          maxLength={10}
           onChange={() => {
             /* 코스 추가 가능 여부 판단 */
-            if (newPlaces.length != 0 && courseDescRef.current?.value) {
+            if (
+              newPlaces.length != 0 &&
+              titleRef.current?.value &&
+              descRef.current?.value
+            ) {
               setIsRegisterAble(true);
             } else {
               setIsRegisterAble(false);
@@ -168,7 +222,11 @@ const index = () => {
           maxLength={20}
           onChange={() => {
             /* 코스 추가 가능 여부 판단 */
-            if (newPlaces.length != 0 && courseDescRef.current?.value) {
+            if (
+              newPlaces.length != 0 &&
+              titleRef.current?.value &&
+              descRef.current?.value
+            ) {
               setIsRegisterAble(true);
             } else {
               setIsRegisterAble(false);
@@ -177,15 +235,15 @@ const index = () => {
         />
       </section>
       <section className="mt-[-2px] mb-[17px]">
-        {newPlaces.map((item) => {
+        {newPlaces.map((item, i) => {
           return (
             <div key={uuid()} className="relative">
               <PlaceItem
                 id={item.placeId}
                 type={item.category}
-                name={item.placeName}
+                name={item.place_name}
                 desc={item.description}
-                img={''}
+                img={URL.createObjectURL(selectedImages[i])}
               />
               <section className="absolute flex gap-[9px] right-[10px] top-[19px]">
                 {/* TODO: 장소 수정 기능 추가 필요 */}
@@ -231,10 +289,33 @@ const index = () => {
             );
           })}
         </div>
+        <section className={variants.section}>
+          <Input
+            ref={placeTitleRef}
+            size={'lg'}
+            placeholder={'장소 이름을 입력해주세요'}
+            maxLength={15}
+            onChange={() => {
+              /* 장소 추가 가능 여부 판단 */
+              if (
+                imageInputRef.current?.value &&
+                placeTitleRef.current?.value &&
+                placeDescRef.current?.value
+              ) {
+                setIsAddAble(true);
+              } else {
+                setIsAddAble(false);
+              }
+            }}
+          />
+        </section>
         <label className={variants.imagePreview}>
-          {selectedImage ? (
+          {selectedImages.length > 0 &&
+          newPlaces.length == selectedImages.length - 1 ? (
             <img
-              src={imagePreview}
+              src={URL.createObjectURL(
+                selectedImages[selectedImages.length - 1],
+              )}
               alt="Selected"
               className="rounded-[10px] object-cover w-full h-full"
             />
@@ -250,13 +331,17 @@ const index = () => {
           />
         </label>
         <Textarea
-          ref={courseDescRef}
+          ref={placeDescRef}
           maxLength={50}
           placeholder={'지도에서 선택한 장소를 설명해주세요'}
           size={'md'}
           onChange={() => {
             /* 장소 추가 가능 여부 판단 */
-            if (selectedChip != '' && courseDescRef.current?.value) {
+            if (
+              imageInputRef.current?.value &&
+              placeTitleRef.current?.value &&
+              placeDescRef.current?.value
+            ) {
               setIsAddAble(true);
             } else {
               setIsAddAble(false);

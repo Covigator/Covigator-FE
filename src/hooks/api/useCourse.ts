@@ -1,9 +1,13 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import {
+  deleteCourseLikeApi,
   getAllCourseApi,
   getCourseDetailApi,
   getCourseReviewApi,
+  postCourseApi,
+  postCourseLikeApi,
+  postCourseReviewApi,
 } from '../../api/community';
 
 export const useAllCourses = (page: number, sort: string) => {
@@ -23,10 +27,53 @@ export const useCourseDetail = (courseId: number) => {
   return { data, isLoading, error, refetch };
 };
 
+export const usePostCourse = (data: FormData) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_POST'],
+    mutationFn: () => postCourseApi(data),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
+};
+
 export const useCourseReviews = (courseId: number) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['COURSE_REVIEWS'],
     queryFn: () => getCourseReviewApi(courseId),
   });
   return { data, isLoading, error, refetch };
+};
+
+export const usePostCourseReview = (
+  courseId: number,
+  requestBody: { score: number; comment: string },
+) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_REVIEW_POST', courseId],
+    mutationFn: () => postCourseReviewApi(courseId, requestBody),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
+};
+
+export const usePostCourseLike = (courseId: number) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_LIKE_POST', courseId],
+    mutationFn: () => postCourseLikeApi(courseId),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
+};
+
+export const useDeleteCourseLike = (courseId: number) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['COURSE_LIKE_DELETE', courseId],
+    mutationFn: () => deleteCourseLikeApi(courseId),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
 };
