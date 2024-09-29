@@ -36,6 +36,7 @@ type FormErrors = {
 };
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
     nickname: '',
@@ -48,7 +49,6 @@ const Signup = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   const signupMutation = useMutation(signupUser, {
@@ -176,7 +176,7 @@ const Signup = () => {
   return (
     <div className="w-full h-full overflow-x-hidden">
       <div className="fixed top-0 left-0 right-0 z-50">
-        <Topbar />
+        <Topbar handleClick={() => navigate('/login')} />
       </div>
 
       <form
