@@ -93,7 +93,17 @@ const index = () => {
 
   return (
     <div className={variants.container}>
-      <Topbar handleClick={() => navigate(`${location.state}`)} />
+      {/* <Topbar handleClick={() => navigate(`${location.state}`)} /> */}
+      <Topbar
+        handleClick={() =>
+          navigate(
+            location.state === `/course/chat/${courseId}` ||
+              location.state === '/review'
+              ? '/community'
+              : location.state,
+          )
+        }
+      />
       <header className={variants.headerLayout}>
         <p className="text-bk-90 text-h1">{resData?.courseName}</p>
         <section className="flex gap-[10px] items-center">
