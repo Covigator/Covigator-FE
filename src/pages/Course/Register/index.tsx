@@ -181,7 +181,7 @@ const index = () => {
 
   return (
     <div className={variants.container}>
-      <Topbar handleClick={() => navigate('/')} />
+      <Topbar handleClick={() => navigate('/community')} />
       <header className="flex justify-between mb-[13px]">
         <p className="text-h1 text-bk-90">코스 등록</p>
         {isSecret ? (
