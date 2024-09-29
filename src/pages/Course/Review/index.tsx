@@ -90,7 +90,7 @@ const index = () => {
           disabled={inputValue === ''}
           onClick={() => {
             mutate();
-            navigate(`/course/${courseId}`);
+            navigate(`/course/${courseId}`, { state: location.pathname });
           }}
         >
           등록하기
@@ -108,7 +108,9 @@ const index = () => {
         <Dialog
           title={'이전 화면으로 돌아가시겠습니까?'}
           subtitle={'작성 중인 내용은 삭제됩니다'}
-          onConfirm={() => navigate(`/course/${courseId}`)}
+          onConfirm={() =>
+            navigate(`/course/${courseId}`, { state: location.pathname })
+          }
           onCancel={() => setIsOpen(false)}
         />
       )}
