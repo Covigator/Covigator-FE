@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ChipSize, ChipState, ChipProps } from './Chip.types';
 
 import clsx from 'clsx';
@@ -20,14 +18,14 @@ const style: {
   },
 };
 
-const Chip: React.FC<ChipProps> = ({
+const Chip = ({
   size = 'sm',
   state = 'inactive',
   className,
   onClick,
   children,
   ...rest
-}) => {
+}: ChipProps) => {
   return (
     <div
       className={clsx(

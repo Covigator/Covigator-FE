@@ -7,6 +7,7 @@ import Map from '../../pages/Home/Map';
 
 export interface Location {
   name: string;
+  courseType: string;
   isSelected: boolean;
   lat: number;
   lng: number;
@@ -18,26 +19,29 @@ const Index = () => {
   const [locations, setLocations] = useState<Location[]>([
     {
       name: '마우스래빗',
+      courseType: '카페',
       isSelected: false,
-      lat: 37.541,
+      lat: 37.543,
       lng: 127.0695,
-      image: '/src/assets/image/restaurant_temporary.jpg',
+      image: '/src/assets/image/mouse_rabbit.jpg',
       description: '맛있는 음식과 아늑한 분위기의 카페',
     },
     {
       name: 'CGV 건대입구점',
+      courseType: '문화/여가',
       isSelected: false,
-      lat: 37.5407,
-      lng: 127.0691,
-      image: '/src/assets/image/restaurant_temporary.jpg',
+      lat: 37.54,
+      lng: 127.067,
+      image: '/src/assets/image/cgv.png',
       description: '최신 영화를 즐길 수 있는 멀티플렉스 영화관',
     },
     {
       name: '스타벅스 건대점',
+      courseType: '카페',
       isSelected: false,
       lat: 37.5412,
       lng: 127.0699,
-      image: '/src/assets/image/restaurant_temporary.jpg',
+      image: '/src/assets/image/starbucks.jpg',
       description: '다양한 커피와 음료를 즐길 수 있는 카페',
     },
   ]);
@@ -72,7 +76,8 @@ const Index = () => {
 
       <div className="relative z-20 border-t-0">
         <CoursePreview
-          date="6월 15일"
+          date="9월 30일"
+          place="성수역"
           weather="맑을"
           companions="매우 혼잡할"
           locations={locations}
