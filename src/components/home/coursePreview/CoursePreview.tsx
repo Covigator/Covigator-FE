@@ -5,6 +5,7 @@ import {
 } from 'react-icons/hi';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { WiDaySunny } from 'react-icons/wi';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Timeline,
@@ -15,7 +16,7 @@ import {
   TimelineDot,
 } from '@mui/lab';
 
-import { Location } from '../../../pages/Result';
+import { LocationType } from '../../../types/location';
 import Chip from '../../common/chip';
 
 interface CoursePreviewProps {
@@ -23,7 +24,7 @@ interface CoursePreviewProps {
   place: string;
   weather: string;
   companions: string;
-  locations: Location[];
+  locations: LocationType[];
   isExpanded: boolean;
   onExpand: (expanded: boolean) => void;
 }
@@ -37,6 +38,8 @@ const CoursePreview = ({
   isExpanded,
   onExpand,
 }: CoursePreviewProps) => {
+  const navigate = useNavigate();
+
   const toggleExpanded = () => {
     onExpand(!isExpanded);
   };
@@ -108,7 +111,10 @@ const CoursePreview = ({
                   {location.name}
                 </p>
                 {isExpanded && (
-                  <div className="mt-2 box-border flex gap-x-[11px]">
+                  <div
+                    className="mt-2 box-border flex gap-x-[11px] cursor-pointer"
+                    onClick={() => navigate(`/result/${location.id}`)}
+                  >
                     {location.image && (
                       <div className="w-[75px] h-[75px] mb-2 overflow-hidden rounded-md border border-bk-20">
                         <img
