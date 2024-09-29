@@ -1,47 +1,16 @@
 import { useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
 import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
 import { Topbar } from '../../layouts';
 import Map from '../../pages/Home/Map';
-
-export interface Location {
-  name: string;
-  isSelected: boolean;
-  lat: number;
-  lng: number;
-  image: string;
-  description: string;
-}
+import { locations as initialLocations } from './../../constants/location';
 
 const Index = () => {
-  const [locations, setLocations] = useState<Location[]>([
-    {
-      name: '마우스래빗',
-      isSelected: false,
-      lat: 37.541,
-      lng: 127.0695,
-      image: '/src/assets/image/restaurant_temporary.jpg',
-      description: '맛있는 음식과 아늑한 분위기의 카페',
-    },
-    {
-      name: 'CGV 건대입구점',
-      isSelected: false,
-      lat: 37.5407,
-      lng: 127.0691,
-      image: '/src/assets/image/restaurant_temporary.jpg',
-      description: '최신 영화를 즐길 수 있는 멀티플렉스 영화관',
-    },
-    {
-      name: '스타벅스 건대점',
-      isSelected: false,
-      lat: 37.5412,
-      lng: 127.0699,
-      image: '/src/assets/image/restaurant_temporary.jpg',
-      description: '다양한 커피와 음료를 즐길 수 있는 카페',
-    },
-  ]);
+  const navigate = useNavigate();
 
+  const [locations, setLocations] = useState(initialLocations);
   const [isExpanded, setIsExpanded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -66,13 +35,14 @@ const Index = () => {
   return (
     <div className="h-full w-full overflow-x-hidden relative">
       <div className="sticky top-0 z-50 bg-white border-none">
-        <Topbar />
+        <Topbar handleClick={() => navigate('/')} />
         <RefreshRecommend />
       </div>
 
       <div className="relative z-20 border-t-0">
         <CoursePreview
-          date="6월 15일"
+          date="9월 30일"
+          place="성수역"
           weather="맑을"
           companions="매우 혼잡할"
           locations={locations}

@@ -9,6 +9,7 @@ import {
   HiOutlineLockOpen,
   HiOutlineTrash,
 } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/common/button';
 import Chip from '../../../components/common/chip';
@@ -39,6 +40,8 @@ const variants = {
 };
 
 const index = () => {
+  const navigate = useNavigate();
+
   const [currentLat, setCurrentLat] = useState<number>(37.541);
   const [currentLng, setCurrentLng] = useState<number>(127.0695);
   const [selectedChip, setSelectedChip] = useState<string>('');
@@ -172,6 +175,7 @@ const index = () => {
       );
       selectedImages.map((img) => completeData.append('image', img));
       mutate();
+      navigate('/community');
     }
   }, [textData]);
 
