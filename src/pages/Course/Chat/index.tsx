@@ -77,7 +77,11 @@ const Chat = () => {
 
   return (
     <div className="w-full h-full pt-[60px] px-[20px]">
-      <Topbar handleClick={() => navigate(`/course/${courseId}`)}>
+      <Topbar
+        handleClick={() =>
+          navigate(`/course/${courseId}`, { state: location.pathname })
+        }
+      >
         <span className="ml-[14px] text-h4 text-bk-90">
           {courseName} 채팅방
         </span>
