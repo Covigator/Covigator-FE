@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
 import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
@@ -7,6 +8,8 @@ import Map from '../../pages/Home/Map';
 import { locations as initialLocations } from './../../constants/location';
 
 const Index = () => {
+  const navigate = useNavigate();
+
   const [locations, setLocations] = useState(initialLocations);
   const [isExpanded, setIsExpanded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -32,7 +35,7 @@ const Index = () => {
   return (
     <div className="h-full w-full overflow-x-hidden relative">
       <div className="sticky top-0 z-50 bg-white border-none">
-        <Topbar />
+        <Topbar handleClick={() => navigate('/')} />
         <RefreshRecommend />
       </div>
 
