@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { findPassword, verifyCode, changePassword } from '../../../../api/auth';
 import Button from '../../../../components/common/button/Button';
 import Input from '../../../../components/common/input';
 import { Topbar } from '../../../../layouts';
@@ -8,35 +9,51 @@ import { Topbar } from '../../../../layouts';
 const Index = () => {
   const navigate = useNavigate();
 
-  // 인증 완료 여부 상태
-  const [isVerified, setIsVerified] = useState<boolean>(false);
-
-  // 이메일
   const [email, setEmail] = useState<string>('');
-
-  // 인증 번호
   const [verificationCode, setVerificationCode] = useState<string>('');
-
-  // 새로운 비밀번호
   const [newPassword, setNewPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
-  // 인증 요청 핸들러
-  const handleRequestVerification = () => {
-    // TODO: 실제 인증 요청 로직 구현
-    console.log('인증 요청:', email);
+  const handleRequestVerification = async () => {
+    try {
+      await findPassword(email);
+      setError('');
+    } catch (err) {
+      setError((err as Error).message);
+    }
   };
 
-  // 인증 확인 핸들러
-  const handleVerify = () => {
-    // TODO: 실제 인증 확인 로직 구현
-    console.log('인증 확인:', verificationCode);
-    setIsVerified(true);
+  const handleVerify = async () => {
+    if (!verificationCode) {
+      setError('인증번호를 입력해주세요.');
+      return;
+    }
+    try {
+      await verifyCode({ email, code: verificationCode });
+      setIsVerified(true);
+      setError('');
+    } catch (err) {
+      setError((err as Error).message);
+    }
   };
 
-  // 비밀번호 변경 핸들러
-  const handleChangePassword = () => {
-    // TODO: 실제 비밀번호 변경 로직 구현
-    console.log('새 비밀번호:', newPassword);
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      setError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    try {
+      await changePassword({
+        password: newPassword,
+        passwordVerification: confirmPassword,
+      });
+      setError('');
+      navigate('/login');
+    } catch (err) {
+      setError((err as Error).message);
+    }
   };
 
   return (
@@ -47,19 +64,16 @@ const Index = () => {
       <div className="flex flex-col items-center px-4 mt-24">
         <h1 className="text-h1 mb-24">비밀번호 찾기</h1>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full max-w-[280px]">
           <div className="flex gap-x-2 mb-1">
-            <div className="w-[240px]">
-              <Input
-                size="sm"
-                placeholder="이메일을 입력해주세요"
-                type="email"
-                className="w-full"
-                defaultValue={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
+            <Input
+              size="sm"
+              placeholder="이메일을 입력해주세요"
+              type="email"
+              className="w-full"
+              defaultValue={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <Button
               size="sm"
               shape="square"
@@ -71,21 +85,19 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="text-body6 text-bk-70">
+          <div className="text-body6 text-bk-70 mb-3">
             @를 포함한 전체 이메일을 입력해주세요
           </div>
 
-          <div className="flex mt-3 gap-x-2">
-            <div className="w-[240px]">
-              <Input
-                size="sm"
-                placeholder="인증번호를 입력해주세요"
-                type="text"
-                className="w-full"
-                defaultValue={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-            </div>
+          <div className="flex gap-x-2 mb-5">
+            <Input
+              size="sm"
+              placeholder="인증번호를 입력해주세요"
+              type="text"
+              className="w-full"
+              defaultValue={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+            />
             <Button
               size="sm"
               shape="square"
@@ -98,28 +110,38 @@ const Index = () => {
           </div>
 
           {isVerified && (
-            <div className="flex mt-5 gap-x-2">
-              <div className="w-[240px]">
-                <Input
-                  size="sm"
-                  placeholder="새로운 비밀번호를 입력해주세요"
-                  type="password"
-                  className="w-full"
-                  defaultValue={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-              <Button
+            <>
+              <Input
                 size="sm"
-                shape="square"
-                color="sub_300"
-                className="text-btn2"
-                onClick={handleChangePassword}
-              >
-                변경
-              </Button>
-            </div>
+                placeholder="새로운 비밀번호를 입력해주세요"
+                type="password"
+                className="w-full mb-3"
+                defaultValue={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <Input
+                size="sm"
+                placeholder="비밀번호를 다시 입력해주세요"
+                type="password"
+                className="w-full mb-3"
+                defaultValue={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <div className="w-[240px]">
+                <Button
+                  size="sm"
+                  shape="rounded"
+                  color="sub_300"
+                  className="text-btn2 w-full mt-4"
+                  onClick={handleChangePassword}
+                >
+                  변경
+                </Button>
+              </div>
+            </>
           )}
+
+          {error && <div className="text-red-500 mt-2">{error}</div>}
         </div>
       </div>
     </div>
