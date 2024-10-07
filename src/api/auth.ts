@@ -207,3 +207,41 @@ export const verifyCode = async (data: {
     }
   }
 };
+
+export const changePassword = async (data: {
+  password: string;
+  passwordVerification: string;
+}): Promise<void> => {
+  try {
+    // 비밀번호 찾기 요청 보내기
+    const response = await instance.post('/accounts/change-password', { data });
+
+    // 서버에서 200 OK를 반환하면 성공
+    if (response.status === 200) {
+      console.log('비밀번호 변경 요청이 성공적으로 전송되었습니다.');
+    } else {
+      throw new Error('서버에서 예상치 못한 응답을 받았습니다.');
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        // 서버가 2xx 범위를 벗어나는 상태 코드로 응답한 경우
+        throw new Error(
+          `비밀번호 변경 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
+        );
+      } else if (axiosError.request) {
+        // 요청은 보냈지만 응답을 받지 못한 경우
+        throw new Error('비밀번호 변경 요청에 대한 응답이 없습니다.');
+      } else {
+        // 요청 설정 중 오류가 발생한 경우
+        throw new Error(
+          `비밀번호 변경 설정 중 오류 발생: ${axiosError.message}`,
+        );
+      }
+    } else {
+      // Axios 오류가 아닌 경우
+      throw new Error('비밀번호 변경 요청 중 예기치 않은 오류가 발생했습니다');
+    }
+  }
+};
