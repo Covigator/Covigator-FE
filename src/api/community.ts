@@ -1,8 +1,8 @@
+import { ChatLogResponse } from '../types/chatting';
 import {
   CourseListResponse,
   CourseDetailResponse,
   ReviewResponse,
-  ChatLogResponse,
 } from '../types/community';
 import { convertObjectPropertiesSnakeCaseToCamelCase } from '../utils/common';
 import instance from './instance';
