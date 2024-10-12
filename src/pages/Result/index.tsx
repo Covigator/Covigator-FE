@@ -42,7 +42,7 @@ const Index = () => {
       <div className="relative z-20 border-t-0">
         <CoursePreview
           date="9월 30일"
-          place="성수역"
+          place="건대입구역"
           weather="맑을"
           companions="매우 혼잡할"
           locations={locations}
