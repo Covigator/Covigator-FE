@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { HiUser } from 'react-icons/hi2';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,6 @@ import { useAuthStore } from '../../stores/authStore';
 
 import { z } from 'zod';
 
-// Zod 스키마 수정
 const signupSchema = z
   .object({
     image: z.string().optional(),
@@ -21,7 +20,12 @@ const signupSchema = z
       .string()
       .min(1, '닉네임은 필수입니다')
       .max(10, '닉네임은 10자 이하여야 합니다'),
-    password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
+    password: z
+      .string()
+      .regex(
+        /^(?=.*[a-zA-Z가-힣])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&가-힣]{7,15}$/,
+        '비밀번호는 한글/영문, 숫자, 특수문자를 포함하여 7~15자여야 합니다',
+      ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -33,6 +37,8 @@ type SignupFormData = z.infer<typeof signupSchema>;
 
 type FormErrors = {
   [K in keyof SignupFormData]?: string;
+} & {
+  server?: string;
 };
 
 const Signup = () => {
@@ -166,8 +172,33 @@ const Signup = () => {
         console.log('서버 요청 시작');
         await signupMutation.mutateAsync(formDataToSend);
         console.log('서버 요청 성공');
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('회원가입 제출 중 오류 발생:', error);
+        if (error instanceof Error) {
+          setErrors({ ...errors, server: error.message });
+        } else if (
+          typeof error === 'object' &&
+          error !== null &&
+          'response' in error
+        ) {
+          // axios 에러 처리
+          const axiosError = error as {
+            response?: { data?: { message?: string } };
+          };
+          if (axiosError.response?.data?.message) {
+            setErrors({ ...errors, server: axiosError.response.data.message });
+          } else {
+            setErrors({
+              ...errors,
+              server: '회원가입 중 알 수 없는 오류가 발생했습니다.',
+            });
+          }
+        } else {
+          setErrors({
+            ...errors,
+            server: '회원가입 중 알 수 없는 오류가 발생했습니다.',
+          });
+        }
       }
     } else {
       console.log('폼 유효성 검사 실패');
@@ -228,7 +259,7 @@ const Signup = () => {
             maxLength={10}
             onChange={(e) => handleInputChange(e, 'nickname')}
           />
-          {isFormSubmitted && errors.nickname && (
+          {errors.nickname && (
             <p className="text-red-500 text-sm">{errors.nickname}</p>
           )}
 
@@ -237,7 +268,7 @@ const Signup = () => {
             placeholder="이메일을 입력해주세요"
             onChange={(e) => handleInputChange(e, 'email')}
           />
-          {isFormSubmitted && errors.email && (
+          {errors.email && (
             <p className="text-red-500 text-sm">{errors.email}</p>
           )}
 
@@ -248,8 +279,9 @@ const Signup = () => {
             maxLength={15}
             onChange={(e) => handleInputChange(e, 'password')}
           />
-          {isFormSubmitted && errors.password && (
-            <p className="text-red-500 text-sm">{errors.password}</p>
+
+          {errors.password && (
+            <p className="text-red-500 text-sm ">{errors.password}</p>
           )}
 
           <Input
@@ -259,10 +291,19 @@ const Signup = () => {
             maxLength={15}
             onChange={(e) => handleInputChange(e, 'confirmPassword')}
           />
-          {isFormSubmitted && errors.confirmPassword && (
+          {errors.confirmPassword && (
             <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
           )}
+
+          <p className="text-sm text-bk-50">
+            한글/영문, 숫자, 특수문자를 포함 7~15자
+          </p>
         </div>
+
+        {/* 서버 오류 메시지 */}
+        {errors.server && (
+          <p className="text-red-500 text-sm mt-3">{errors.server}</p>
+        )}
 
         {/* 가입하기 버튼 */}
         <div className="mt-7">
