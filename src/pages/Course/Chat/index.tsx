@@ -67,7 +67,7 @@ const Chat = () => {
             const jsonRes: ChatMessageResponse = JSON.parse(res.body);
             const newMsg: ChatMessageResponse = {
               nickname: jsonRes.nickname,
-              time: formatLocalDateTime(jsonRes.time),
+              time: jsonRes.time,
               message: jsonRes.message,
               profileImageUrl: jsonRes.profileImageUrl,
               memberId: jsonRes.memberId,
