@@ -6,6 +6,7 @@ import { CompatClient, Stomp } from '@stomp/stompjs';
 
 import MyMsgItem from '../../../components/chatting/MyMsgItem';
 import OtherMsgItem from '../../../components/chatting/OtherMsgItem';
+import Loading from '../../../components/common/Loading';
 import Input from '../../../components/common/input';
 import { useChatLog } from '../../../hooks/api/useCourse';
 import { Topbar } from '../../../layouts';
@@ -26,6 +27,7 @@ const Chat = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
 
+  const [isConnected, setIsConnected] = useState<boolean>(false);
   const { data } = useChatLog(courseId);
   const [myId, setMyId] = useState<number>();
 
@@ -63,6 +65,7 @@ const Chat = () => {
       { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
       () => {
         if (stompClient.current) {
+          setIsConnected(true);
           stompClient.current.subscribe(`/topic/chat/${courseId}`, (res) => {
             const jsonRes: ChatMessageResponse = JSON.parse(res.body);
             const newMsg: ChatMessageResponse = {
@@ -78,6 +81,7 @@ const Chat = () => {
       },
       (error: unknown) => {
         console.error('웹소켓 연결 실패: ', error);
+        setIsConnected(false);
       },
     );
   };
@@ -106,7 +110,9 @@ const Chat = () => {
           {courseName} 채팅방
         </span>
       </Topbar>
-      {chatData && chatData.length === 0 ? (
+      {!isConnected ? (
+        <Loading />
+      ) : chatData && chatData.length === 0 ? (
         <div className="mt-[265px] flex flex-col justify-center items-center text-body2 text-bk-60">
           <p>{courseName} 코스에 대해서</p>
           {/* <br /> */}
