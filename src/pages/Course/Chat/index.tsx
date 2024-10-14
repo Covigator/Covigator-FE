@@ -67,7 +67,7 @@ const Chat = () => {
             const jsonRes: ChatMessageResponse = JSON.parse(res.body);
             const newMsg: ChatMessageResponse = {
               nickname: jsonRes.nickname,
-              timestamp: formatLocalDateTime(jsonRes.timestamp),
+              time: formatLocalDateTime(jsonRes.time),
               message: jsonRes.message,
               profileImageUrl: jsonRes.profileImageUrl,
               memberId: jsonRes.memberId,
@@ -126,7 +126,7 @@ const Chat = () => {
                   {d.memberId === myId ? (
                     <MyMsgItem
                       text={d.message}
-                      time={formatLocalDateTime(d.timestamp)}
+                      time={formatLocalDateTime(d.time)}
                     />
                   ) : (
                     <OtherMsgItem
@@ -135,7 +135,7 @@ const Chat = () => {
                       senderName={d.nickname}
                       senderProfileImg={d.profileImageUrl || ''}
                       text={d.message}
-                      time={formatLocalDateTime(d.timestamp)}
+                      time={formatLocalDateTime(d.time)}
                     />
                   )}
                 </div>

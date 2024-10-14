@@ -30,7 +30,7 @@ export const convertObjectPropertiesSnakeCaseToCamelCase = (
 };
 
 export const formatLocalDateTime = (d: string) => {
-  if (d == '') return '';
+  if (d == '') d = new Date().toISOString();
   const dateTime = new Date(d);
 
   const text = dateTime.getHours() > 12 ? '오후' : '오전';

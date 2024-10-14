@@ -11,7 +11,7 @@ export interface OtherMsgItemProps extends MsgItemProps {
 
 export type ChatMessageResponse = {
   nickname: string;
-  timestamp: string;
+  time: string;
   message: string;
   profileImageUrl: string;
   memberId: number;
