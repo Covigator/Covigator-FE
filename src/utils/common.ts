@@ -28,3 +28,20 @@ export const convertObjectPropertiesSnakeCaseToCamelCase = (
 
   return convertedObject;
 };
+
+export const formatLocalDateTime = (d: string) => {
+  if (d == '') return '';
+  const dateTime = new Date(d);
+
+  const text = dateTime.getHours() > 12 ? '오후' : '오전';
+  const hour = (
+    '0' +
+    (dateTime.getHours() > 12
+      ? dateTime.getHours() - 12
+      : dateTime.getHours()
+    ).toString()
+  ).slice(-2);
+  const minute = ('0' + dateTime.getMinutes()).slice(-2);
+
+  return text + ' ' + hour + ' : ' + minute;
+};
