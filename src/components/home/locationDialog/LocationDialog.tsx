@@ -18,15 +18,22 @@ const LocationDialog = ({
   onClose,
   onConfirm,
 }: LocationDialogProps) => {
-  const [selectedRadius, setSelectedRadius] = useState<number>(1);
+  const [selectedRadius, setSelectedRadius] = useState<number>(0.5);
+  const [currentLat, setCurrentLat] = useState<number>(lat);
+  const [currentLng, setCurrentLng] = useState<number>(lng);
 
   const handleRadiusSelect = (radius: number) => {
     setSelectedRadius(radius);
   };
 
   const handleConfirm = () => {
-    onConfirm(lat, lng, selectedRadius);
+    onConfirm(currentLat, currentLng, selectedRadius);
     onClose();
+  };
+
+  const handleCenterChanged = (newLat: number, newLng: number) => {
+    setCurrentLat(newLat);
+    setCurrentLng(newLng);
   };
 
   const RadioButton = ({ radius }: { radius: number }) => (
@@ -35,7 +42,7 @@ const LocationDialog = ({
       onClick={() => handleRadiusSelect(radius)}
     >
       <p className="text-body6 text-bk-70 whitespace-nowrap">
-        반경 {Number.isInteger(radius) ? radius + 'km' : radius * 1000 + 'm'}
+        반경 {radius < 1 ? radius * 1000 + 'm' : radius + 'km'}
       </p>
       {selectedRadius === radius ? <RadioBtn_active /> : <RadioBtn_inactive />}
     </div>
@@ -49,7 +56,12 @@ const LocationDialog = ({
         <RadioButton radius={1} />
       </div>
       <div className="w-[241px] h-[224px] flex-shrink-0">
-        <Map lat={lat} lng={lng} radius={selectedRadius} />
+        <Map
+          lat={currentLat}
+          lng={currentLng}
+          radius={selectedRadius}
+          onCenterChanged={handleCenterChanged}
+        />
       </div>
     </div>
   );
@@ -58,7 +70,7 @@ const LocationDialog = ({
     <Dialog
       title="지역을 선택해주세요"
       subtitle={
-        '원하는 반경을 선택 후\n지도에 직접 원하는 범위를 표시해주세요!'
+        '원하는 반경을 선택 후\n지도를 드래그하여 원하는 위치로 이동해주세요!'
       }
       content={content}
       onConfirm={handleConfirm}

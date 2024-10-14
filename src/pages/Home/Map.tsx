@@ -17,6 +17,7 @@ interface MapProps {
   radius?: number;
   locations?: Location[];
   onLocationSelect?: (lat: number, lng: number, isMarker?: boolean) => void;
+  onCenterChanged?: (lat: number, lng: number) => void; // 새로 추가된 prop
 }
 
 // Kakao Maps API의 Circle 인터페이스를 확장
@@ -31,6 +32,7 @@ const Map = ({
   radius,
   locations = [],
   onLocationSelect,
+  onCenterChanged, // 새로 추가된 prop
 }: MapProps) => {
   // 지도를 표시할 div 요소에 대한 ref
   const mapRef = useRef<HTMLDivElement>(null);
@@ -86,9 +88,10 @@ const Map = ({
         // 반경에 따라 zoom level 조정
         let zoomLevel = 3;
         if (radius) {
-          if (radius === 1) zoomLevel = 14;
-          else if (radius === 5) zoomLevel = 12;
-          else if (radius === 10) zoomLevel = 11;
+          if (radius <= 0.5) zoomLevel = 15;
+          else if (radius <= 1) zoomLevel = 14;
+          else if (radius <= 5) zoomLevel = 12;
+          else if (radius <= 10) zoomLevel = 11;
         }
 
         const options = {
@@ -132,6 +135,7 @@ const Map = ({
           newMap.setBounds(bounds);
         }
 
+        // 지도 클릭 이벤트 리스너 추가
         window.kakao.maps.event.addListener(
           newMap,
           'click',
@@ -143,11 +147,24 @@ const Map = ({
             );
           },
         );
+
+        // 중심 변경 이벤트 리스너 추가 (onCenterChanged prop이 제공된 경우에만)
+        if (onCenterChanged) {
+          window.kakao.maps.event.addListener(newMap, 'dragend', () => {
+            const center = newMap.getCenter();
+            if (center) {
+              onCenterChanged(center.getLat(), center.getLng());
+              if (circleRef.current) {
+                circleRef.current.setPosition(center);
+              }
+            }
+          });
+        }
       });
     };
 
     loadKakaoMaps();
-  }, [lat, lng, onLocationSelect, radius]);
+  }, [lat, lng, onLocationSelect, onCenterChanged, radius]);
 
   // 위치 정보가 변경될 때마다 마커(오버레이) 업데이트
   useEffect(() => {
