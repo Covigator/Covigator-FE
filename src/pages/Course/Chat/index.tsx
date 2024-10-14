@@ -1,14 +1,19 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HiArrowUp } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { CompatClient, Stomp } from '@stomp/stompjs';
 
 import MyMsgItem from '../../../components/chatting/MyMsgItem';
 import OtherMsgItem from '../../../components/chatting/OtherMsgItem';
 import Input from '../../../components/common/input';
+import { useChatLog } from '../../../hooks/api/useCourse';
 import { Topbar } from '../../../layouts';
-import { MsgItemType, sendingMsgFrame } from '../../../types/chatting';
+import { ChatMessageResponse } from '../../../types/chatting';
+import { formatLocalDateTime } from '../../../utils/common';
 
 import clsx from 'clsx';
+import SockJS from 'sockjs-client';
 import { v4 as uuid } from 'uuid';
 
 const Chat = () => {
@@ -16,64 +21,79 @@ const Chat = () => {
   const location = useLocation();
   const courseId = location.state.courseId;
   const courseName = location.state.courseName;
-  /* TOFIX: 임의로 설정 */
-  const myId = 1;
+  const stompClient = useRef<CompatClient | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const dummyDate = new Date();
+  const { data } = useChatLog(courseId);
+  const [myId, setMyId] = useState<number>();
 
-  const dummy: MsgItemType[] = [
-    {
-      senderId: 0,
-      senderName: '박재욱',
-      content: '하이하이이거어때',
-      createdAt: dummyDate,
-    },
-    {
-      senderId: 1,
-      senderName: '정서현',
-      content: '하이하이이거어때',
-      createdAt: dummyDate,
-    },
-    {
-      senderId: 2,
-      senderName: '조하상',
-      content: '안녕안녕',
-      createdAt: dummyDate,
-    },
-    {
-      senderId: 2,
-      senderName: '조하상',
-      content: '줄바꿈 기준을 글자수에서 width로 변경했습니다',
-      createdAt: dummyDate,
-    },
-    {
-      senderId: 1,
-      senderName: '정서현',
-      content: '네 알겠습니다 그럼 여기도 줄바꿈하겠죠?',
-      createdAt: dummyDate,
-    },
-    {
-      senderId: 3,
-      senderName: '김경민',
-      content: '와우~',
-      createdAt: dummyDate,
-    },
-  ];
+  const [chatData, setChatData] = useState<ChatMessageResponse[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setChatData(data.chat);
+      setMyId(data.myId);
+    }
+  }, [data]);
 
   const handleSendMsg = () => {
-    const newMsg: sendingMsgFrame = {
-      senderId: myId,
-      content: inputValue,
-    };
-    console.log(newMsg);
+    if (stompClient.current) {
+      stompClient.current.send(
+        `/app/chat/${courseId}`,
+        {},
+        JSON.stringify({
+          message: inputValue,
+        }),
+      );
+    }
     if (inputRef.current) {
       inputRef.current.value = '';
       inputRef.current.focus();
     }
   };
+
+  // 웹소켓 연결 설정
+  const connect = () => {
+    const socket = new SockJS(`${import.meta.env.VITE_API_BASE_URL}/ws-chat`);
+    stompClient.current = Stomp.over(socket);
+
+    stompClient.current.connect(
+      { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
+      () => {
+        if (stompClient.current) {
+          stompClient.current.subscribe(`/topic/chat/${courseId}`, (res) => {
+            const jsonRes: ChatMessageResponse = JSON.parse(res.body);
+            const newMsg: ChatMessageResponse = {
+              nickname: jsonRes.nickname,
+              timestamp: formatLocalDateTime(jsonRes.timestamp),
+              message: jsonRes.message,
+              profileImageUrl: jsonRes.profileImageUrl,
+              memberId: jsonRes.memberId,
+            };
+            setChatData((prev) => [...prev, newMsg]);
+          });
+        }
+      },
+      (error: unknown) => {
+        console.error('웹소켓 연결 실패: ', error);
+      },
+    );
+  };
+
+  // 웹소켓 연결 해제
+  const disconnect = () => {
+    if (stompClient.current) {
+      stompClient.current.disconnect();
+    }
+  };
+
+  // 채팅방 아이디 변경 시마다 연결 설정
+  useEffect(() => {
+    connect();
+    return () => disconnect();
+  }, []);
 
   return (
     <div className="w-full h-full pt-[60px] px-[20px]">
@@ -86,39 +106,41 @@ const Chat = () => {
           {courseName} 채팅방
         </span>
       </Topbar>
-      {dummy.length === 0 ? (
-        <div className="mt-[265px] flex justify-center text-body2 text-bk-60">
-          {courseName} 코스에 대해서
-          <br />
-          다른 유저들과 채팅해보세요
+      {chatData && chatData.length === 0 ? (
+        <div className="mt-[265px] flex flex-col justify-center items-center text-body2 text-bk-60">
+          <p>{courseName} 코스에 대해서</p>
+          {/* <br /> */}
+          <p>다른 유저들과 채팅해보세요</p>
         </div>
       ) : (
         <div className="flex flex-col py-[11px]">
-          {dummy.map((d, i) => {
-            const isSameAsPrev = i > 0 && dummy[i - 1].senderId === d.senderId;
-            return (
-              <div
-                key={uuid()}
-                className={clsx(isSameAsPrev ? 'mt-[7px]' : 'mt-[15px]')}
-              >
-                {d.senderId === myId ? (
-                  <MyMsgItem
-                    text={d.content}
-                    time={d.createdAt.toLocaleTimeString()}
-                  />
-                ) : (
-                  <OtherMsgItem
-                    key={uuid()}
-                    isSameAsPrev={isSameAsPrev}
-                    senderName={d.senderName}
-                    senderProfileImg={d.senderProfileImg || ''}
-                    text={d.content}
-                    time={d.createdAt.toLocaleTimeString()}
-                  />
-                )}
-              </div>
-            );
-          })}
+          {chatData &&
+            chatData.map((d, i) => {
+              const isSameAsPrev =
+                i > 0 && chatData[i - 1].memberId === d.memberId;
+              return (
+                <div
+                  key={uuid()}
+                  className={clsx(isSameAsPrev ? 'mt-[7px]' : 'mt-[15px]')}
+                >
+                  {d.memberId === myId ? (
+                    <MyMsgItem
+                      text={d.message}
+                      time={formatLocalDateTime(d.timestamp)}
+                    />
+                  ) : (
+                    <OtherMsgItem
+                      key={uuid()}
+                      isSameAsPrev={isSameAsPrev}
+                      senderName={d.nickname}
+                      senderProfileImg={d.profileImageUrl || ''}
+                      text={d.message}
+                      time={formatLocalDateTime(d.timestamp)}
+                    />
+                  )}
+                </div>
+              );
+            })}
         </div>
       )}
       <div className="max-w-full fixed left-[10px] right-[10px] bottom-[11px] flex flex-row gap-[6px] items-center">
