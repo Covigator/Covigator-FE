@@ -93,48 +93,25 @@ export const kakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
 };
 
 export const signupUser = async (formData: FormData): Promise<string> => {
-  try {
-    const response = await instance.post<signupUserResponse>(
-      '/accounts/sign-up',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+  const response = await instance.post<signupUserResponse>(
+    '/accounts/sign-up',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
-    );
+    },
+  );
 
-    const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response.data as unknown as AxiosResponse<string, unknown>,
-    ) as signupUserResponse;
+  const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
+    response.data as unknown as AxiosResponse<string, unknown>,
+  ) as signupUserResponse;
 
-    // 응답 구조 로깅
-    console.log('서버 응답:', response.data);
-
-    // 토큰이 응답에 있는지 확인하고 반환
-    if (convertedResponse.accessToken) {
-      localStorage.setItem('accessToken', convertedResponse.accessToken);
-      return convertedResponse.accessToken;
-    } else {
-      throw new Error('회원가입 실패: 응답에 토큰이 없습니다');
-    }
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response) {
-        console.error('서버 오류 응답:', axiosError.response.data);
-        throw new Error(
-          `회원가입 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
-        );
-      } else if (axiosError.request) {
-        throw new Error('회원가입 실패: 서버로부터 응답을 받지 못했습니다');
-      } else {
-        throw new Error(`회원가입 실패: ${axiosError.message}`);
-      }
-    } else {
-      console.error('예기치 않은 오류:', error);
-      throw new Error('회원가입 중 예기치 않은 오류가 발생했습니다');
-    }
+  if (convertedResponse.accessToken) {
+    localStorage.setItem('accessToken', convertedResponse.accessToken);
+    return convertedResponse.accessToken;
+  } else {
+    throw new Error('회원가입 실패: 응답에 토큰이 없습니다');
   }
 };
 

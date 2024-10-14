@@ -172,27 +172,10 @@ const Signup = () => {
         console.log('서버 요청 시작');
         await signupMutation.mutateAsync(formDataToSend);
         console.log('서버 요청 성공');
-      } catch (error: unknown) {
+      } catch (error) {
         console.error('회원가입 제출 중 오류 발생:', error);
         if (error instanceof Error) {
           setErrors({ ...errors, server: error.message });
-        } else if (
-          typeof error === 'object' &&
-          error !== null &&
-          'response' in error
-        ) {
-          // axios 에러 처리
-          const axiosError = error as {
-            response?: { data?: { message?: string } };
-          };
-          if (axiosError.response?.data?.message) {
-            setErrors({ ...errors, server: axiosError.response.data.message });
-          } else {
-            setErrors({
-              ...errors,
-              server: '회원가입 중 알 수 없는 오류가 발생했습니다.',
-            });
-          }
         } else {
           setErrors({
             ...errors,
@@ -204,6 +187,7 @@ const Signup = () => {
       console.log('폼 유효성 검사 실패');
     }
   };
+
   return (
     <div className="w-full h-full overflow-x-hidden">
       <div className="fixed top-0 left-0 right-0 z-50">
