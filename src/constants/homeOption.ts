@@ -29,12 +29,13 @@ export const locationOptions: LocationItemType[] = [
   { id: 25, text: '강동구', lat: 37.5301, lng: 127.1237 },
 ];
 export const chipOptions = [
-  '식당',
-  '카페',
-  '액티비티',
-  '문화/여가',
+  '식당/카페',
+  '쇼핑',
+  '레저',
+  '테마시설',
+  '문화시설',
+  '역사/유적',
   '자연',
-  '기타',
 ];
 
 export const withOptions = [
