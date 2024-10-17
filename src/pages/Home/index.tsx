@@ -130,11 +130,23 @@ const Home = () => {
             </div>
           </div>
 
-          <p className="text-body3 mt-[31px] mb-3">
+          <p className="text-body3 text-bk-70 mt-[31px] mb-[13px]">
             어떤 곳을 방문하고 싶나요?
           </p>
-          <div className="grid grid-cols-3 gap-x-[27px] gap-y-[11px]">
-            {chipOptions.map((option) => (
+          <div className="grid grid-cols-4 gap-x-[7px] gap-y-[11px] mb-[11px] ml-[-15px]">
+            {chipOptions.slice(0, 4).map((option) => (
+              <div key={option} onClick={() => handlePlaceSelect(option)}>
+                <Chip
+                  size="md"
+                  state={selectedPlaces[option] ? 'active' : 'inactive'}
+                >
+                  {option}
+                </Chip>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-3 gap-x-[7px] gap-y-[11px] ml-[25px]">
+            {chipOptions.slice(4).map((option) => (
               <div key={option} onClick={() => handlePlaceSelect(option)}>
                 <Chip
                   size="md"
