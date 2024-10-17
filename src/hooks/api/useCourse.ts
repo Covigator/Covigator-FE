@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import {
   deleteCourseLikeApi,
   getAllCourseApi,
+  getChatLogApi,
   getCourseDetailApi,
   getCourseReviewApi,
   postCourseApi,
@@ -76,4 +77,12 @@ export const useDeleteCourseLike = (courseId: number) => {
     onError: () => {},
   });
   return { mutate, isLoading };
+};
+
+export const useChatLog = (courseId: number) => {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['CHAT_LOG', courseId],
+    queryFn: () => getChatLogApi(courseId),
+  });
+  return { data, isLoading, error, refetch };
 };
