@@ -33,7 +33,7 @@ export const formatLocalDateTime = (d: string) => {
   if (d == '') d = new Date().toISOString();
   const dateTime = new Date(d);
 
-  const text = dateTime.getHours() > 12 ? '오후' : '오전';
+  const text = dateTime.getHours() >= 12 ? '오후' : '오전';
   const hour = (
     '0' +
     (dateTime.getHours() > 12
