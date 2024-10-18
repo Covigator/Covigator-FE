@@ -9,15 +9,15 @@ export interface OtherMsgItemProps extends MsgItemProps {
   isSameAsPrev: boolean;
 }
 
-export type MsgItemType = {
-  senderId: number;
-  senderName: string;
-  senderProfileImg?: string;
-  content: string;
-  createdAt: Date;
+export type ChatMessageResponse = {
+  nickname: string;
+  time: string;
+  message: string;
+  profileImageUrl: string;
+  memberId: number;
 };
 
-export type sendingMsgFrame = {
-  senderId: number;
-  content: string;
+export type ChatLogResponse = {
+  myId: number;
+  chat: ChatMessageResponse[];
 };
