@@ -16,7 +16,7 @@ import Chip from '../../../components/common/chip';
 import Input from '../../../components/common/input';
 import Textarea from '../../../components/common/textarea';
 import PlaceItem from '../../../components/community/PlaceItem';
-import { PlaceType } from '../../../constants/object';
+import { chipOptions } from '../../../constants/homeOption';
 import { usePostCourse } from '../../../hooks/api/useCourse';
 import { Topbar } from '../../../layouts';
 import {
@@ -25,6 +25,7 @@ import {
 } from '../../../types/community';
 import Map from '../../Home/Map';
 
+import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
 
 const variants = {
@@ -34,8 +35,7 @@ const variants = {
   label: 'w-full text-body3 text-bk-90 mb-[10px]',
   imagePreview:
     'w-full max-w-[280px] h-[220px] rounded-[10px] flex justify-center items-center border border-bk-50 mb-[11px]',
-  chipContainer:
-    'w-full grid mb-[13px] grid-cols-3 justify-items-center gap-y-[11px]',
+  chipContainer: 'grid grid-cols-4 !gap-x-[7px] grid mb-[13px] gap-y-[11px]',
   btnContainer: 'flex flex-col items-center',
 };
 
@@ -275,23 +275,35 @@ const index = () => {
           <Map
             lat={currentLat}
             lng={currentLng}
-            locations={[]}
+            locations={[
+              { name: '', lat: currentLat, lng: currentLng, isSelected: true },
+            ]}
             onLocationSelect={handleLocationSelect}
           />
         </div>
         <div className={variants.chipContainer}>
-          {PlaceType.map((item) => {
-            return (
-              <Chip
-                key={uuid()}
-                size={'md'}
-                state={selectedChip === item ? 'active' : 'inactive'}
-                onClick={() => handleChips(item)}
-              >
-                {item}
-              </Chip>
-            );
-          })}
+          {chipOptions.slice(0, 4).map((item) => (
+            <Chip
+              key={uuid()}
+              size={'md'}
+              state={selectedChip === item ? 'active' : 'inactive'}
+              onClick={() => handleChips(item)}
+            >
+              {item}
+            </Chip>
+          ))}
+        </div>
+        <div className={clsx(variants.chipContainer, '!grid-cols-3')}>
+          {chipOptions.slice(4).map((item) => (
+            <Chip
+              key={uuid()}
+              size={'md'}
+              state={selectedChip === item ? 'active' : 'inactive'}
+              onClick={() => handleChips(item)}
+            >
+              {item}
+            </Chip>
+          ))}
         </div>
         <section className={variants.section}>
           <Input
