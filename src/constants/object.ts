@@ -8,15 +8,6 @@ import {
 import { DropdownItemType } from '../components/common/dropdown';
 import { MypageMenuItemType } from '../types/mypage';
 
-export const PlaceType: string[] = [
-  '식당',
-  '카페',
-  '액티비티',
-  '문화/여가',
-  '자연',
-  '기타',
-];
-
 export const sortDropdownItems: DropdownItemType[] = [
   {
     id: 0,
