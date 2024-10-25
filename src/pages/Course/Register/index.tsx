@@ -275,7 +275,9 @@ const index = () => {
           <Map
             lat={currentLat}
             lng={currentLng}
-            locations={[]}
+            locations={[
+              { name: '', lat: currentLat, lng: currentLng, isSelected: true },
+            ]}
             onLocationSelect={handleLocationSelect}
           />
         </div>
