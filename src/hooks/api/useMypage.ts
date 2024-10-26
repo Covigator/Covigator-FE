@@ -1,6 +1,11 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
-import { getLikeCourseApi, getMyCourseApi } from '../../api/mypage';
+import {
+  getLikeCourseApi,
+  getMyCourseApi,
+  patchMemberInfo,
+} from '../../api/mypage';
+import { MypageModifyMemberInfo } from '../../types/mypage';
 
 export const useMyCourse = () => {
   const { data, isLoading, error, refetch } = useQuery({
@@ -16,4 +21,14 @@ export const useLikeCourse = () => {
     queryFn: () => getLikeCourseApi(),
   });
   return { data, isLoading, error, refetch };
+};
+
+export const useMemberInfo = (memberInfo: MypageModifyMemberInfo) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['MEMBER_INFO'],
+    mutationFn: () => patchMemberInfo(memberInfo),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
 };
