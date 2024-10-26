@@ -51,6 +51,7 @@ declare namespace kakao {
       getLevel(): number;
       setBounds(bounds: LatLngBounds): void;
       removeOverlayMapTypeId(mapTypeId: number): void;
+      getCenter(): LatLng;
     }
     export class Marker {
       constructor(options: MarkerOptions);

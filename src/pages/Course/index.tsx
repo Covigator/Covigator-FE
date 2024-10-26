@@ -58,6 +58,11 @@ const index = () => {
     }[]
   >([]);
 
+  const [initialLocation, setInitialLocation] = useState<{
+    lat: number;
+    lng: number;
+  }>();
+
   const handleLike = () => {
     if (isLike) {
       setLikeCount((prev) => prev - 1);
@@ -81,13 +86,16 @@ const index = () => {
         isSelected: true,
         lat: parseFloat(place.latitude),
         lng: parseFloat(place.longitude),
-        // lat: 37.541,
-        // lng: 127.0695,
         image: place.image_url,
         description: place.place_description,
       }));
 
       setLocations(newLocations); // 변환한 데이터를 locations에 설정
+
+      setInitialLocation({
+        lat: newLocations[0].lat,
+        lng: newLocations[0].lng,
+      });
     }
   }, [data, reviewData]);
 
@@ -136,7 +144,11 @@ const index = () => {
       </header>
       <p className="mt-2 text-bk-80 text-body3">{resData?.courseDescription}</p>
       <div className={variants.map}>
-        <Map lat={37.541} lng={127.0695} locations={locations} />
+        <Map
+          lat={initialLocation ? initialLocation.lat : 0}
+          lng={initialLocation ? initialLocation.lng : 0}
+          locations={locations}
+        />
       </div>
       <section className="mt-[25px]">
         <p className={clsx('mb-[7px]', variants.label)}>코스 장소</p>
