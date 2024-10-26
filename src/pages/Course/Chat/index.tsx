@@ -100,56 +100,58 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className="w-full h-full pt-[60px] px-[20px]">
-      <Topbar
-        handleClick={() =>
-          navigate(`/course/${courseId}`, { state: location.pathname })
-        }
-      >
-        <span className="ml-[14px] text-h4 text-bk-90">
-          {courseName} 채팅방
-        </span>
-      </Topbar>
-      {!isConnected ? (
-        <Loading />
-      ) : chatData && chatData.length === 0 ? (
-        <div className="mt-[265px] flex flex-col justify-center items-center text-body2 text-bk-60">
-          <p>{courseName} 코스에 대해서</p>
-          {/* <br /> */}
-          <p>다른 유저들과 채팅해보세요</p>
-        </div>
-      ) : (
-        <div className="flex flex-col py-[11px]">
-          {chatData &&
-            chatData.map((d, i) => {
-              const isSameAsPrev =
-                i > 0 && chatData[i - 1].memberId === d.memberId;
-              return (
-                <div
-                  key={uuid()}
-                  className={clsx(isSameAsPrev ? 'mt-[7px]' : 'mt-[15px]')}
-                >
-                  {d.memberId === myId ? (
-                    <MyMsgItem
-                      text={d.message}
-                      time={formatLocalDateTime(d.time)}
-                    />
-                  ) : (
-                    <OtherMsgItem
-                      key={uuid()}
-                      isSameAsPrev={isSameAsPrev}
-                      senderName={d.nickname}
-                      senderProfileImg={d.profileImageUrl || ''}
-                      text={d.message}
-                      time={formatLocalDateTime(d.time)}
-                    />
-                  )}
-                </div>
-              );
-            })}
-        </div>
-      )}
-      <div className="max-w-full fixed left-[10px] right-[10px] bottom-[11px] flex flex-row gap-[6px] items-center">
+    <>
+      <div className="w-full h-full pt-[60px] px-[20px] pb-16">
+        <Topbar
+          handleClick={() =>
+            navigate(`/course/${courseId}`, { state: location.pathname })
+          }
+        >
+          <span className="ml-[14px] text-h4 text-bk-90">
+            {courseName} 채팅방
+          </span>
+        </Topbar>
+        {!isConnected ? (
+          <Loading />
+        ) : chatData && chatData.length === 0 ? (
+          <div className="mt-[265px] flex flex-col justify-center items-center text-body2 text-bk-60">
+            <p>{courseName} 코스에 대해서</p>
+            {/* <br /> */}
+            <p>다른 유저들과 채팅해보세요</p>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {chatData &&
+              chatData.map((d, i) => {
+                const isSameAsPrev =
+                  i > 0 && chatData[i - 1].memberId === d.memberId;
+                return (
+                  <div
+                    key={uuid()}
+                    className={clsx(isSameAsPrev ? 'mt-[7px]' : 'mt-[15px]')}
+                  >
+                    {d.memberId === myId ? (
+                      <MyMsgItem
+                        text={d.message}
+                        time={formatLocalDateTime(d.time)}
+                      />
+                    ) : (
+                      <OtherMsgItem
+                        key={uuid()}
+                        isSameAsPrev={isSameAsPrev}
+                        senderName={d.nickname}
+                        senderProfileImg={d.profileImageUrl || ''}
+                        text={d.message}
+                        time={formatLocalDateTime(d.time)}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </div>
+      <div className="bg-wh max-w-full fixed right-0 left-0 bottom-0 pl-[10px] pr-[10px] pb-[11px] flex flex-row gap-[6px] items-center">
         <Input
           ref={inputRef}
           size={'xl'}
@@ -164,7 +166,7 @@ const Chat = () => {
           onClick={handleSendMsg}
         />
       </div>
-    </div>
+    </>
   );
 };
 
