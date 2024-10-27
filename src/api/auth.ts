@@ -27,6 +27,9 @@ export const loginUser = async (data: {
 
     // 토큰이 응답에 있으면 반환
     if (convertedResponse.accessToken) {
+      localStorage.setItem('nickname', convertedResponse.nickname);
+      localStorage.setItem('email', convertedResponse.email);
+      localStorage.setItem('img', convertedResponse.image_url);
       localStorage.setItem('accessToken', convertedResponse.accessToken);
       return convertedResponse.accessToken;
     } else {

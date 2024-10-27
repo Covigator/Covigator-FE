@@ -11,7 +11,10 @@ const Layout = () => {
     location.pathname.includes('chat') ||
     location.pathname.includes('/course/register') ||
     location.pathname.includes('review') ||
-    location.pathname.includes('/mypage/info/modify');
+    location.pathname.includes('/mypage/info/modify') ||
+    location.pathname.includes('/login') ||
+    location.pathname.includes('/find') ||
+    location.pathname.includes('/signup');
   // const topbarNeeded =
 
   return (

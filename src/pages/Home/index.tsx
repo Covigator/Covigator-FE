@@ -89,7 +89,9 @@ const Home = () => {
     <div className="h-full w-full overflow-x-hidden">
       <div className="flex flex-col items-center mt-[55px]">
         <div className="flex flex-col items-start">
-          <h1 className="text-h1 mb-[2px]">박재욱님</h1>
+          <h1 className="text-h1 mb-[2px]">
+            {localStorage.getItem('nickname')}님
+          </h1>
           <h1 className="text-h1 mb-[6px]">코스를 추천해드릴게요!</h1>
           <p className="text-body3 text-bk-70 mb-[41px]">
             추천받고 싶은 코스에 대한 정보를 입력해주세요
