@@ -25,13 +25,13 @@ export const useLikeCourse = () => {
 };
 
 export const useMemberInfo = (memberInfo: MypageModifyMemberInfo) => {
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading, isSuccess } = useMutation({
     mutationKey: ['MEMBER_INFO'],
     mutationFn: () => patchMemberInfoApi(memberInfo),
     onSuccess: () => {},
     onError: () => {},
   });
-  return { mutate, isLoading };
+  return { mutate, isLoading, isSuccess };
 };
 
 export const useDuplicateCheck = (nickname: string) => {

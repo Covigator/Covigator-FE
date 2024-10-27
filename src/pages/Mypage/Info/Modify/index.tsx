@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../../../components/common/button';
+import Dialog from '../../../../components/common/dialog';
 import Input from '../../../../components/common/input';
+import { ModalStateContext } from '../../../../context/ModalProvider';
+import {
+  useDuplicateCheck,
+  useMemberInfo,
+} from '../../../../hooks/api/useMypage';
+import useModal from '../../../../hooks/useModal';
 import { Topbar } from '../../../../layouts';
 
 const Modify = () => {
@@ -11,7 +18,6 @@ const Modify = () => {
   const location = useLocation();
   const userImg = location.state.userImg;
   const userName = location.state.userName;
-  const userPassword = location.state.userPassword;
 
   const [profileImg, setProfileImg] = useState<string>(userImg);
 
@@ -20,7 +26,33 @@ const Modify = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const passwordConfirmInputRef = useRef<HTMLInputElement>(null);
 
+  const [name, setName] = useState<string>(userName);
+  const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+
   const [isModifiable, setIsModifiable] = useState<boolean>(false);
+  const { openModal } = useModal();
+  const modalState = useContext(ModalStateContext);
+
+  const { mutate: duplicateMutate } = useDuplicateCheck(name);
+
+  const { mutate, isSuccess } = useMemberInfo({
+    nickname: name,
+    password: password,
+    password_verification: passwordConfirm,
+  });
+
+  const handleDuplicateCheck = () => {
+    if (name.length < 1 || name.length > 10) {
+      openModal({
+        type: 'Dialog',
+        props: {
+          title: '1자 이상 10자 이하로 입력해주세요',
+        },
+      });
+    }
+    duplicateMutate();
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,20 +72,24 @@ const Modify = () => {
       passwordInputRef.current &&
       passwordConfirmInputRef.current
     ) {
+      setName(nameInputRef.current.value);
+      setPassword(passwordInputRef.current.value);
+      setPasswordConfirm(passwordConfirmInputRef.current.value);
+
+      setIsModifiable(false);
+
       if (nameInputRef.current.value.length <= 0) {
         console.log('이름을 입력해주세요');
-        setIsModifiable(false);
+      } else if (nameInputRef.current.value.length > 10) {
+        console.log('이름은 10자 이하여야 합니다');
       } else if (passwordInputRef.current.value.length <= 0) {
         console.log('비밀번호를 입력해주세요');
-        setIsModifiable(false);
       } else if (passwordConfirmInputRef.current.value.length <= 0) {
         console.log('비밀번호 확인을 입력해주세요');
-        setIsModifiable(false);
       } else if (
         passwordInputRef.current.value !== passwordConfirmInputRef.current.value
       ) {
         console.log('비밀번호가 같은지 다시 확인해주세요');
-        setIsModifiable(false);
       } else {
         setIsModifiable(true);
       }
@@ -62,24 +98,24 @@ const Modify = () => {
 
   const handleModify = () => {
     if (isModifiable && imgInputRef.current) {
-      console.log('수정 완료');
+      mutate();
+      if (isSuccess) {
+        navigate('/mypage');
+      }
     }
   };
 
-  useEffect(() => {
-    if (
-      nameInputRef.current &&
-      passwordInputRef.current &&
-      passwordConfirmInputRef.current
-    ) {
-      nameInputRef.current.focus();
-      passwordInputRef.current.focus();
-      passwordConfirmInputRef.current.focus();
-    }
-  }, []);
-
   return (
     <div className="w-full px-10 pt-[105px] flex flex-col items-center">
+      {modalState?.type === 'Dialog' && (
+        <Dialog
+          title={modalState.props.title}
+          subtitle={modalState.props.subtitle}
+          content={modalState.props.content}
+          onConfirm={modalState.props.onConfirm}
+          onCancel={modalState.props.onCancel}
+        />
+      )}
       {/* TODO: 뒤로가기 클릭 시 현재까지의 정보 저장되지 않는다는 모달창 추가 필요 */}
       <Topbar handleClick={() => navigate(`/mypage/info/${userId}`)} />
       <form>
@@ -111,6 +147,7 @@ const Modify = () => {
             shape={'square'}
             color={'sub_300'}
             className="absolute top-1/4 right-[15px]"
+            onClick={handleDuplicateCheck}
           >
             중복확인
           </Button>
@@ -119,8 +156,7 @@ const Modify = () => {
           ref={passwordInputRef}
           size={'lg'}
           type="password"
-          placeholder={'비밀번호를 입력해주세요'}
-          defaultValue={userPassword}
+          placeholder={'변경할 비밀번호를 입력해주세요'}
           maxLength={15}
           onChange={setBtnActive}
         />
@@ -129,7 +165,6 @@ const Modify = () => {
           size={'lg'}
           type="password"
           placeholder={'비밀번호 확인을 입력해주세요'}
-          defaultValue={userPassword}
           maxLength={15}
           onChange={setBtnActive}
         />
