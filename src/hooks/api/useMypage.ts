@@ -4,6 +4,7 @@ import {
   getLikeCourseApi,
   getMyCourseApi,
   patchMemberInfoApi,
+  postDuplicateNameApi,
 } from '../../api/mypage';
 import { MypageModifyMemberInfo } from '../../types/mypage';
 
@@ -27,6 +28,16 @@ export const useMemberInfo = (memberInfo: MypageModifyMemberInfo) => {
   const { mutate, isLoading } = useMutation({
     mutationKey: ['MEMBER_INFO'],
     mutationFn: () => patchMemberInfoApi(memberInfo),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading };
+};
+
+export const useDuplicateCheck = (nickname: string) => {
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ['DUPLICATE_CHECK'],
+    mutationFn: () => postDuplicateNameApi(nickname),
     onSuccess: () => {},
     onError: () => {},
   });
