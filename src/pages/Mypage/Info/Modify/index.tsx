@@ -14,19 +14,17 @@ import { Topbar } from '../../../../layouts';
 
 const Modify = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
-  const location = useLocation();
-  const userImg = location.state.userImg;
-  const userName = location.state.userName;
 
-  const [profileImg, setProfileImg] = useState<string>(userImg);
+  const [profileImg, setProfileImg] = useState<string>('');
 
   const imgInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const passwordConfirmInputRef = useRef<HTMLInputElement>(null);
 
-  const [name, setName] = useState<string>(userName);
+  const [name, setName] = useState<string>(
+    localStorage.getItem('nickname') || '',
+  );
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
 
@@ -117,7 +115,7 @@ const Modify = () => {
         />
       )}
       {/* TODO: 뒤로가기 클릭 시 현재까지의 정보 저장되지 않는다는 모달창 추가 필요 */}
-      <Topbar handleClick={() => navigate(`/mypage/info/${userId}`)} />
+      <Topbar handleClick={() => navigate('/mypage/info')} />
       <form>
         <input
           ref={imgInputRef}
@@ -139,7 +137,7 @@ const Modify = () => {
             ref={nameInputRef}
             size={'lg'}
             placeholder={'이름을 입력해주세요'}
-            defaultValue={userName}
+            defaultValue={localStorage.getItem('nickname') || ''}
             onChange={setBtnActive}
           />
           <Button

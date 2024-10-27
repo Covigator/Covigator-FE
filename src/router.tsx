@@ -142,7 +142,7 @@ const Router = () => {
             }
           />
           <Route
-            path="info/:userId"
+            path="info"
             element={
               <PrivateRoute>
                 <Info />
@@ -150,7 +150,7 @@ const Router = () => {
             }
           />
           <Route
-            path="info/modify/:userId"
+            path="info/modify"
             element={
               <PrivateRoute>
                 <Modify />
@@ -158,7 +158,7 @@ const Router = () => {
             }
           />
           <Route
-            path="like/:userId"
+            path="like"
             element={
               <PrivateRoute>
                 <Like />
@@ -166,7 +166,7 @@ const Router = () => {
             }
           />
           <Route
-            path="mycourse/:userId"
+            path="mycourse"
             element={
               <PrivateRoute>
                 <Mycourse />
