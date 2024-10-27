@@ -76,7 +76,7 @@ export const getLikeCourseApi = async (): Promise<CourseListResponse> => {
 };
 
 /** PATCH: 회원 정보 수정 */
-export const patchMemberInfo = async (
+export const patchMemberInfoApi = async (
   memberInfo: MypageModifyMemberInfo,
 ): Promise<string> => {
   try {

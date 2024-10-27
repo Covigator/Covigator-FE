@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import {
   getLikeCourseApi,
   getMyCourseApi,
-  patchMemberInfo,
+  patchMemberInfoApi,
 } from '../../api/mypage';
 import { MypageModifyMemberInfo } from '../../types/mypage';
 
@@ -26,7 +26,7 @@ export const useLikeCourse = () => {
 export const useMemberInfo = (memberInfo: MypageModifyMemberInfo) => {
   const { mutate, isLoading } = useMutation({
     mutationKey: ['MEMBER_INFO'],
-    mutationFn: () => patchMemberInfo(memberInfo),
+    mutationFn: () => patchMemberInfoApi(memberInfo),
     onSuccess: () => {},
     onError: () => {},
   });
