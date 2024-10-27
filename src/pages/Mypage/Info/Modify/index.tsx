@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useContext, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../../components/common/button';
 import Dialog from '../../../../components/common/dialog';
