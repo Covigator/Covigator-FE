@@ -14,45 +14,32 @@ const variants = {
 
 const Info = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
-
-  /* TODO: userId로 API 호출해서 받은 데이터 */
-  const dummy = {
-    userImg: '',
-    userName: '박재욱',
-    userEmail: 'asdf@naver.com',
-    userPassword: 'asdf1234',
-  };
 
   return (
     <div className={variants.container}>
       <Topbar handleClick={() => navigate('/mypage')} />
       <img
-        src={dummy.userImg}
+        src={localStorage.getItem('img') || ''}
         alt="프로필 사진"
         className="w-[100px] h-[100px] rounded-full bg-bk-40 mb-[41px]"
       />
       <div className={clsx(variants.contentContainer, 'mb-3')}>
         <span className={variants.label}>닉네임</span>
-        <span className={variants.content}>{dummy.userName}</span>
+        <span className={variants.content}>
+          {localStorage.getItem('nickname')}
+        </span>
       </div>
       <div className={clsx(variants.contentContainer, 'mb-9')}>
         <span className={variants.label}>이메일</span>
-        <span className={variants.content}>{dummy.userEmail}</span>
+        <span className={variants.content}>
+          {localStorage.getItem('email')}
+        </span>
       </div>
       <Button
         size={'lg'}
         shape={'rounded'}
         color={'default'}
-        onClick={() =>
-          navigate(`/mypage/info/modify/${userId}`, {
-            state: {
-              userImg: dummy.userImg,
-              userName: dummy.userName,
-              userPassword: dummy.userPassword,
-            },
-          })
-        }
+        onClick={() => navigate('/mypage/info/modify')}
       >
         내 정보 수정
       </Button>

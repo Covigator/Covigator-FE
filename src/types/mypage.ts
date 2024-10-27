@@ -8,3 +8,9 @@ export type MypageDataType = {
   name: string;
   email: string;
 };
+
+export type MypageModifyMemberInfo = {
+  nickname: string;
+  password: string;
+  password_verification: string;
+};

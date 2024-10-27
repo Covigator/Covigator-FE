@@ -16,6 +16,9 @@ const signupSchema = z
   .object({
     image: z.string().optional(),
     email: z.string().email('유효한 이메일 주소를 입력해주세요'),
+    phoneNumber: z
+      .string()
+      .regex(/^[0-9]{11}$/, '핸드폰 번호는 숫자 11자리여야 합니다'),
     nickname: z
       .string()
       .min(1, '닉네임은 필수입니다')
@@ -45,6 +48,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
+    phoneNumber: '',
     nickname: '',
     password: '',
     confirmPassword: '',
@@ -140,6 +144,7 @@ const Signup = () => {
         const postSignUpRequest = {
           image_url: formData.image ? formData.image.split(',')[1] : '',
           email: formData.email,
+          phoneNumber: formData.phoneNumber,
           nickname: formData.nickname,
           password: formData.password,
         };
@@ -246,6 +251,21 @@ const Signup = () => {
           {errors.nickname && (
             <p className="text-red-500 text-sm">{errors.nickname}</p>
           )}
+
+          <Input
+            size="md"
+            placeholder="휴대폰 번호를 입력해주세요"
+            maxLength={11}
+            type="text"
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, '');
+              const syntheticEvent = {
+                ...e,
+                target: { ...e.target, value },
+              };
+              handleInputChange(syntheticEvent, 'phoneNumber');
+            }}
+          />
 
           <Input
             size="md"

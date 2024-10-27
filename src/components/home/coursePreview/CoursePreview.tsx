@@ -51,7 +51,9 @@ const CoursePreview = ({
       }`}
     >
       <div className="flex justify-between">
-        <h2 className="text-h2 text-bk-90 mb-4">박재욱님, 이 코스는 어때요?</h2>
+        <h2 className="text-h2 text-bk-90 mb-4">
+          {localStorage.getItem('nickname')}님, 이 코스는 어때요?
+        </h2>
         <IoMdHeartEmpty className="w-6 h-6 text-bk-90" />
       </div>
       <div className="flex items-center gap-x-2 mb-[13px]">
@@ -72,7 +74,7 @@ const CoursePreview = ({
       </div>
       <Timeline
         sx={{
-          [`& .MuiTimelineItem-root:before`]: {
+          ['& .MuiTimelineItem-root:before']: {
             flex: 0,
             padding: 0,
           },
