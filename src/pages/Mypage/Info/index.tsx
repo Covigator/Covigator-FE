@@ -21,7 +21,6 @@ const Info = () => {
     userImg: '',
     userName: '박재욱',
     userEmail: 'asdf@naver.com',
-    userPassword: 'asdf1234',
   };
 
   return (
@@ -49,7 +48,6 @@ const Info = () => {
             state: {
               userImg: dummy.userImg,
               userName: dummy.userName,
-              userPassword: dummy.userPassword,
             },
           })
         }
