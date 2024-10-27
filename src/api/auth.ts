@@ -29,6 +29,7 @@ export const loginUser = async (data: {
     if (convertedResponse.accessToken) {
       localStorage.setItem('nickname', convertedResponse.nickname);
       localStorage.setItem('email', convertedResponse.email);
+      localStorage.setItem('img', convertedResponse.image_url);
       localStorage.setItem('accessToken', convertedResponse.accessToken);
       return convertedResponse.accessToken;
     } else {

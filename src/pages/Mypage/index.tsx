@@ -2,24 +2,16 @@ import { HiOutlineChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
 import { mypageMenuItems } from '../../constants/object';
-import { MypageDataType } from '../../types/mypage';
 
 import { v4 as uuid } from 'uuid';
 
 const Mypage = () => {
   const navigate = useNavigate();
 
-  const dummy: MypageDataType = {
-    id: 0,
-    img: '',
-    name: '박재욱',
-    email: 'asdf@naver.com',
-  };
-
   return (
     <div className="w-full !px-5 pt-[105px] flex flex-col items-center">
       <img
-        src={dummy.img}
+        src={localStorage.getItem('img') || ''}
         alt="프로필 사진"
         className="w-[100px] h-[100px] rounded-full mb-[15px] bg-bk-30"
       />

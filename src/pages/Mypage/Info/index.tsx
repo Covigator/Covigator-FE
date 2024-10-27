@@ -15,16 +15,11 @@ const variants = {
 const Info = () => {
   const navigate = useNavigate();
 
-  /* TODO: userId로 API 호출해서 받은 데이터 */
-  const dummy = {
-    userImg: '',
-  };
-
   return (
     <div className={variants.container}>
       <Topbar handleClick={() => navigate('/mypage')} />
       <img
-        src={dummy.userImg}
+        src={localStorage.getItem('img') || ''}
         alt="프로필 사진"
         className="w-[100px] h-[100px] rounded-full bg-bk-40 mb-[41px]"
       />
