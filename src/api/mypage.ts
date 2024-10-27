@@ -108,7 +108,9 @@ export const postDuplicateNameApi = async (
   nickname: string,
 ): Promise<string> => {
   try {
-    await instance.post('/members/check-for-duplicate/nickname', nickname);
+    await instance.post('/members/check-for-duplicate/nickname', {
+      nickname: nickname,
+    });
 
     return 'ok';
   } catch (error) {
