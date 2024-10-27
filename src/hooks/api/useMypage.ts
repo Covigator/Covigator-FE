@@ -1,11 +1,13 @@
 import { useMutation, useQuery } from 'react-query';
 
+import { postTravelStyleApi } from '../../api/auth';
 import {
   getLikeCourseApi,
   getMyCourseApi,
   patchMemberInfoApi,
   postDuplicateNameApi,
 } from '../../api/mypage';
+import { travleStyleRequest } from '../../types/auth';
 import { MypageModifyMemberInfo } from '../../types/mypage';
 
 export const useMyCourse = () => {
@@ -42,4 +44,14 @@ export const useDuplicateCheck = (nickname: string) => {
     onError: () => {},
   });
   return { mutate, isLoading };
+};
+
+export const useTravelStyle = (travelStyles: travleStyleRequest) => {
+  const { mutate, isLoading, isSuccess } = useMutation({
+    mutationKey: ['TRAVEL_STYLE'],
+    mutationFn: () => postTravelStyleApi(travelStyles),
+    onSuccess: () => {},
+    onError: () => {},
+  });
+  return { mutate, isLoading, isSuccess };
 };
