@@ -1,7 +1,7 @@
 import {
   loginUserResponse,
   signupUserResponse,
-  travleStyleRequest,
+  travelStyleRequest,
 } from '../types/auth';
 import { convertObjectPropertiesSnakeCaseToCamelCase } from '../utils/common';
 import instance from './instance';
@@ -74,9 +74,12 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 
   const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
     response.data as unknown as AxiosResponse<string, unknown>,
-  ) as signupUserResponse;
+  ) as loginUserResponse;
 
   if (convertedResponse.accessToken) {
+    localStorage.setItem('nickname', convertedResponse.nickname);
+    localStorage.setItem('email', convertedResponse.email);
+    localStorage.setItem('img', convertedResponse.image_url);
     localStorage.setItem('accessToken', convertedResponse.accessToken);
     return convertedResponse.accessToken;
   } else {
@@ -212,7 +215,7 @@ export const changePassword = async (data: {
 
 /** POST: 여행 스타일 저장 */
 export const postTravelStyleApi = async (
-  travelStyles: travleStyleRequest,
+  travelStyles: travelStyleRequest,
 ): Promise<string> => {
   try {
     await instance.post('/members/travel-styles', travelStyles);
