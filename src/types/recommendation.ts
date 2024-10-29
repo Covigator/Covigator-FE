@@ -1,4 +1,4 @@
-interface RecommendResponse {
+export interface RecommendResponse {
   GUNGU: string;
   LATITUDE: number;
   LONGITUDE: number;
