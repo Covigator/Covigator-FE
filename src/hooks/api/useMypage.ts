@@ -7,7 +7,7 @@ import {
   patchMemberInfoApi,
   postDuplicateNameApi,
 } from '../../api/mypage';
-import { travleStyleRequest } from '../../types/auth';
+import { travelStyleRequest } from '../../types/auth';
 import { MypageModifyMemberInfo } from '../../types/mypage';
 
 export const useMyCourse = () => {
@@ -46,7 +46,7 @@ export const useDuplicateCheck = (nickname: string) => {
   return { mutate, isLoading };
 };
 
-export const useTravelStyle = (travelStyles: travleStyleRequest) => {
+export const useTravelStyle = (travelStyles: travelStyleRequest) => {
   const { mutate, isLoading, isSuccess } = useMutation({
     mutationKey: ['TRAVEL_STYLE'],
     mutationFn: () => postTravelStyleApi(travelStyles),
