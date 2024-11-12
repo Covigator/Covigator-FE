@@ -1,4 +1,8 @@
-import { loginUserResponse, signupUserResponse } from '../types/auth';
+import {
+  loginUserResponse,
+  signupUserResponse,
+  travelStyleRequest,
+} from '../types/auth';
 import { convertObjectPropertiesSnakeCaseToCamelCase } from '../utils/common';
 import instance from './instance';
 
@@ -70,9 +74,12 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 
   const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
     response.data as unknown as AxiosResponse<string, unknown>,
-  ) as signupUserResponse;
+  ) as loginUserResponse;
 
   if (convertedResponse.accessToken) {
+    localStorage.setItem('nickname', convertedResponse.nickname);
+    localStorage.setItem('email', convertedResponse.email);
+    localStorage.setItem('img', convertedResponse.image_url);
     localStorage.setItem('accessToken', convertedResponse.accessToken);
     return convertedResponse.accessToken;
   } else {
@@ -202,6 +209,34 @@ export const changePassword = async (data: {
       }
     } else {
       throw new Error('비밀번호 변경 요청 중 예기치 않은 오류가 발생했습니다');
+    }
+  }
+};
+
+/** POST: 여행 스타일 저장 */
+export const postTravelStyleApi = async (
+  travelStyles: travelStyleRequest,
+): Promise<string> => {
+  try {
+    await instance.post('/members/travel-styles', travelStyles);
+
+    return 'ok';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        throw new Error(
+          `여행 스타일 저장 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
+        );
+      } else if (axiosError.request) {
+        throw new Error(
+          '여행 스타일 저장 실패: 서버로부터 응답을 받지 못했습니다',
+        );
+      } else {
+        throw new Error(`여행 스타일 저장 실패: ${axiosError.message}`);
+      }
+    } else {
+      throw new Error('여행 스타일 저장 중 예기치 않은 오류가 발생했습니다');
     }
   }
 };
