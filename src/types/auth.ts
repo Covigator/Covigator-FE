@@ -9,3 +9,13 @@ export type loginUserResponse = {
 export type signupUserResponse = {
   accessToken: string;
 };
+
+export type travelStyleRequest = {
+  gender: string;
+  area_type: string;
+  familiarity: string;
+  activity_type: string;
+  planning_type: string;
+  photo_priority: string;
+  popularity: string;
+};
