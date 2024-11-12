@@ -38,6 +38,7 @@ const OnboardingPage = () => {
   const { mutate, isSuccess } = useTravelStyle(requestOptionList);
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [count, setCount] = useState<number>(0);
 
   const handleOptionClick = (option: string) => {
     const fieldToUpdate = fieldOrder[
@@ -49,25 +50,27 @@ const OnboardingPage = () => {
       [fieldToUpdate]: option,
     }));
 
+    setCount((prev) => prev + 1);
+
     if (currentStep < onboardingOptions.length) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   useEffect(() => {
-    if (
-      currentStep === onboardingOptions.length &&
-      requestOptionList.photo_priority.length > 0
-    ) {
-      console.log(requestOptionList);
-      console.log(requestOptionList.photo_priority);
+    console.log(requestOptionList);
+    console.log(count, onboardingOptions.length);
+    if (count === onboardingOptions.length) {
       mutate();
-      if (isSuccess) {
-        alert('이제 코스를 짜러 같이 떠나볼까요?');
-        navigate('/');
-      }
     }
-  }, [requestOptionList]);
+  }, [count]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      alert('이제 코스를 짜러 같이 떠나볼까요?');
+      navigate('/');
+    }
+  }, [isSuccess]);
 
   const currentOptions = onboardingOptions[currentStep - 1].options;
   const currentQuestion = onboardingQuestions[currentStep - 1];
