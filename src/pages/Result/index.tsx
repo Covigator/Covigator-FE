@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
+import { getWeatherForecastApi } from '../../api/weatherForecast';
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
 import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
 import { useMapCenter } from '../../hooks/useMapCenter';
-import useRandomCongestion from '../../hooks/useRandomCongestion';
+import { useRandomCongestion } from '../../hooks/useRandomCongestion';
 import { Topbar } from '../../layouts';
 import Map from '../../pages/Home/Map';
 import { LocationType } from '../../types/location';
@@ -14,7 +15,9 @@ const Index = () => {
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
-
+  const [weatherForecast, setWeatherForecast] =
+    useState<string>('날씨 조회 중...');
+  const randomCongestion = useRandomCongestion();
   const {
     recommendResults,
     selectedDate,
@@ -26,6 +29,35 @@ const Index = () => {
   useEffect(() => {
     console.log('Raw recommend results:', recommendResults);
   }, [recommendResults]);
+
+  // 날씨 정보 가져오기
+  useEffect(() => {
+    const fetchWeatherForecast = async () => {
+      if (!selectedDate || !selectedLocation?.lat || !selectedLocation?.lng) {
+        setWeatherForecast('날씨 정보 없음');
+        return;
+      }
+
+      try {
+        const formattedDate = selectedDate
+          .toISOString()
+          .split('T')[0]
+          .replace(/-/g, '');
+        const response = await getWeatherForecastApi({
+          date: formattedDate,
+          latitude: selectedLocation.lat,
+          longitude: selectedLocation.lng,
+        });
+
+        setWeatherForecast(`${response}일`);
+      } catch (error) {
+        console.error('날씨 정보 조회 실패:', error);
+        setWeatherForecast('날씨 정보 없음');
+      }
+    };
+
+    fetchWeatherForecast();
+  }, [selectedDate, selectedLocation]);
 
   const [locations, setLocations] = useState<LocationType[]>(() => {
     if (Array.isArray(recommendResults)) {
@@ -95,8 +127,8 @@ const Index = () => {
             selectedDate ? selectedDate.toLocaleDateString() : '날짜 미지정'
           }
           place={selectedLocation?.text || locations[0]?.name || '위치 미지정'}
-          weather="맑을"
-          companions={useRandomCongestion}
+          weather={weatherForecast}
+          companions={randomCongestion}
           locations={locations}
           isExpanded={isExpanded}
           onExpand={handleExpand}
