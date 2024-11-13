@@ -10,3 +10,10 @@ export interface RecommendResponse {
   VISIT_AREA_TYPE_CD: string;
   _id: string;
 }
+
+export interface ApiResponse {
+  isSuccess: boolean;
+  responseCode: number;
+  responseMessage: string;
+  result: RecommendResponse[];
+}

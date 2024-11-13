@@ -91,7 +91,9 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 export const findPassword = async (email: string): Promise<void> => {
   try {
     // 비밀번호 찾기 요청 보내기
-    const response = await instance.post('/accounts/find-password', { email });
+    const response = await instance.post('/accounts/find-password/send-email', {
+      email,
+    });
 
     // 서버에서 200 OK를 반환하면 성공
     if (response.status === 200) {
@@ -131,7 +133,10 @@ export const verifyCode = async (data: {
   code: string;
 }): Promise<void> => {
   try {
-    const response = await instance.post('/accounts/verify-code', data);
+    const response = await instance.post(
+      '/accounts/find-password/verify-code',
+      data,
+    );
 
     if (response.status === 200) {
       console.log('인증이 성공적으로 완료되었습니다.');

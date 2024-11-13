@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
+import { fetchRecommendations } from '../../api/recommendation';
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
 import {
@@ -30,6 +32,77 @@ const Home = () => {
   );
   const [showLocationDialog, setShowLocationDialog] = useState(false);
 
+  const recommendMutation = useMutation(fetchRecommendations, {
+    onSuccess: (data) => {
+      navigate('/result', {
+        state: {
+          recommendResults: data,
+          selectedDate,
+          selectedLocation,
+          selectedCompanion,
+        },
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to get recommendations:', error);
+    },
+  });
+
+  const handleRecommendation = () => {
+    if (isAllSelected) {
+      const selectedPlaceTypes = Object.entries(selectedPlaces)
+        .filter(([_, isSelected]) => isSelected)
+        .map(([placeType]) => placeType);
+
+      // radius 값 변환: km를 m로 변환 (0.3 -> 300)
+      const radiusInMeters = (selectedLocation.radius || 0.5) * 1000;
+
+      const requestData = {
+        GUNGU: selectedLocation.text,
+        LONGITUDE: Number(selectedLocation.lng) || 0,
+        LATITUDE: Number(selectedLocation.lat) || 0,
+        RADIUS: radiusInMeters, // 미터 단위로 변환된 값 사용
+        AGE_GRP: '20~30',
+        GENDER: '남',
+        TRAVEL_STYL_1: '2',
+        TRAVEL_STYL_2: '3',
+        TRAVEL_STYL_3: '2',
+        TRAVEL_STYL_4: '1',
+        TRAVEL_STYL_5: '2',
+        TRAVEL_STYL_6: '2',
+        TRAVEL_STATUS_ACCOMPANY: selectedCompanion.text,
+        VISIT_AREA_TYPE_CD: selectedPlaceTypes[0],
+      };
+
+      console.log('Sending Request Data:', requestData);
+
+      recommendMutation.mutate(requestData, {
+        onSuccess: (data) => {
+          console.log('Recommendation Success Data:', data);
+
+          if (Array.isArray(data) && data.length === 0) {
+            alert(
+              '선택하신 조건에 맞는 추천 결과를 찾지 못했습니다.\n다른 조건으로 다시 시도해보세요.',
+            );
+            return;
+          }
+
+          navigate('/result', {
+            state: {
+              recommendResults: data,
+              selectedDate,
+              selectedLocation,
+              selectedCompanion,
+            },
+          });
+        },
+        onError: (error) => {
+          console.error('Recommendation Error:', error);
+          alert('추천 과정에서 오류가 발생했습니다. 다시 시도해주세요.');
+        },
+      });
+    }
+  };
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     console.log('날짜 변경 :', date);
@@ -66,12 +139,6 @@ const Home = () => {
 
   // 전부 선택했는지
   const [isAllSelected, setIsAllSelected] = useState(false);
-
-  const handleRecommendation = () => {
-    if (isAllSelected) {
-      navigate('/result');
-    }
-  };
 
   useEffect(() => {
     const dateSelected = selectedDate !== null;
@@ -166,8 +233,9 @@ const Home = () => {
               shape="square"
               className="w-full h-full text-btn1"
               onClick={handleRecommendation}
+              disabled={recommendMutation.isLoading}
             >
-              추천받기
+              {recommendMutation.isLoading ? '추천 중...' : '추천받기'}
             </Button>
           </div>
         </div>
