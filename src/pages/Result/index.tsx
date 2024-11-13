@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
 import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
 import { useMapCenter } from '../../hooks/useMapCenter';
+import useRandomCongestion from '../../hooks/useRandomCongestion';
 import { Topbar } from '../../layouts';
 import Map from '../../pages/Home/Map';
 import { LocationType } from '../../types/location';
@@ -95,7 +96,7 @@ const Index = () => {
           }
           place={selectedLocation?.text || locations[0]?.name || '위치 미지정'}
           weather="맑을"
-          companions="매우 혼잡할"
+          companions={useRandomCongestion}
           locations={locations}
           isExpanded={isExpanded}
           onExpand={handleExpand}
