@@ -3,14 +3,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { getWeatherForecastApi } from '../../api/weatherForecast';
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
-import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
 import { useMapCenter } from '../../hooks/useMapCenter';
 import { useRandomCongestion } from '../../hooks/useRandomCongestion';
 import { Topbar } from '../../layouts';
 import Map from '../../pages/Home/Map';
 import { LocationType } from '../../types/location';
 
-const Index = () => {
+const Result = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -18,6 +17,7 @@ const Index = () => {
   const [weatherForecast, setWeatherForecast] =
     useState<string>('날씨 조회 중...');
   const randomCongestion = useRandomCongestion();
+
   const {
     recommendResults,
     selectedDate,
@@ -25,16 +25,49 @@ const Index = () => {
     selectedCompanion,
   } = location.state || {};
 
-  // 데이터 로깅
-  useEffect(() => {
-    console.log('Raw recommend results:', recommendResults);
-  }, [recommendResults]);
+  const [locations, setLocations] = useState<LocationType[]>(() => {
+    try {
+      if (!recommendResults || !Array.isArray(recommendResults)) {
+        console.warn('Invalid recommendResults:', recommendResults);
+        return [];
+      }
 
-  // 날씨 정보 가져오기
+      // recommendResults가 직접 배열로 들어오므로 그대로 매핑
+      return recommendResults.map((item, index) => {
+        // 위도, 경도 변환
+        const lat = parseFloat(String(item.lat)) || 0;
+        const lng = parseFloat(String(item.lng)) || 0;
+
+        // 주소 정보 처리
+        const description = [
+          item.ROAD_NM_ADDR || item.LOTNO_ADDR || '주소 정보 없음',
+          `영업시간: ${item.OPERATION_HOUR || '정보 없음'}`,
+          `전화번호: ${item.PHONE_NUMBER || '정보 없음'}`,
+        ]
+          .filter(Boolean)
+          .join('\n');
+
+        return {
+          id: item.id || '',
+          name: item.name || '이름 없음',
+          courseType: item.courseType || '미분류',
+          description,
+          lat,
+          lng,
+          isSelected: index === 0,
+          image: '/src/assets/image/placeholder.jpg',
+        };
+      });
+    } catch (error) {
+      console.error('Error transforming recommendations:', error);
+      return [];
+    }
+  });
+
   useEffect(() => {
     const fetchWeatherForecast = async () => {
       if (!selectedDate || !selectedLocation?.lat || !selectedLocation?.lng) {
-        setWeatherForecast('날씨 정보 없음');
+        setWeatherForecast('화창할');
         return;
       }
 
@@ -48,8 +81,7 @@ const Index = () => {
           latitude: selectedLocation.lat,
           longitude: selectedLocation.lng,
         });
-
-        setWeatherForecast(`${response}일`);
+        setWeatherForecast(`${response[0]}`);
       } catch (error) {
         console.error('날씨 정보 조회 실패:', error);
         setWeatherForecast('날씨 정보 없음');
@@ -59,30 +91,7 @@ const Index = () => {
     fetchWeatherForecast();
   }, [selectedDate, selectedLocation]);
 
-  const [locations, setLocations] = useState<LocationType[]>(() => {
-    if (Array.isArray(recommendResults)) {
-      return recommendResults.map((item, index) => ({
-        id: item._id || index,
-        name: item.VISIT_AREA_NM || '이름 없음',
-        lat: item.LATITUDE || 0,
-        lng: item.LONGITUDE || 0,
-        description: item.LOTNO_ADDR || item.ROAD_NM_ADDR || '주소 정보 없음',
-        courseType: item.VISIT_AREA_TYPE_CD || '미분류',
-        isSelected: index === 0,
-        image: '/src/assets/image/placeholder.jpg',
-      }));
-    }
-    return [];
-  });
-
-  // useMapCenter 사용
   const { mapCenter } = useMapCenter(locations);
-
-  // 데이터 검증 로깅
-  useEffect(() => {
-    console.log('Current locations:', locations);
-    console.log('Map center:', mapCenter);
-  }, [locations, mapCenter]);
 
   const handleLocationSelect = useCallback(
     (lat: number, lng: number, isMarker?: boolean) => {
@@ -102,7 +111,6 @@ const Index = () => {
     setIsExpanded(expanded);
   };
 
-  // 데이터가 없을 때만 홈으로 리다이렉트
   useEffect(() => {
     if (!locations.length) {
       console.warn('No locations available - redirecting to home');
@@ -118,7 +126,6 @@ const Index = () => {
     <div className="h-full w-full overflow-x-hidden relative">
       <div className="sticky top-0 z-50 bg-white border-none">
         <Topbar handleClick={() => navigate('/')} />
-        <RefreshRecommend />
       </div>
 
       <div className="relative z-20 border-t-0">
@@ -134,6 +141,7 @@ const Index = () => {
           onExpand={handleExpand}
         />
       </div>
+
       <div
         ref={mapRef}
         className={`h-[453px] w-full relative ${isExpanded ? 'blur-sm' : ''}`}
@@ -155,4 +163,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Result;

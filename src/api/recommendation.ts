@@ -2,6 +2,23 @@ import { ApiResponse, RecommendResponse } from '../types/recommendation';
 
 import axios from 'axios';
 
+const formatAddress = (
+  roadAddr: string | number,
+  lotnoAddr: string | number,
+): string => {
+  // NaN 체크 및 문자열 처리
+  const road =
+    Number.isNaN(Number(roadAddr)) || roadAddr === 'NaN'
+      ? ''
+      : String(roadAddr);
+  const lotno =
+    Number.isNaN(Number(lotnoAddr)) || lotnoAddr === 'NaN'
+      ? ''
+      : String(lotnoAddr);
+
+  // 도로명 주소 우선, 없으면 지번 주소 사용
+  return road || lotno || '주소 정보 없음';
+};
 // 재시도 함수
 const retryAxios = async (
   fn: () => Promise<any>,
@@ -47,39 +64,83 @@ export const fetchRecommendations = async (requestData: any) => {
     // 응답 데이터 로깅
     console.log('response: ', response);
     console.log('response.data:', response.data);
-    console.log('response.data.result: ', response.data.result);
     console.log('Type of response:', typeof response);
     console.log('Type of response.data:', typeof response.data);
-    console.log('Type of response.data.result:', typeof response.data.result);
-    console.log(
-      'Is response.data.result an array?',
-      Array.isArray(response.data.result),
-    );
-    console.log('response.data.isSuccess : ', response.data.isSuccess);
 
-    if (!response.data) {
-      throw new Error('No data received from server');
+    let parsedData;
+    if (typeof response.data === 'string') {
+      // NaN을 "NaN"으로 치환한 후 파싱
+      try {
+        const sanitizedData = response.data.replace(/:\s*NaN/g, ':"NaN"');
+        parsedData = JSON.parse(sanitizedData);
+      } catch (parseError) {
+        console.error('Parse error:', parseError);
+        console.error('Original data:', response.data);
+        console.error('Sanitized data:', sanitizedData);
+        throw new Error('Failed to parse response data');
+      }
+    } else {
+      // 이미 객체인 경우
+      parsedData = response.data;
     }
 
-    if (response.data.result && Array.isArray(response.data.result)) {
-      const transformedData = response.data.result.map((item) => ({
+    console.log('Parsed data:', parsedData);
+
+    if (!parsedData || !parsedData.result) {
+      console.error('Missing result field:', parsedData);
+      throw new Error('Invalid response format: missing result field');
+    }
+
+    const results = Array.isArray(parsedData.result)
+      ? parsedData.result
+      : [parsedData.result];
+
+    console.log('Processing results:', results);
+
+    console.log('Parsed data:', parsedData);
+
+    if (!parsedData || !parsedData.result) {
+      console.error('Invalid response structure:', parsedData);
+      throw new Error('Invalid response format: missing result field');
+    }
+
+    console.log('Processing results:', results);
+
+    const transformedData = results.map((item) => {
+      const lat = Number(item.LATITUDE);
+      const lng = Number(item.LONGITUDE);
+
+      const address = formatAddress(item.ROAD_NM_ADDR, item.LOTNO_ADDR);
+
+      const operationHour =
+        item.OPERATION_HOUR && item.OPERATION_HOUR !== 'NaN'
+          ? item.OPERATION_HOUR
+          : '영업시간 정보 없음';
+
+      const phoneNumber =
+        item.PHONE_NUMBER && item.PHONE_NUMBER !== 'NaN'
+          ? item.PHONE_NUMBER
+          : '전화번호 정보 없음';
+
+      return {
         id: item._id || '',
         name: item.VISIT_AREA_NM || '이름 없음',
-        lat: item.LATITUDE || 0,
-        lng: item.LONGITUDE || 0,
-        description: item.LOTNO_ADDR || item.ROAD_NM_ADDR || '주소 정보 없음',
+        lat: Number.isNaN(lat) ? 0 : lat,
+        lng: Number.isNaN(lng) ? 0 : lng,
+        description: [
+          `주소: ${address}`,
+          `영업시간: ${operationHour}`,
+          `전화번호: ${phoneNumber}`,
+        ].join('\n'),
         courseType: item.VISIT_AREA_TYPE_CD || '미분류',
         isSelected: false,
         image: '/src/assets/image/placeholder.jpg',
-      }));
+      };
+    });
 
-      console.log(transformedData);
-      return transformedData;
-    } else {
-      throw new Error('Response data is not an array');
-    }
+    console.log('Transformed data:', transformedData);
+    return transformedData;
   } catch (error) {
-    // 에러 상세 로깅
     console.error('Error details:', {
       error,
       isAxiosError: axios.isAxiosError(error),
@@ -108,6 +169,6 @@ export const fetchRecommendations = async (requestData: any) => {
         );
       }
     }
-    throw new Error('Failed to fetch recommendations');
+    throw error;
   }
 };
