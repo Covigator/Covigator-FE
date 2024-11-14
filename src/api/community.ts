@@ -189,7 +189,7 @@ export const getCourseReviewApi = async (
     );
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response.data.result,
+      response.data,
     ) as ReviewResponse;
 
     return convertedResponse;
