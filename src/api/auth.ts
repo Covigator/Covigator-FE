@@ -33,8 +33,16 @@ export const loginUser = async (data: {
     if (convertedResponse.accessToken) {
       localStorage.setItem('nickname', convertedResponse.nickname);
       localStorage.setItem('email', convertedResponse.email);
-      localStorage.setItem('img', convertedResponse.image_url);
+      localStorage.setItem('img', convertedResponse.imageUrl);
       localStorage.setItem('accessToken', convertedResponse.accessToken);
+
+      localStorage.setItem('gender', convertedResponse.gender);
+      localStorage.setItem('generation', convertedResponse.generation);
+
+      localStorage.setItem(
+        'travelStyle',
+        JSON.stringify(convertedResponse.travelStyle),
+      );
       return convertedResponse.accessToken;
     } else {
       throw new Error('로그인 실패: 응답에 토큰이 없습니다');
@@ -79,7 +87,7 @@ export const signupUser = async (formData: FormData): Promise<string> => {
   if (convertedResponse.accessToken) {
     localStorage.setItem('nickname', convertedResponse.nickname);
     localStorage.setItem('email', convertedResponse.email);
-    localStorage.setItem('img', convertedResponse.image_url);
+    localStorage.setItem('img', convertedResponse.imageUrl);
     localStorage.setItem('accessToken', convertedResponse.accessToken);
     return convertedResponse.accessToken;
   } else {

@@ -3,7 +3,10 @@ export type loginUserResponse = {
   refreshToken: string;
   nickname: string;
   email: string;
-  image_url: string;
+  imageUrl: string;
+  gender: string;
+  generation: string;
+  travelStyle: string;
 };
 
 export type signupUserResponse = {
@@ -12,6 +15,7 @@ export type signupUserResponse = {
 
 export type travelStyleRequest = {
   gender: string;
+  generation: string;
   area_type: string;
   familiarity: string;
   activity_type: string;

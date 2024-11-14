@@ -17,6 +17,11 @@ import {
   withOptions,
   chipOptions,
 } from '../../constants/homeOption';
+import {
+  transformAgeToGroup,
+  transformGender,
+  transformTravelStyle,
+} from '../../utils/onboardingTransformer';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -61,19 +66,36 @@ const Home = () => {
 
       const radiusInMeters = calculateRadiusInMeters(selectedLocation);
 
+      const gender = transformGender(localStorage.getItem('gender') || 'MALE');
+      const ageGroup = transformAgeToGroup(
+        localStorage.getItem('generation') || 'YOUNG_ADULT',
+      );
+
+      const travelStyleStr = localStorage.getItem('travelStyle');
+      const travelStyle = travelStyleStr ? JSON.parse(travelStyleStr) : {};
+
+      const travelStyleValues = transformTravelStyle(
+        travelStyle.areaType || 'NATURE',
+        travelStyle.familiarity || 'NEW',
+        travelStyle.activityType || 'REST',
+        travelStyle.popularity || 'NOT_WIDELY_KNOWN',
+        travelStyle.planningType || 'PLANNED',
+        travelStyle.photoPriority || 'NOT_IMPORTANT',
+      );
+
       const requestData = {
         GUNGU: selectedLocation.text,
         LONGITUDE: Number(selectedLocation.lng) || 0,
         LATITUDE: Number(selectedLocation.lat) || 0,
         RADIUS: radiusInMeters,
-        AGE_GRP: '20~30',
-        GENDER: '남',
-        TRAVEL_STYL_1: '2',
-        TRAVEL_STYL_2: '3',
-        TRAVEL_STYL_3: '2',
-        TRAVEL_STYL_4: '1',
-        TRAVEL_STYL_5: '2',
-        TRAVEL_STYL_6: '2',
+        AGE_GRP: ageGroup,
+        GENDER: gender,
+        TRAVEL_STYL_1: travelStyleValues.TRAVEL_STYL_1,
+        TRAVEL_STYL_2: travelStyleValues.TRAVEL_STYL_2,
+        TRAVEL_STYL_3: travelStyleValues.TRAVEL_STYL_3,
+        TRAVEL_STYL_4: travelStyleValues.TRAVEL_STYL_4,
+        TRAVEL_STYL_5: travelStyleValues.TRAVEL_STYL_5,
+        TRAVEL_STYL_6: travelStyleValues.TRAVEL_STYL_6,
         TRAVEL_STATUS_ACCOMPANY: selectedCompanion.text,
         VISIT_AREA_TYPE_CD: selectedPlaceTypes[0],
       };

@@ -97,13 +97,13 @@ const Result = () => {
         console.log('날씨 response : ', response);
 
         if (response.result === '날씨 정보를 찾을 수 없습니다.') {
-          setWeatherForecast('맑을');
+          setWeatherForecast('화창할');
         } else {
           setWeatherForecast(`${response.result}`);
         }
       } catch (error) {
         console.error('날씨 정보 조회 실패:', error);
-        setWeatherForecast('날씨 정보 없음');
+        setWeatherForecast('화창할');
       }
     };
 
