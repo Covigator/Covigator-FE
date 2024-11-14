@@ -50,8 +50,8 @@ const CoursePreview = ({
   };
 
   useEffect(() => {
-    console.log('locations : ', locations);
-    console.log('isInformation : ', isInformation);
+    console.log('locations :', locations);
+    console.log('isInformation :', isInformation);
   }, []);
 
   return (
@@ -140,7 +140,8 @@ const CoursePreview = ({
                 </p>
 
                 {isExpanded && (
-                  <div
+                  <div className="mt-3 p-3 bg-bk-10 rounded-lg">
+                    {/* <div
                     className={`mt-3 p-3 bg-bk-10 rounded-lg transition-all ${
                       isAddress
                         ? 'cursor-pointer hover:bg-bk-20'
@@ -148,10 +149,12 @@ const CoursePreview = ({
                     }`}
                     onClick={() => {
                       if (isAddress) {
-                        navigate(`/result/${location.id}`);
+                        navigate(
+                          `/result/${location.name}/${location.address}`,
+                        );
                       }
                     }}
-                  >
+                  > */}
                     <div className="flex gap-x-4">
                       <div className="w-[80px] h-[80px] flex-shrink-0 overflow-hidden rounded-md bg-bk-30" />
                       <div className="flex flex-col gap-y-2">
@@ -187,11 +190,11 @@ const CoursePreview = ({
         ))}
       </Timeline>
 
-      {isExpanded && (
+      {/* {isExpanded && (
         <div className="text-btn3 text-bk-60 mt-4 text-center">
           (정보가 있는 경우) 장소를 선택하면 상세 정보를 확인할 수 있어요
         </div>
-      )}
+      )} */}
 
       <button
         onClick={toggleExpanded}

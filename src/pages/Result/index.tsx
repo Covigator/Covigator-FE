@@ -17,7 +17,7 @@ const Result = () => {
   const [weatherForecast, setWeatherForecast] =
     useState<string>('날씨 조회 중...');
   const [isAddress, setIsAddress] = useState<boolean>(true);
-  const [isInformation, setIsInformation] = useState<boolean>(false);
+  const [isInformation, setIsInformation] = useState<boolean>(true);
 
   const randomCongestion = useRandomCongestion();
 
@@ -37,19 +37,14 @@ const Result = () => {
         const lat = parseFloat(String(item.lat)) || 0;
         const lng = parseFloat(String(item.lng)) || 0;
 
-        const address =
-          item.ROAD_NM_ADDR || item.LOTNO_ADDR || '주소 정보 없음';
-        const operationHour = item.OPERATION_HOUR || '정보 없음';
-        const phoneNumber = item.PHONE_NUMBER || '정보 없음';
-
-        if (address === '주소 정보 없음') {
+        if (item.address === '주소 정보 없음') {
           setIsAddress(false);
         }
 
         if (
-          address === '주소 정보 없음' &&
-          operationHour === '정보 없음' &&
-          phoneNumber === '정보 없음'
+          item.address === '주소 정보 없음' &&
+          item.operationHour === '영업시간 정보 없음' &&
+          item.phoneNumber === '전화번호 정보 없음'
         ) {
           setIsInformation(false);
         }
@@ -67,9 +62,9 @@ const Result = () => {
           id: item.id || '',
           name: item.name || '이름 없음',
           courseType: item.courseType || '미분류',
-          address,
-          operationHour,
-          phoneNumber,
+          address: item.address,
+          operationHour: item.operationHour,
+          phoneNumber: item.phoneNumber,
           lat,
           lng,
           isSelected: index === 0,
@@ -99,7 +94,13 @@ const Result = () => {
           latitude: selectedLocation.lat,
           longitude: selectedLocation.lng,
         });
-        setWeatherForecast(`${response[0]}`);
+        console.log('날씨 response : ', response);
+
+        if (response.result === '날씨 정보를 찾을 수 없습니다.') {
+          setWeatherForecast('맑을');
+        } else {
+          setWeatherForecast(`${response.result}`);
+        }
       } catch (error) {
         console.error('날씨 정보 조회 실패:', error);
         setWeatherForecast('날씨 정보 없음');

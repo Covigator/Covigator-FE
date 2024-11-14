@@ -110,28 +110,24 @@ export const fetchRecommendations = async (requestData: any) => {
       const lat = Number(item.LATITUDE);
       const lng = Number(item.LONGITUDE);
 
-      const address = formatAddress(item.ROAD_NM_ADDR, item.LOTNO_ADDR);
+      let address = '주소 정보 없음';
+      if (item.ROAD_NM_ADDR && item.ROAD_NM_ADDR !== 'NaN') {
+        address = item.ROAD_NM_ADDR;
+      } else if (item.LOTNO_ADDR && item.LOTNO_ADDR !== 'NaN') {
+        address = item.LOTNO_ADDR;
+      }
 
-      const operationHour =
-        item.OPERATION_HOUR && item.OPERATION_HOUR !== 'NaN'
-          ? item.OPERATION_HOUR
-          : '영업시간 정보 없음';
-
-      const phoneNumber =
-        item.PHONE_NUMBER && item.PHONE_NUMBER !== 'NaN'
-          ? item.PHONE_NUMBER
-          : '전화번호 정보 없음';
+      const operationHour = item.OPERATION_HOUR || '영업시간 정보 없음';
+      const phoneNumber = item.PHONE_NUMBER || '전화번호 정보 없음';
 
       return {
         id: item._id || '',
         name: item.VISIT_AREA_NM || '이름 없음',
         lat: Number.isNaN(lat) ? 0 : lat,
         lng: Number.isNaN(lng) ? 0 : lng,
-        description: [
-          `주소: ${address}`,
-          `영업시간: ${operationHour}`,
-          `전화번호: ${phoneNumber}`,
-        ].join('\n'),
+        address: address,
+        operationHour: operationHour,
+        phoneNumber: phoneNumber,
         courseType: item.VISIT_AREA_TYPE_CD || '미분류',
         isSelected: false,
         image: '/src/assets/image/placeholder.jpg',

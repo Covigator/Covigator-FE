@@ -27,7 +27,7 @@ export const getWeatherForecastApi = async ({
     });
 
     const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
-      response.data.result,
+      response.data,
     ) as WeatherForecastResponse;
 
     return convertedResponse;

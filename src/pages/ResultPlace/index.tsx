@@ -1,20 +1,63 @@
+import { useQuery } from 'react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { getPlaces } from '../../api/places';
 import Chip from '../../components/common/chip';
 import CourseItem from '../../components/community/CourseItem';
-import { locations } from '../../constants/location';
 import { Topbar } from '../../layouts';
 import Map from '../Home/Map';
 
 const ResultPlace = () => {
-  const { placeId } = useParams<{ placeId: string }>();
+  const { name = '', address = '' } = useParams<{
+    name: string;
+    address: string;
+  }>();
   const navigate = useNavigate();
-  const location = locations.find((loc) => loc.id === Number(placeId));
 
-  if (!location) {
-    alert('장소를 찾을 수 없습니다!');
+  let decodedName = '';
+  let decodedAddress = '';
+
+  try {
+    decodedName = decodeURIComponent(name);
+    decodedAddress = decodeURIComponent(address);
+  } catch (error) {
+    console.error('URI 디코딩 에러:', error);
     navigate('/result');
-    return;
+    return null;
+  }
+
+  const {
+    data: place,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['place', decodedName, decodedAddress],
+    () => getPlaces({ name: decodedName, address: decodedAddress }),
+    {
+      enabled: !!decodedName && !!decodedAddress,
+      onError: () => {
+        alert('장소를 찾을 수 없습니다!');
+        navigate('/result');
+      },
+    },
+  );
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-400"></div>
+      </div>
+    );
+  }
+
+  if (!place || isError) return null;
+
+  // place 객체의 필수 속성 검증
+  const hasRequiredProps = place.latitude && place.longitude && place.name;
+  if (!hasRequiredProps) {
+    console.error('필수 장소 정보 누락');
+    navigate('/result');
+    return null;
   }
 
   return (
@@ -23,23 +66,29 @@ const ResultPlace = () => {
 
       <div className="mx-[30px] flex flex-col">
         <div className="mt-[63px] flex gap-x-[11px] items-center">
-          <div className="text-h1">{location.name}</div>
+          <div className="text-h1">{place.name}</div>
           <Chip size="sm" state="active">
-            {location.courseType}
+            {place.category || '기타'}
           </Chip>
         </div>
         <div className="mt-[7px] text-body6 text-bk-80">
-          {location.description}
+          {place.address}
+          {place.floor && ` ${place.floor}`}
+          {place.dongName && ` ${place.dongName}`}
+          {place.buildingName && ` ${place.buildingName}`}
         </div>
 
         <div className="mt-[8px] w-full h-[114px]">
-          <Map lat={location.lat} lng={location.lng} />
+          <Map lat={Number(place.latitude)} lng={Number(place.longitude)} />
         </div>
 
         <img
-          src={location.image}
-          alt={location.name}
+          src={place.imageUrl || '/src/assets/image/placeholder.jpg'}
+          alt={place.name}
           className="w-full h-[200px] object-cover mt-[20px]"
+          onError={(e) => {
+            e.currentTarget.src = '/src/assets/image/placeholder.jpg';
+          }}
         />
 
         <div className="mt-[26px] text-body3 text-bk-80">
@@ -50,14 +99,13 @@ const ResultPlace = () => {
         </div>
 
         <div className="mt-[9px]">
-          {/* 임시로 생성 */}
           <CourseItem
-            id={location.id}
+            id={1}
             title={'성수동 데이트'}
             caption={'성수동에서 감각있는 장소들을 모아놓은 코스입니다'}
             rate={4.5}
             isLike={false}
-          ></CourseItem>
+          />
         </div>
       </div>
     </div>

@@ -48,7 +48,7 @@ const Router = () => {
           }
         />
         <Route
-          path="/result/:placeId"
+          path="/result/:name/:address"
           element={
             <PrivateRoute>
               <ResultPlace />
