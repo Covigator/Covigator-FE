@@ -32,6 +32,10 @@ const Home = () => {
   );
   const [showLocationDialog, setShowLocationDialog] = useState(false);
 
+  const calculateRadiusInMeters = (location: LocationItemType) => {
+    return (location.radius || 0.5) * 1000;
+  };
+
   const recommendMutation = useMutation(fetchRecommendations, {
     onSuccess: (data) => {
       navigate('/result', {
@@ -40,6 +44,7 @@ const Home = () => {
           selectedDate,
           selectedLocation,
           selectedCompanion,
+          radius: calculateRadiusInMeters(selectedLocation),
         },
       });
     },
@@ -54,14 +59,13 @@ const Home = () => {
         .filter(([_, isSelected]) => isSelected)
         .map(([placeType]) => placeType);
 
-      // radius 값 변환: km를 m로 변환 (0.3 -> 300)
-      const radiusInMeters = (selectedLocation.radius || 0.5) * 1000;
+      const radiusInMeters = calculateRadiusInMeters(selectedLocation);
 
       const requestData = {
         GUNGU: selectedLocation.text,
         LONGITUDE: Number(selectedLocation.lng) || 0,
         LATITUDE: Number(selectedLocation.lat) || 0,
-        RADIUS: radiusInMeters, // 미터 단위로 변환된 값 사용
+        RADIUS: radiusInMeters,
         AGE_GRP: '20~30',
         GENDER: '남',
         TRAVEL_STYL_1: '2',
@@ -93,6 +97,7 @@ const Home = () => {
               selectedDate,
               selectedLocation,
               selectedCompanion,
+              state: calculateRadiusInMeters(selectedLocation),
             },
           });
         },

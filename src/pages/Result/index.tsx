@@ -18,12 +18,8 @@ const Result = () => {
     useState<string>('날씨 조회 중...');
   const randomCongestion = useRandomCongestion();
 
-  const {
-    recommendResults,
-    selectedDate,
-    selectedLocation,
-    selectedCompanion,
-  } = location.state || {};
+  const { recommendResults, selectedDate, selectedLocation, radius } =
+    location.state || {};
 
   const [locations, setLocations] = useState<LocationType[]>(() => {
     try {
@@ -91,7 +87,7 @@ const Result = () => {
     fetchWeatherForecast();
   }, [selectedDate, selectedLocation]);
 
-  const { mapCenter } = useMapCenter(locations);
+  const { mapCenter, mapBounds, calculateRadius } = useMapCenter(locations);
 
   const handleLocationSelect = useCallback(
     (lat: number, lng: number, isMarker?: boolean) => {
@@ -151,6 +147,7 @@ const Result = () => {
           lng={mapCenter.lng}
           locations={locations}
           onLocationSelect={handleLocationSelect}
+          mapBounds={mapBounds}
         />
         {isExpanded && (
           <div

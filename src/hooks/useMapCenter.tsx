@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { LocationType } from '../types/location';
 
-interface MapBounds {
+export interface MapBounds {
   minLat: number;
   maxLat: number;
   minLng: number;
@@ -27,10 +27,13 @@ export const useMapCenter = (locations: LocationType[]): UseMapCenterResult => {
       return { lat: 37.541, lng: 127.0695 }; // 기본값
     }
 
-    // 첫 번째 위치를 중심점으로 사용
+    // 모든 위치의 평균을 중심점으로 계산
+    const sumLat = locations.reduce((sum, loc) => sum + loc.lat, 0);
+    const sumLng = locations.reduce((sum, loc) => sum + loc.lng, 0);
+
     return {
-      lat: locations[0].lat,
-      lng: locations[0].lng,
+      lat: sumLat / locations.length,
+      lng: sumLng / locations.length,
     };
   }, [locations]);
 
@@ -49,8 +52,18 @@ export const useMapCenter = (locations: LocationType[]): UseMapCenterResult => {
     };
   }, [locations]);
 
-  // radius는 더 이상 사용하지 않으므로 간단한 값 반환
-  const calculateRadius = () => 0;
+  // 반경 계산 - 중심점에서 가장 먼 위치까지의 거리를 반환
+  const calculateRadius = () => {
+    if (locations.length === 0) return 0;
+
+    const distances = locations.map((loc) => {
+      const latDiff = loc.lat - mapCenter.lat;
+      const lngDiff = loc.lng - mapCenter.lng;
+      return Math.sqrt(latDiff * latDiff + lngDiff * lngDiff);
+    });
+
+    return Math.max(...distances);
+  };
 
   return {
     mapCenter,
