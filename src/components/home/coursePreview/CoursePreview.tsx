@@ -27,6 +27,8 @@ interface CoursePreviewProps {
   companions: string;
   locations: LocationType[];
   isExpanded: boolean;
+  isAddress: boolean;
+  isInformation: boolean;
   onExpand: (expanded: boolean) => void;
 }
 
@@ -37,6 +39,8 @@ const CoursePreview = ({
   companions,
   locations,
   isExpanded,
+  isAddress,
+  isInformation,
   onExpand,
 }: CoursePreviewProps) => {
   const navigate = useNavigate();
@@ -47,6 +51,7 @@ const CoursePreview = ({
 
   useEffect(() => {
     console.log('locations : ', locations);
+    console.log('isInformation : ', isInformation);
   }, []);
 
   return (
@@ -136,8 +141,16 @@ const CoursePreview = ({
 
                 {isExpanded && (
                   <div
-                    className="mt-3 p-3 bg-bk-10 rounded-lg cursor-pointer hover:bg-bk-20 transition-all"
-                    onClick={() => navigate(`/result/${location.id}`)}
+                    className={`mt-3 p-3 bg-bk-10 rounded-lg transition-all ${
+                      isAddress
+                        ? 'cursor-pointer hover:bg-bk-20'
+                        : 'cursor-not-allowed'
+                    }`}
+                    onClick={() => {
+                      if (isAddress) {
+                        navigate(`/result/${location.id}`);
+                      }
+                    }}
                   >
                     <div className="flex gap-x-4">
                       <div className="w-[80px] h-[80px] flex-shrink-0 overflow-hidden rounded-md bg-bk-30" />
@@ -147,9 +160,23 @@ const CoursePreview = ({
                             {location.courseType}
                           </Chip>
                         </div>
-                        <p className="text-body5 text-bk-70">
-                          업데이트 예정입니다
-                        </p>
+                        {isInformation ? (
+                          <>
+                            <p className="text-body5 text-bk-70">
+                              {location.address}{' '}
+                            </p>
+                            <p className="text-body5 text-bk-70">
+                              {location.operationHour}{' '}
+                            </p>
+                            <p className="text-body5 text-bk-70">
+                              {location.phoneNumber}{' '}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="text-body5 text-bk-70">
+                            업데이트 예정입니다
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -162,7 +189,7 @@ const CoursePreview = ({
 
       {isExpanded && (
         <div className="text-btn3 text-bk-60 mt-4 text-center">
-          장소를 선택하면 상세 정보를 확인할 수 있어요
+          (정보가 있는 경우) 장소를 선택하면 상세 정보를 확인할 수 있어요
         </div>
       )}
 

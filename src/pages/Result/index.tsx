@@ -16,6 +16,9 @@ const Result = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [weatherForecast, setWeatherForecast] =
     useState<string>('날씨 조회 중...');
+  const [isAddress, setIsAddress] = useState<boolean>(true);
+  const [isInformation, setIsInformation] = useState<boolean>(false);
+
   const randomCongestion = useRandomCongestion();
 
   const { recommendResults, selectedDate, selectedLocation, radius } =
@@ -34,20 +37,39 @@ const Result = () => {
         const lat = parseFloat(String(item.lat)) || 0;
         const lng = parseFloat(String(item.lng)) || 0;
 
+        const address =
+          item.ROAD_NM_ADDR || item.LOTNO_ADDR || '주소 정보 없음';
+        const operationHour = item.OPERATION_HOUR || '정보 없음';
+        const phoneNumber = item.PHONE_NUMBER || '정보 없음';
+
+        if (address === '주소 정보 없음') {
+          setIsAddress(false);
+        }
+
+        if (
+          address === '주소 정보 없음' &&
+          operationHour === '정보 없음' &&
+          phoneNumber === '정보 없음'
+        ) {
+          setIsInformation(false);
+        }
+
         // 주소 정보 처리
-        const description = [
-          item.ROAD_NM_ADDR || item.LOTNO_ADDR || '주소 정보 없음',
-          `영업시간: ${item.OPERATION_HOUR || '정보 없음'}`,
-          `전화번호: ${item.PHONE_NUMBER || '정보 없음'}`,
-        ]
-          .filter(Boolean)
-          .join('\n');
+        // const description = [
+        //   item.ROAD_NM_ADDR || item.LOTNO_ADDR || '주소 정보 없음',
+        //   `영업시간: ${item.OPERATION_HOUR || '정보 없음'}`,
+        //   `전화번호: ${item.PHONE_NUMBER || '정보 없음'}`,
+        // ]
+        //   .filter(Boolean)
+        //   .join('\n');
 
         return {
           id: item.id || '',
           name: item.name || '이름 없음',
           courseType: item.courseType || '미분류',
-          description,
+          address,
+          operationHour,
+          phoneNumber,
           lat,
           lng,
           isSelected: index === 0,
@@ -87,7 +109,7 @@ const Result = () => {
     fetchWeatherForecast();
   }, [selectedDate, selectedLocation]);
 
-  const { mapCenter, mapBounds, calculateRadius } = useMapCenter(locations);
+  const { mapCenter, mapBounds } = useMapCenter(locations);
 
   const handleLocationSelect = useCallback(
     (lat: number, lng: number, isMarker?: boolean) => {
@@ -135,6 +157,8 @@ const Result = () => {
           locations={locations}
           isExpanded={isExpanded}
           onExpand={handleExpand}
+          isAddress={isAddress}
+          isInformation={isInformation}
         />
       </div>
 
