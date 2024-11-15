@@ -12,11 +12,23 @@ import { travelStyleRequest } from '../../types/auth';
 
 import { v4 as uuid } from 'uuid';
 
+const convertTravelStyle = (data: travelStyleRequest) => {
+  return {
+    activityType: data.activity_type,
+    areaType: data.area_type,
+    familiarity: data.familiarity,
+    photoPriority: data.photo_priority,
+    planningType: data.planning_type,
+    popularity: data.popularity,
+  };
+};
+
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const [requestOptionList, setRequestOptionList] =
     useState<travelStyleRequest>({
       gender: '',
+      generation: '',
       area_type: '',
       familiarity: '',
       activity_type: '',
@@ -61,6 +73,12 @@ const OnboardingPage = () => {
     console.log(requestOptionList);
     console.log(count, onboardingOptions.length);
     if (count === onboardingOptions.length) {
+      localStorage.setItem('gender', requestOptionList.gender);
+      localStorage.setItem('generation', requestOptionList.generation);
+
+      const travelStyle = convertTravelStyle(requestOptionList);
+      localStorage.setItem('travelStyle', JSON.stringify(travelStyle));
+
       mutate();
     }
   }, [count]);

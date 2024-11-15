@@ -33,8 +33,16 @@ export const loginUser = async (data: {
     if (convertedResponse.accessToken) {
       localStorage.setItem('nickname', convertedResponse.nickname);
       localStorage.setItem('email', convertedResponse.email);
-      localStorage.setItem('img', convertedResponse.image_url);
+      localStorage.setItem('img', convertedResponse.imageUrl);
       localStorage.setItem('accessToken', convertedResponse.accessToken);
+
+      localStorage.setItem('gender', convertedResponse.gender);
+      localStorage.setItem('generation', convertedResponse.generation);
+
+      localStorage.setItem(
+        'travelStyle',
+        JSON.stringify(convertedResponse.travelStyle),
+      );
       return convertedResponse.accessToken;
     } else {
       throw new Error('로그인 실패: 응답에 토큰이 없습니다');
@@ -79,7 +87,7 @@ export const signupUser = async (formData: FormData): Promise<string> => {
   if (convertedResponse.accessToken) {
     localStorage.setItem('nickname', convertedResponse.nickname);
     localStorage.setItem('email', convertedResponse.email);
-    localStorage.setItem('img', convertedResponse.image_url);
+    localStorage.setItem('img', convertedResponse.imageUrl);
     localStorage.setItem('accessToken', convertedResponse.accessToken);
     return convertedResponse.accessToken;
   } else {
@@ -91,7 +99,9 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 export const findPassword = async (email: string): Promise<void> => {
   try {
     // 비밀번호 찾기 요청 보내기
-    const response = await instance.post('/accounts/find-password', { email });
+    const response = await instance.post('/accounts/find-password/send-email', {
+      email,
+    });
 
     // 서버에서 200 OK를 반환하면 성공
     if (response.status === 200) {
@@ -131,7 +141,10 @@ export const verifyCode = async (data: {
   code: string;
 }): Promise<void> => {
   try {
-    const response = await instance.post('/accounts/verify-code', data);
+    const response = await instance.post(
+      '/accounts/find-password/verify-code',
+      data,
+    );
 
     if (response.status === 200) {
       console.log('인증이 성공적으로 완료되었습니다.');

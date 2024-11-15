@@ -6,5 +6,7 @@ export interface LocationType {
   lat: number;
   lng: number;
   image: string;
-  description: string;
+  address: string;
+  operationHour: string;
+  phoneNumber: string;
 }
