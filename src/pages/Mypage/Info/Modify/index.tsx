@@ -77,17 +77,17 @@ const Modify = () => {
       setIsModifiable(false);
 
       if (nameInputRef.current.value.length <= 0) {
-        console.log('이름을 입력해주세요');
+        alert('이름을 입력해주세요');
       } else if (nameInputRef.current.value.length > 10) {
-        console.log('이름은 10자 이하여야 합니다');
+        alert('이름은 10자 이하여야 합니다');
       } else if (passwordInputRef.current.value.length <= 0) {
-        console.log('비밀번호를 입력해주세요');
+        alert('비밀번호를 입력해주세요');
       } else if (passwordConfirmInputRef.current.value.length <= 0) {
-        console.log('비밀번호 확인을 입력해주세요');
+        alert('비밀번호 확인을 입력해주세요');
       } else if (
         passwordInputRef.current.value !== passwordConfirmInputRef.current.value
       ) {
-        console.log('비밀번호가 같은지 다시 확인해주세요');
+        alert('비밀번호가 같은지 다시 확인해주세요');
       } else {
         setIsModifiable(true);
       }

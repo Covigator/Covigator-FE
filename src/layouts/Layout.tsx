@@ -14,8 +14,8 @@ const Layout = () => {
     location.pathname.includes('/mypage/info/modify') ||
     location.pathname.includes('/login') ||
     location.pathname.includes('/find') ||
-    location.pathname.includes('/signup');
-  // const topbarNeeded =
+    location.pathname.includes('/signup') ||
+    location.pathname.includes('/onboarding');
 
   return (
     <div className="w-full h-screen">

@@ -1,4 +1,8 @@
-import { loginUserResponse, signupUserResponse } from '../types/auth';
+import {
+  loginUserResponse,
+  signupUserResponse,
+  travelStyleRequest,
+} from '../types/auth';
 import { convertObjectPropertiesSnakeCaseToCamelCase } from '../utils/common';
 import instance from './instance';
 
@@ -29,8 +33,16 @@ export const loginUser = async (data: {
     if (convertedResponse.accessToken) {
       localStorage.setItem('nickname', convertedResponse.nickname);
       localStorage.setItem('email', convertedResponse.email);
-      localStorage.setItem('img', convertedResponse.image_url);
+      localStorage.setItem('img', convertedResponse.imageUrl);
       localStorage.setItem('accessToken', convertedResponse.accessToken);
+
+      localStorage.setItem('gender', convertedResponse.gender);
+      localStorage.setItem('generation', convertedResponse.generation);
+
+      localStorage.setItem(
+        'travelStyle',
+        JSON.stringify(convertedResponse.travelStyle),
+      );
       return convertedResponse.accessToken;
     } else {
       throw new Error('로그인 실패: 응답에 토큰이 없습니다');
@@ -70,9 +82,12 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 
   const convertedResponse = convertObjectPropertiesSnakeCaseToCamelCase(
     response.data as unknown as AxiosResponse<string, unknown>,
-  ) as signupUserResponse;
+  ) as loginUserResponse;
 
   if (convertedResponse.accessToken) {
+    localStorage.setItem('nickname', convertedResponse.nickname);
+    localStorage.setItem('email', convertedResponse.email);
+    localStorage.setItem('img', convertedResponse.imageUrl);
     localStorage.setItem('accessToken', convertedResponse.accessToken);
     return convertedResponse.accessToken;
   } else {
@@ -84,7 +99,9 @@ export const signupUser = async (formData: FormData): Promise<string> => {
 export const findPassword = async (email: string): Promise<void> => {
   try {
     // 비밀번호 찾기 요청 보내기
-    const response = await instance.post('/accounts/find-password', { email });
+    const response = await instance.post('/accounts/find-password/send-email', {
+      email,
+    });
 
     // 서버에서 200 OK를 반환하면 성공
     if (response.status === 200) {
@@ -124,7 +141,10 @@ export const verifyCode = async (data: {
   code: string;
 }): Promise<void> => {
   try {
-    const response = await instance.post('/accounts/verify-code', data);
+    const response = await instance.post(
+      '/accounts/find-password/verify-code',
+      data,
+    );
 
     if (response.status === 200) {
       console.log('인증이 성공적으로 완료되었습니다.');
@@ -202,6 +222,34 @@ export const changePassword = async (data: {
       }
     } else {
       throw new Error('비밀번호 변경 요청 중 예기치 않은 오류가 발생했습니다');
+    }
+  }
+};
+
+/** POST: 여행 스타일 저장 */
+export const postTravelStyleApi = async (
+  travelStyles: travelStyleRequest,
+): Promise<string> => {
+  try {
+    await instance.post('/members/travel-styles', travelStyles);
+
+    return 'ok';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        throw new Error(
+          `여행 스타일 저장 실패: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`,
+        );
+      } else if (axiosError.request) {
+        throw new Error(
+          '여행 스타일 저장 실패: 서버로부터 응답을 받지 못했습니다',
+        );
+      } else {
+        throw new Error(`여행 스타일 저장 실패: ${axiosError.message}`);
+      }
+    } else {
+      throw new Error('여행 스타일 저장 중 예기치 않은 오류가 발생했습니다');
     }
   }
 };

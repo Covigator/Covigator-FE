@@ -1,18 +1,116 @@
-import { useState, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
+import { getWeatherForecastApi } from '../../api/weatherForecast';
 import CoursePreview from '../../components/home/coursePreview/CoursePreview';
-import RefreshRecommend from '../../components/home/refreshRecommend/RefreshRecommend';
+import { useMapCenter } from '../../hooks/useMapCenter';
+import { useRandomCongestion } from '../../hooks/useRandomCongestion';
 import { Topbar } from '../../layouts';
 import Map from '../../pages/Home/Map';
-import { locations as initialLocations } from './../../constants/location';
+import { LocationType } from '../../types/location';
 
-const Index = () => {
+const Result = () => {
   const navigate = useNavigate();
-
-  const [locations, setLocations] = useState(initialLocations);
+  const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
+  const [weatherForecast, setWeatherForecast] =
+    useState<string>('날씨 조회 중...');
+  const [isAddress, setIsAddress] = useState<boolean>(true);
+  const [isInformation, setIsInformation] = useState<boolean>(true);
+
+  const randomCongestion = useRandomCongestion();
+
+  const { recommendResults, selectedDate, selectedLocation, radius } =
+    location.state || {};
+
+  const [locations, setLocations] = useState<LocationType[]>(() => {
+    try {
+      if (!recommendResults || !Array.isArray(recommendResults)) {
+        console.warn('Invalid recommendResults:', recommendResults);
+        return [];
+      }
+
+      // recommendResults가 직접 배열로 들어오므로 그대로 매핑
+      return recommendResults.map((item, index) => {
+        // 위도, 경도 변환
+        const lat = parseFloat(String(item.lat)) || 0;
+        const lng = parseFloat(String(item.lng)) || 0;
+
+        if (item.address === '주소 정보 없음') {
+          setIsAddress(false);
+        }
+
+        if (
+          item.address === '주소 정보 없음' &&
+          item.operationHour === '영업시간 정보 없음' &&
+          item.phoneNumber === '전화번호 정보 없음'
+        ) {
+          setIsInformation(false);
+        }
+
+        // 주소 정보 처리
+        // const description = [
+        //   item.ROAD_NM_ADDR || item.LOTNO_ADDR || '주소 정보 없음',
+        //   `영업시간: ${item.OPERATION_HOUR || '정보 없음'}`,
+        //   `전화번호: ${item.PHONE_NUMBER || '정보 없음'}`,
+        // ]
+        //   .filter(Boolean)
+        //   .join('\n');
+
+        return {
+          id: item.id || '',
+          name: item.name || '이름 없음',
+          courseType: item.courseType || '미분류',
+          address: item.address,
+          operationHour: item.operationHour,
+          phoneNumber: item.phoneNumber,
+          lat,
+          lng,
+          isSelected: index === 0,
+          image: '/src/assets/image/placeholder.jpg',
+        };
+      });
+    } catch (error) {
+      console.error('Error transforming recommendations:', error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    const fetchWeatherForecast = async () => {
+      if (!selectedDate || !selectedLocation?.lat || !selectedLocation?.lng) {
+        setWeatherForecast('화창할');
+        return;
+      }
+
+      try {
+        const formattedDate = selectedDate
+          .toISOString()
+          .split('T')[0]
+          .replace(/-/g, '');
+        const response = await getWeatherForecastApi({
+          date: formattedDate,
+          latitude: selectedLocation.lat,
+          longitude: selectedLocation.lng,
+        });
+        console.log('날씨 response : ', response);
+
+        if (response.result === '날씨 정보를 찾을 수 없습니다.') {
+          setWeatherForecast('화창할');
+        } else {
+          setWeatherForecast(`${response.result}`);
+        }
+      } catch (error) {
+        console.error('날씨 정보 조회 실패:', error);
+        setWeatherForecast('화창할');
+      }
+    };
+
+    fetchWeatherForecast();
+  }, [selectedDate, selectedLocation]);
+
+  const { mapCenter, mapBounds } = useMapCenter(locations);
 
   const handleLocationSelect = useCallback(
     (lat: number, lng: number, isMarker?: boolean) => {
@@ -32,33 +130,49 @@ const Index = () => {
     setIsExpanded(expanded);
   };
 
+  useEffect(() => {
+    if (!locations.length) {
+      console.warn('No locations available - redirecting to home');
+      navigate('/');
+    }
+  }, [locations, navigate]);
+
+  if (!locations.length) {
+    return null;
+  }
+
   return (
     <div className="h-full w-full overflow-x-hidden relative">
       <div className="sticky top-0 z-50 bg-white border-none">
         <Topbar handleClick={() => navigate('/')} />
-        <RefreshRecommend />
       </div>
 
       <div className="relative z-20 border-t-0">
         <CoursePreview
-          date="9월 30일"
-          place="건대입구역"
-          weather="맑을"
-          companions="매우 혼잡할"
+          date={
+            selectedDate ? selectedDate.toLocaleDateString() : '날짜 미지정'
+          }
+          place={selectedLocation?.text || locations[0]?.name || '위치 미지정'}
+          weather={weatherForecast}
+          companions={randomCongestion}
           locations={locations}
           isExpanded={isExpanded}
           onExpand={handleExpand}
+          isAddress={isAddress}
+          isInformation={isInformation}
         />
       </div>
+
       <div
         ref={mapRef}
         className={`h-[453px] w-full relative ${isExpanded ? 'blur-sm' : ''}`}
       >
         <Map
-          lat={37.541}
-          lng={127.0695}
+          lat={mapCenter.lat}
+          lng={mapCenter.lng}
           locations={locations}
           onLocationSelect={handleLocationSelect}
+          mapBounds={mapBounds}
         />
         {isExpanded && (
           <div
@@ -71,4 +185,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Result;

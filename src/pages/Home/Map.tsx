@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 
+import { MapBounds } from '../../hooks/useMapCenter';
+
 // 위치 정보를 나타내는 인터페이스
 interface Location {
   lat: number;
@@ -16,6 +18,7 @@ interface MapProps {
   lng: number;
   radius?: number;
   locations?: Location[];
+  mapBounds?: MapBounds | null;
   onLocationSelect?: (lat: number, lng: number, isMarker?: boolean) => void;
   onCenterChanged?: (lat: number, lng: number) => void; // 새로 추가된 prop
 }
@@ -31,6 +34,7 @@ const Map = ({
   lng,
   radius,
   locations = [],
+  mapBounds,
   onLocationSelect,
   onCenterChanged, // 새로 추가된 prop
 }: MapProps) => {
@@ -87,6 +91,7 @@ const Map = ({
 
         // 반경에 따라 zoom level 조정
         let zoomLevel = 3;
+
         if (radius) {
           if (radius <= 0.5) zoomLevel = 15;
           else if (radius <= 1) zoomLevel = 14;
@@ -102,6 +107,17 @@ const Map = ({
         // 새 지도 인스턴스 생성
         const newMap = new window.kakao.maps.Map(mapRef.current, options);
         setMap(newMap);
+
+        if (mapBounds) {
+          const bounds = new window.kakao.maps.LatLngBounds();
+          bounds.extend(
+            new window.kakao.maps.LatLng(mapBounds.minLat, mapBounds.minLng),
+          );
+          bounds.extend(
+            new window.kakao.maps.LatLng(mapBounds.maxLat, mapBounds.maxLng),
+          );
+          newMap.setBounds(bounds);
+        }
 
         // radius가 제공된 경우에만 원 추가
         if (radius) {
