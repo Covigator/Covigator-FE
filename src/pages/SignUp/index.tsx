@@ -63,14 +63,14 @@ const Signup = () => {
 
   const signupMutation = useMutation(signupUser, {
     onSuccess: (token) => {
-      console.log('회원가입 성공, 토큰 받음:', token);
+      console.log('회원가입 성공');
       setAuth(token);
 
       // 상태 업데이트 후 네비게이션을 위해 setTimeout 사용
       setTimeout(() => navigate('/onboarding'), 0);
     },
-    onError: (error: any) => {
-      console.error('회원가입 실패', error.response?.data || error.message);
+    onError: () => {
+      console.error('회원가입 실패');
       setErrors({ email: '회원가입에 실패했습니다. 다시 시도해 주세요.' });
     },
   });
@@ -82,14 +82,14 @@ const Signup = () => {
   }, [formData, isFormSubmitted]);
 
   const validateForm = () => {
-    console.log('validateForm 시작');
+    console.log('폼 유효성 검사 시작');
     try {
       signupSchema.parse(formData);
-      console.log('validateForm 성공');
+      console.log('폼 유효성 검사 성공');
       setErrors({});
       return true;
     } catch (error) {
-      console.log('validateForm 실패:', error);
+      console.log('폼 유효성 검사 실패');
       if (error instanceof z.ZodError) {
         const fieldErrors: FormErrors = {};
         error.errors.forEach((err) => {
@@ -111,33 +111,29 @@ const Signup = () => {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleImageChange 시작');
+    console.log('이미지 업로드 시작');
     const file = e.target.files?.[0];
     if (file) {
-      console.log('파일 선택됨:', file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log('FileReader 로드 완료');
+        console.log('이미지 처리 완료');
         const base64String = reader.result as string;
         setPreviewImage(base64String);
         setFormData({ ...formData, image: base64String });
-        console.log('이미지 상태 업데이트 완료');
       };
-      reader.onerror = (error) => {
-        console.error('FileReader 오류:', error);
+      reader.onerror = () => {
+        console.error('이미지 처리 실패');
+        setErrors({ ...errors, image: '이미지 처리 중 오류가 발생했습니다.' });
       };
       reader.readAsDataURL(file);
-    } else {
-      console.log('파일이 선택되지 않음');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log('handleSubmit 시작');
+    console.log('회원가입 제출 시작');
     e.preventDefault();
     setIsFormSubmitted(true);
     if (validateForm()) {
-      console.log('폼 유효성 검사 통과');
       try {
         const formDataToSend = new FormData();
 
@@ -149,8 +145,7 @@ const Signup = () => {
           password: formData.password,
         };
 
-        console.log('postSignUpRequest 생성:', postSignUpRequest);
-
+        console.log('서버 요청 시작');
         formDataToSend.append(
           'postSignUpRequest',
           new Blob([JSON.stringify(postSignUpRequest)], {
@@ -159,7 +154,6 @@ const Signup = () => {
         );
 
         if (formData.image) {
-          console.log('이미지 처리 시작');
           const byteCharacters = atob(formData.image.split(',')[1]);
           const byteNumbers = new Array(byteCharacters.length);
           for (let i = 0; i < byteCharacters.length; i++) {
@@ -169,16 +163,11 @@ const Signup = () => {
           const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
           formDataToSend.append('image', blob, 'profile.jpg');
-          console.log('이미지 처리 완료');
-        } else {
-          console.log('이미지 없음');
         }
 
-        console.log('서버 요청 시작');
         await signupMutation.mutateAsync(formDataToSend);
-        console.log('서버 요청 성공');
       } catch (error) {
-        console.error('회원가입 제출 중 오류 발생:', error);
+        console.error('회원가입 처리 실패');
         if (error instanceof Error) {
           setErrors({ ...errors, server: error.message });
         } else {
@@ -188,8 +177,6 @@ const Signup = () => {
           });
         }
       }
-    } else {
-      console.log('폼 유효성 검사 실패');
     }
   };
 
