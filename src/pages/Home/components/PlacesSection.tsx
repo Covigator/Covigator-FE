@@ -1,4 +1,3 @@
-import React from 'react';
 import Chip from '../../../components/common/chip/Chip';
 import { chipOptions } from '../../../constants/homeOption';
 
@@ -7,10 +6,10 @@ interface PlacesSectionProps {
   onPlaceSelect: (place: string) => void;
 }
 
-const PlacesSection: React.FC<PlacesSectionProps> = ({
+const PlacesSection = ({
   selectedPlaces,
   onPlaceSelect,
-}) => {
+}: PlacesSectionProps) => {
   return (
     <div className="mt-[31px]">
       <p className="text-body3 text-bk-70 mb-[13px]">어떤 곳을 방문하고 싶나요?</p>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchRecommendations } from '../../api/recommendation';
 import { LocationItemType, DropdownItemType } from '../../components/common/dropdown';
 import { locationOptions, withOptions, chipOptions } from '../../constants/homeOption';
-import { createRecommendationRequest, calculateRadiusInMeters } from './utils';
+import { calculateRadiusInMeters } from './utils';
 
 interface MutationContext {
   selectedDate: Date | null;
