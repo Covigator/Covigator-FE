@@ -18,7 +18,7 @@ const retryAxios = async (
 };
 
 export const fetchRecommendations = async (requestData: any) => {
-  const aiServerUrl = import.meta.env.VITE_AI_SERVER_URL;
+  const aiServerUrl = `${import.meta.env.VITE_AI_SERVER_URL}/api/recommend`;
   
   // 요청 데이터 로깅
   console.log('Request Data:', {
