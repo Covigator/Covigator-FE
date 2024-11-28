@@ -1,5 +1,5 @@
 export interface LocationType {
-  id: number;
+  id: string;
   name: string;
   courseType: string;
   isSelected: boolean;
