@@ -21,7 +21,7 @@ const Result = () => {
 
   const randomCongestion = useRandomCongestion();
 
-  const { recommendResults, selectedDate, selectedLocation, radius } =
+  const { recommendResults, selectedDate, selectedLocation } =
     location.state || {};
 
   const [locations, setLocations] = useState<LocationType[]>(() => {
