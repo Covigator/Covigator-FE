@@ -22,7 +22,7 @@ import Mycourse from './pages/Mypage/Mycourse';
 import Notice from './pages/Mypage/Notice';
 import Onboarding from './pages/Onboarding';
 import Result from './pages/Result';
-import ResultPlace from './pages/ResultPlace';
+// import ResultPlace from './pages/ResultPlace';
 import SignUp from './pages/SignUp';
 import Hasang from './pages/Test/Hasang';
 import Seohyun from './pages/Test/Seohyun';
@@ -47,14 +47,14 @@ const Router = () => {
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/result/:name/:address"
           element={
             <PrivateRoute>
               <ResultPlace />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/map"
           element={

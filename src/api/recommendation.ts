@@ -2,23 +2,6 @@ import { ApiResponse, RecommendResponse } from '../types/recommendation';
 
 import axios from 'axios';
 
-const formatAddress = (
-  roadAddr: string | number,
-  lotnoAddr: string | number,
-): string => {
-  // NaN 체크 및 문자열 처리
-  const road =
-    Number.isNaN(Number(roadAddr)) || roadAddr === 'NaN'
-      ? ''
-      : String(roadAddr);
-  const lotno =
-    Number.isNaN(Number(lotnoAddr)) || lotnoAddr === 'NaN'
-      ? ''
-      : String(lotnoAddr);
-
-  // 도로명 주소 우선, 없으면 지번 주소 사용
-  return road || lotno || '주소 정보 없음';
-};
 // 재시도 함수
 const retryAxios = async (
   fn: () => Promise<any>,
@@ -76,7 +59,6 @@ export const fetchRecommendations = async (requestData: any) => {
       } catch (parseError) {
         console.error('Parse error:', parseError);
         console.error('Original data:', response.data);
-        console.error('Sanitized data:', sanitizedData);
         throw new Error('Failed to parse response data');
       }
     } else {
@@ -106,7 +88,7 @@ export const fetchRecommendations = async (requestData: any) => {
 
     console.log('Processing results:', results);
 
-    const transformedData = results.map((item) => {
+    const transformedData = results.map((item: RecommendResponse) => {
       const lat = Number(item.LATITUDE);
       const lng = Number(item.LONGITUDE);
 

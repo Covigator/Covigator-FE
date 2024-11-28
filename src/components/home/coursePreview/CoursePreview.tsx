@@ -6,7 +6,6 @@ import {
 } from 'react-icons/hi';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { WiDaySunny } from 'react-icons/wi';
-import { useNavigate } from 'react-router-dom';
 
 import {
   Timeline,
@@ -39,12 +38,9 @@ const CoursePreview = ({
   companions,
   locations,
   isExpanded,
-  isAddress,
   isInformation,
   onExpand,
 }: CoursePreviewProps) => {
-  const navigate = useNavigate();
-
   const toggleExpanded = () => {
     onExpand(!isExpanded);
   };

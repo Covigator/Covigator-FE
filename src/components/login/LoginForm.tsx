@@ -37,12 +37,12 @@ const LoginForm = () => {
   // 로그인 API 호출을 위한 React Query mutation 설정
   const loginMutation = useMutation(loginUser, {
     onSuccess: (token) => {
-      console.log('로그인 성공', token);
+      console.log('로그인 성공');
       setAuth(token); // Zustand store 업데이트
       navigate('/'); // 홈페이지로 리다이렉트
     },
-    onError: (error) => {
-      console.error('로그인 실패', error);
+    onError: () => {
+      console.error('로그인 실패');
       setErrors({
         email: '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
       });
