@@ -1,5 +1,4 @@
 import { ApiResponse, RecommendResponse } from '../types/recommendation';
-
 import axios from 'axios';
 
 // 재시도 함수
@@ -19,21 +18,19 @@ const retryAxios = async (
 };
 
 export const fetchRecommendations = async (requestData: any) => {
+  const aiServerUrl = import.meta.env.VITE_AI_SERVER_URL;
+  
   // 요청 데이터 로깅
   console.log('Request Data:', {
-    url: '/api/recommend',
+    url: aiServerUrl,
     method: 'POST',
     data: requestData,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
   });
 
   try {
     const response = await retryAxios(
       () =>
-        axios.post<ApiResponse>('/api/recommend', requestData, {
+        axios.post<ApiResponse>(aiServerUrl, requestData, {
           headers: {
             'Content-Type': 'application/json',
           },
