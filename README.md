@@ -23,7 +23,7 @@ Covigator는 사용자의 선호도와 실시간 데이터를 기반으로 최�
 - 좋아요 기능
 
 ### 4. 지도 기반 UI
-- 네이버 지도 기반 위치 정보 제공
+- 카카오맵 기반 위치 정보 제공
 - 반경 기반 장소 검색
 - 직관적인 코스 시각화
 
@@ -44,7 +44,6 @@ Covigator는 사용자의 선호도와 실시간 데이터를 기반으로 최�
 <img src="https://img.shields.io/badge/React Icons-EA4AAA?style=for-the-badge&logo=React&logoColor=white">
 <img src="https://img.shields.io/badge/MUI-007FFF?style=for-the-badge&logo=MUI&logoColor=white">
 <img src="https://img.shields.io/badge/Kakao Maps-FFCD00?style=for-the-badge&logo=kakao&logoColor=black">
-<img src="https://img.shields.io/badge/공공데이터 API-337CCF?style=for-the-badge">
 </div>
 
 
