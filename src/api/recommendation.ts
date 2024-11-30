@@ -22,7 +22,8 @@ export const fetchRecommendations = async (requestData: any) => {
   
   // 요청 데이터 로깅
   console.log('Request Data:', {
-    url: aiServerUrl,
+    url: 'https://covigator-ai.shop/recommend',
+
     method: 'POST',
     data: requestData,
   });
@@ -30,7 +31,8 @@ export const fetchRecommendations = async (requestData: any) => {
   try {
     const response = await retryAxios(
       () =>
-        axios.post<ApiResponse>(aiServerUrl, requestData, {
+        axios.post<ApiResponse>('https://covigator-ai.shop/recommend', requestData, {
+
           headers: {
             'Content-Type': 'application/json',
           },
