@@ -1,4 +1,5 @@
 import { ApiResponse, RecommendResponse } from '../types/recommendation';
+
 import axios from 'axios';
 
 // 재시도 함수
@@ -18,8 +19,8 @@ const retryAxios = async (
 };
 
 export const fetchRecommendations = async (requestData: any) => {
-  const aiServerUrl = `${import.meta.env.VITE_AI_SERVER_URL}/api/recommend`;
-  
+  // const aiServerUrl = `${import.meta.env.VITE_AI_SERVER_URL}/api/recommend`;
+
   // 요청 데이터 로깅
   console.log('Request Data:', {
     url: 'https://covigator-ai.shop/recommend',
@@ -31,14 +32,17 @@ export const fetchRecommendations = async (requestData: any) => {
   try {
     const response = await retryAxios(
       () =>
-        axios.post<ApiResponse>('https://covigator-ai.shop/recommend', requestData, {
-
-          headers: {
-            'Content-Type': 'application/json',
+        axios.post<ApiResponse>(
+          'https://covigator-ai.shop/recommend',
+          requestData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 30000,
+            signal: AbortSignal.timeout(35000),
           },
-          timeout: 30000,
-          signal: AbortSignal.timeout(35000),
-        }),
+        ),
       3,
       2000,
     );
