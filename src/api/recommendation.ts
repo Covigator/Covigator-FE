@@ -19,9 +19,11 @@ const retryAxios = async (
 };
 
 export const fetchRecommendations = async (requestData: any) => {
+  const AI_SERVER_URL = import.meta.env.VITE_AI_SERVER_URL;
+  
   // 요청 데이터 로깅
   console.log('Request Data:', {
-    url: 'https://covigator-ai.shop/recommend',
+    url: `${AI_SERVER_URL}`,
     method: 'POST',
     data: requestData,
     headers: {
@@ -33,7 +35,7 @@ export const fetchRecommendations = async (requestData: any) => {
   try {
     const response = await retryAxios(
       () =>
-        axios.post<ApiResponse>('https://covigator-ai.shop/recommend', requestData, {
+        axios.post<ApiResponse>(`${AI_SERVER_URL}`, requestData, {
           headers: {
             'Content-Type': 'application/json',
           },
