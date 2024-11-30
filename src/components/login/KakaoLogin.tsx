@@ -5,7 +5,7 @@ const KakaoLogin = () => {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
       import.meta.env.VITE_KAKAO_REST_API_KEY
     }&redirect_uri=${encodeURIComponent(
-      `${window.location.origin}/login/oauth2/callback/kakao`,
+      'https://covigator.shop/accounts/oauth/kakao'
     )}&response_type=code`;
 
     window.location.href = KAKAO_AUTH_URL;
