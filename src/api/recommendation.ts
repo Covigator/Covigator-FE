@@ -1,4 +1,5 @@
 import { ApiResponse, RecommendResponse } from '../types/recommendation';
+
 import axios from 'axios';
 
 // 재시도 함수
@@ -18,6 +19,7 @@ const retryAxios = async (
 };
 
 export const fetchRecommendations = async (requestData: any) => {
+
   const AI_SERVER_URL = import.meta.env.VITE_AI_SERVER_URL;
   
   // 요청 데이터 로깅
@@ -34,9 +36,7 @@ export const fetchRecommendations = async (requestData: any) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          timeout: 30000,
-          signal: AbortSignal.timeout(35000),
-        }),
+        ),
       3,
       2000,
     );
