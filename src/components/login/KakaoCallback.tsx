@@ -28,7 +28,7 @@ const KakaoCallback = () => {
           throw new Error('인증 코드를 찾을 수 없습니다.');
         }
 
-        const url = `${import.meta.env.VITE_API_BASE_URL}accounts/oauth/kakao`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}/accounts/oauth/kakao`;
     
         try {
           const response = await axios.get(url, { params: { code } });
