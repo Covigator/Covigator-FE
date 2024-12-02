@@ -50,16 +50,6 @@ const KakaoCallback = () => {
             localStorage.setItem('email', convertedData.email);
             localStorage.setItem('nickname', convertedData.nickname);
             localStorage.setItem('img', convertedData.imageUrl);
-            
-            if (convertedData.gender) {
-              localStorage.setItem('gender', convertedData.gender);
-            }
-            if (convertedData.generation) {
-              localStorage.setItem('generation', convertedData.generation);
-            }
-            if (convertedData.travelStyle) {
-              localStorage.setItem('travelStyle', convertedData.travelStyle);
-            }
 
             if (convertedData.isNew === 'true') {
               console.log('새로운 사용자: 온보딩 페이지로 이동');

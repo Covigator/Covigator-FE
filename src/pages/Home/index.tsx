@@ -3,6 +3,7 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { fetchRecommendations } from '../../api/recommendation';
+import { DEFAULT_TRAVEL_STYLE } from '../../constants/defaultTravelStyle';
 import Button from '../../components/common/button/Button';
 import Chip from '../../components/common/chip/Chip';
 import {
@@ -66,21 +67,21 @@ const Home = () => {
 
       const radiusInMeters = calculateRadiusInMeters(selectedLocation);
 
-      const gender = transformGender(localStorage.getItem('gender') || 'MALE');
+      const gender = transformGender(localStorage.getItem('gender') || DEFAULT_TRAVEL_STYLE.gender);
       const ageGroup = transformAgeToGroup(
-        localStorage.getItem('generation') || 'YOUNG_ADULT',
+        localStorage.getItem('generation') || DEFAULT_TRAVEL_STYLE.generation,
       );
 
       const travelStyleStr = localStorage.getItem('travelStyle');
-      const travelStyle = travelStyleStr ? JSON.parse(travelStyleStr) : {};
+      const travelStyle = travelStyleStr ? JSON.parse(travelStyleStr) : DEFAULT_TRAVEL_STYLE.travel_style;
 
       const travelStyleValues = transformTravelStyle(
-        travelStyle.areaType || 'NATURE',
-        travelStyle.familiarity || 'NEW',
-        travelStyle.activityType || 'REST',
-        travelStyle.popularity || 'NOT_WIDELY_KNOWN',
-        travelStyle.planningType || 'PLANNED',
-        travelStyle.photoPriority || 'NOT_IMPORTANT',
+        travelStyle.area_type || DEFAULT_TRAVEL_STYLE.travel_style.area_type,
+        travelStyle.familiarity || DEFAULT_TRAVEL_STYLE.travel_style.familiarity,
+        travelStyle.activity_type || DEFAULT_TRAVEL_STYLE.travel_style.activity_type,
+        travelStyle.popularity || DEFAULT_TRAVEL_STYLE.travel_style.popularity,
+        travelStyle.planning_type || DEFAULT_TRAVEL_STYLE.travel_style.planning_type,
+        travelStyle.photo_priority || DEFAULT_TRAVEL_STYLE.travel_style.photo_priority,
       );
 
       const requestData = {
