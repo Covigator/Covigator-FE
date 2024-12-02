@@ -4,6 +4,12 @@ import { z } from 'zod';
 export const KakaoLoginServerResponseSchema = z.object({
   access_token: z.string(),
   is_new: z.string(),
+  email: z.string(),
+  nickname: z.string(),
+  image_url: z.string(),
+  gender: z.string().optional(),
+  generation: z.string().optional(),
+  travel_style: z.string().optional(),
 });
 
 // 서버 응답으로부터 추론된 타입
@@ -15,6 +21,12 @@ export type KakaoLoginServerResponse = z.infer<
 export const KakaoLoginResponseSchema = z.object({
   accessToken: z.string(),
   isNew: z.string(),
+  email: z.string(),
+  nickname: z.string(),
+  imageUrl: z.string(),
+  gender: z.string().optional(),
+  generation: z.string().optional(),
+  travelStyle: z.string().optional(),
 });
 
 // 변환된 응답으로부터 추론된 타입
@@ -26,4 +38,10 @@ export const convertKakaoLoginResponse = (
 ): KakaoLoginResponse => ({
   accessToken: serverResponse.access_token,
   isNew: serverResponse.is_new,
+  email: serverResponse.email,
+  nickname: serverResponse.nickname,
+  imageUrl: serverResponse.image_url,
+  gender: serverResponse.gender,
+  generation: serverResponse.generation,
+  travelStyle: serverResponse.travel_style,
 });
